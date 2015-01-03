@@ -92,6 +92,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.principal);
+        comunic = new ComunicBT();
 		BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		Intent tip = getIntent();
 		if (BTAdapter == null) {
@@ -197,7 +198,6 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
         RN =  false;
         CM =  false;
 		index = defIndex;
-		comunic = new ComunicBT();
 		SC = tip.getIntExtra(MainActivity.typ, MainActivity.CLIENT);
 		pro = tip.getBooleanExtra(MainActivity.lvl, false);
 		Chan_Ser.setEnabled(true);

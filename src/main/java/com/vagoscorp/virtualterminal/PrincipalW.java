@@ -96,6 +96,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.principal);
+        comunic = new Comunic();
 		Intent tip = getIntent();
 		WFM = (WifiManager) getSystemService(WIFI_SERVICE);
 		CTM = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
@@ -195,7 +196,6 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 //		N = false;
         RN =  false;
         CM =  false;
-		comunic = new Comunic();
 		serverip = defIP;
 		serverport = defPort;
 		SC = tip.getIntExtra(MainActivity.typ, MainActivity.CLIENT);
