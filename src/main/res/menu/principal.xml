@@ -1,12 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/rcvTyp"
-        android:orderInCategory="1"
-        android:title="@string/numRCV"/>
-    <item
         android:id="@+id/SendType"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/typSend">
         <menu>
@@ -25,13 +21,43 @@
         </menu>
     </item>
     <item
-        android:id="@+id/commMode"
+        android:id="@+id/rcvTyp"
+        android:orderInCategory="2"
+        android:title="@string/RCVtype">
+        <menu>
+            <item
+                android:id="@+id/rcvText"
+                android:title="@string/textRCV"/>
+            <item
+                android:id="@+id/rcvNum"
+                android:title="@string/numRCV"/>
+            <item
+                android:id="@+id/rcvBoth"
+                android:title="@string/bothRCV"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/visual_settings"
         android:orderInCategory="3"
+        android:title="@string/Appearance">
+        <menu>
+            <item
+                android:id="@+id/themeDark"
+                android:title="@string/darkTheme"/>
+            <item
+                android:id="@+id/themeNormal"
+                android:title="@string/normalTheme"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/commMode"
+        android:orderInCategory="4"
         android:title="@string/commModeNP"/>
     <item
         android:id="@+id/endCOM"
-        android:orderInCategory="4"
-        android:title="@string/Cancel_Conn"/>
+        android:orderInCategory="5"
+        android:title="@string/Cancel_Conn"
+        android:visible="true"/>
     <!--<item-->
         <!--android:id="@+id/action_settings"-->
         <!--android:orderInCategory="100"-->

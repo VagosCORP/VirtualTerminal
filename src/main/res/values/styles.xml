@@ -27,5 +27,10 @@
 <!--     <style name="Dialog" parent="Theme.AppCompat.Dialog"> -->
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    <style name="DarkTheme" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <!--     <style name="Dialog" parent="Theme.AppCompat.Dialog"> -->
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
 
 </resources>

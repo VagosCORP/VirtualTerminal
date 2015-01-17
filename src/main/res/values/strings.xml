@@ -41,12 +41,15 @@
     <string name="EWF">Wait until WiFi Connection is Established</string>
     <string name="BT_Device">Bluetooth device</string>
     <string name="Cancel_Conn">Finish Connection</string>
-    <string name="numRCV">Numeric Reception</string>
-    <string name="defRCV">Text Reception</string>
+    <string name="rcvBytelab" translatable="false">Byte RX</string>
+    <string name="RCVtype">Reception Type</string>
+    <string name="bothRCV">Dual Reception</string>
+    <string name="numRCV">Bytes Reception</string>
+    <string name="textRCV">Text Reception</string>
     <string name="commMode">Commander Mode</string>
     <string name="commDVal" translatable="false">NO_DAT</string>
     <string name="exitCommMode">Normal Mode</string>
-    <string name="commModeNP">Commander(PRO)</string>
+    <string name="commModeNP">Commander Mode</string>
     <string name="noPro">Available for PRO Users only</string>
     <string name="typSend">Send Type</string>
     <string name="textTyp">Text Send</string>
@@ -58,6 +61,12 @@
     <string name="num" translatable="false">#</string>
     <string name="bin" translatable="false">0b</string>
     <string name="hex" translatable="false">0x</string>
+    <string name="defvalup" translatable="false">255</string>
+    <string name="defvaldwn" translatable="false">0</string>
     <string name="MyLoc">en</string>
+    <string name="normalTheme" translatable="false">Normal</string>
+    <string name="darkTheme" translatable="false">Dark</string>
+    <string name="Appearance">Theme</string>
+    <string name="cThemeToast">Restart Activity to apply changes</string>
 
 </resources>

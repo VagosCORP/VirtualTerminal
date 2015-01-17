@@ -70,5 +70,4 @@ public class Device_List extends Activity {
 	 * // NavUtils.navigateUpFromSameTask(this); return true; } return
 	 * super.onOptionsItemSelected(item); }
 	 */
-
 }

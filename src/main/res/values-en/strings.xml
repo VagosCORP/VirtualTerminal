@@ -31,11 +31,13 @@
     <string name="EWF">Wait until WiFi Connection is Established</string>
     <string name="BT_Device">Bluetooth device</string>
     <string name="Cancel_Conn">Finish Connection</string>
-    <string name="numRCV">Numeric Reception</string>
-    <string name="defRCV">Text Reception</string>
+    <string name="RCVtype">Reception Type</string>
+    <string name="bothRCV">Dual Reception</string>
+    <string name="numRCV">Bytes Reception</string>
+    <string name="textRCV">Text Reception</string>
     <string name="commMode">Commander Mode</string>
     <string name="exitCommMode">Normal Mode</string>
-    <string name="commModeNP">Commander(PRO)</string>
+    <string name="commModeNP">Commander Mode</string>
     <string name="noPro">Available for PRO Users only</string>
     <string name="typSend">Send Type</string>
     <string name="textTyp">Text Send</string>
@@ -44,5 +46,7 @@
     <string name="hexTyp">Hexadecimal Send</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="MyLoc">en</string>
+    <string name="Appearance">Theme</string>
+    <string name="cThemeToast">Restart Activity to apply changes</string>
 
 </resources>

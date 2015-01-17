@@ -31,11 +31,13 @@
     <string name="EWF">Espere a que la conexión WiFi sea establecida</string>
     <string name="BT_Device">Dispositivo Bluetooth</string>
     <string name="Cancel_Conn">Finalizar Conexión</string>
-    <string name="numRCV">Recepción Numérica</string>
-    <string name="defRCV">Recepción de Texto</string>
+    <string name="RCVtype">Tipo de Reception</string>
+    <string name="bothRCV">Recepción Dual</string>
+    <string name="numRCV">Recepción de Bytes</string>
+    <string name="textRCV">Recepción de Texto</string>
     <string name="commMode">Modo Comando</string>
     <string name="exitCommMode">Modo Normal</string>
-    <string name="commModeNP">Comando(PRO)</string>
+    <string name="commModeNP">Modo Comando</string>
     <string name="noPro">Disponible solo para Usuarios Pro</string>
     <string name="typSend">Tipo de envío</string>
     <string name="textTyp">Envio de Texto</string>
@@ -44,5 +46,7 @@
     <string name="hexTyp">Envio Hexadecimal</string>
     <string name="numFormExc">Formato Numérico Erróneo</string>
     <string name="MyLoc">es</string>
+    <string name="Appearance">Apariencia</string>
+    <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
 
 </resources>

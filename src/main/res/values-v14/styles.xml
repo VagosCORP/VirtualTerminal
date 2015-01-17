@@ -19,5 +19,9 @@
 <!--     <style name="Dialog" parent="Theme.AppCompat.Dialog"> -->
         <!-- API 14 theme customizations can go here. -->
     </style>
+    <style name="DarkTheme" parent="android:Theme.Holo">
+        <!--     <style name="Dialog" parent="Theme.AppCompat.Dialog"> -->
+        <!-- API 14 theme customizations can go here. -->
+    </style>
 
 </resources>

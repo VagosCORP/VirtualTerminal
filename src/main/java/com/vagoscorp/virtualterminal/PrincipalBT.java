@@ -35,10 +35,13 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	public Button Send;
 	public TextView SD;
     public TextView inputTyp;
+    public TextView sepLab;
 //	private CheckBox TN;
     ScrollView scro;
     ScrollView scron;
     LinearLayout commander;
+    LinearLayout commBase;
+    LinearLayout byteLab;
 
     Button comm1;
     Button comm2;
@@ -76,6 +79,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 
 	public static final String LD = "LD";
 	public static final String indev = "indev";
+    public static final String theme = "Theme";
 	public static final String comm = "comm";
 	public static final String commN = "commN";
 	public static final String commT = "commT";
@@ -85,12 +89,16 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
     public static final int NUMSEND = 1;
     public static final int BINSEND = 2;
     public static final int HEXSEND = 3;
-    public boolean lowLvl = true;
+//    public boolean lowLvl = true;
+    boolean both = false;
 	boolean pro = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+        if(shapre.getBoolean(theme, false))
+            this.setTheme(R.style.DarkTheme);
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.principal);
         comunic = new ComunicBT();
 		BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -104,6 +112,8 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 		RX = (TextView) findViewById(R.id.RX);
         RXn = (TextView) findViewById(R.id.RXn);
 		TX = (EditText) findViewById(R.id.TX);
+        sepLab = (TextView)findViewById(R.id.sepLab);
+        byteLab = (LinearLayout)findViewById(R.id.byteLab);
 //		TN = (CheckBox) findViewById(R.id.TN);
 		SD = (TextView) findViewById(R.id.label_ser);
 		Conect = (Button) findViewById(R.id.Conect);
@@ -112,6 +122,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
         scro = (ScrollView)findViewById(R.id.scro);
         scron = (ScrollView)findViewById(R.id.scron);
         commander = (LinearLayout)findViewById(R.id.commander);
+        commBase = (LinearLayout)findViewById(R.id.commBase);
         inputTyp = (TextView)findViewById(R.id.inputTyp);
         OnLongClickListener oLClistener = new OnLongClickListener() {
 			
@@ -232,32 +243,61 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 return true;
             }
             case R.id.commMode: {
-                if(pro) {
-                    if(!CM) {
-                        CM = true;
-                        item.setTitle(R.string.exitCommMode);
+                if(!CM) {
+                    CM = true;
+                    item.setTitle(R.string.exitCommMode);
+                    commBase.setVisibility(View.VISIBLE);
+                    if(pro)
                         commander.setVisibility(View.VISIBLE);
-                    }else {
-                        CM = false;
-                        item.setTitle(R.string.commMode);
+                }else {
+                    CM = false;
+                    item.setTitle(R.string.commMode);
+                    commBase.setVisibility(View.GONE);
+                    if (pro)
                         commander.setVisibility(View.GONE);
-                    }
-                }else
-                    Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
+                }
+//                Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
                 return true;
             }
-            case R.id.rcvTyp: {
-                if(!RN) {
-                    RN = true;
-                    item.setTitle(R.string.defRCV);
-                    scro.setVisibility(View.GONE);
-                    scron.setVisibility(View.VISIBLE);
-                }else {
-                    RN = false;
-                    item.setTitle(R.string.numRCV);
-                    scro.setVisibility(View.VISIBLE);
-                    scron.setVisibility(View.GONE);
-                }
+//            case R.id.rcvTyp: {
+//                if(!RN) {
+//                    RN = true;
+//                    item.setTitle(R.string.defRCV);
+//                    scro.setVisibility(View.GONE);
+//                    scron.setVisibility(View.VISIBLE);
+//                }else {
+//                    RN = false;
+//                    item.setTitle(R.string.numRCV);
+//                    scro.setVisibility(View.VISIBLE);
+//                    scron.setVisibility(View.GONE);
+//                }
+//                return true;
+//            }
+            case R.id.rcvText: {
+                RN = false;
+                both = false;
+                byteLab.setVisibility(View.GONE);
+                sepLab.setVisibility(View.GONE);
+                scro.setVisibility(View.VISIBLE);
+                scron.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.rcvNum: {
+                RN = true;
+                both = false;
+                byteLab.setVisibility(View.VISIBLE);
+                sepLab.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                scron.setVisibility(View.VISIBLE);
+                return true;
+            }
+            case R.id.rcvBoth: {
+                RN = true;
+                both = true;
+                byteLab.setVisibility(View.VISIBLE);
+                sepLab.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.VISIBLE);
+                scron.setVisibility(View.VISIBLE);
                 return true;
             }
             case R.id.endCOM: {
@@ -296,6 +336,22 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 inputTyp.setText(R.string.hex);
                 return true;
             }
+            case R.id.themeDark: {
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putBoolean(theme, true);
+                editor.commit();
+                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.themeNormal: {
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putBoolean(theme, false);
+                editor.commit();
+                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -322,12 +378,14 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	@Override
 	protected void onResume() {
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+        if(shapre.getBoolean(theme, false))
+            setTheme(R.style.DarkTheme);
 		index = shapre.getInt(indev, defIndex);
 		if(SC == MainActivity.SERVER)
 			Chan_Ser.setVisibility(View.GONE);//Enabled(false);
 		if (BTAdapter.isEnabled()) {
 			BondedDevices = BTAdapter.getBondedDevices().toArray(
-				new BluetoothDevice[0]);
+                    new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
 			initBTD(BondedDevices);
 		} else {
 			Intent enableIntent = new Intent(
@@ -347,7 +405,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 				finish();
 			} else {
 				BondedDevices = BTAdapter.getBondedDevices().toArray(
-						new BluetoothDevice[0]);
+						new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
 				initBTD(BondedDevices);
 			}
 			break;
@@ -559,7 +617,10 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	}
 
 	public void BRX(View view) {
-        if(!RN)
+        if(both) {
+            RX.setText("");
+            RXn.setText("");
+        }else if(!RN)
             RX.setText("");
         else
             RXn.setText("");

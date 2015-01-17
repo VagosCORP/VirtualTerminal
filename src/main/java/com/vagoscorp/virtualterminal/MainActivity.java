@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
 			}else {
 				SW.setEnabled(false); SW.setText(nPro);
 			}
-			if(enab[4].equals("1")) pro = true; else pro = false;
+            pro = enab[4].equals("1");
 		}
 	}
 	
@@ -162,8 +162,8 @@ public class MainActivity extends Activity {
 				os = new FileOutputStream(file);
 				os.write(buff);
 				os.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+//			} catch (FileNotFoundException e) {
+//				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
