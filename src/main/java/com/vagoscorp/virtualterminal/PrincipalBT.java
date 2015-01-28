@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -42,6 +43,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
     LinearLayout commander;
     LinearLayout commBase;
     LinearLayout byteLab;
+    LinearLayout P_LYT;
 
     Button comm1;
     Button comm2;
@@ -100,6 +102,9 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.principal);
+        P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && shapre.getBoolean(theme, false))
+            P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
         comunic = new ComunicBT();
 		BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		Intent tip = getIntent();
@@ -109,9 +114,9 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 			finish();
 			return;
 		}
-		RX = (TextView) findViewById(R.id.RX);
-        RXn = (TextView) findViewById(R.id.RXn);
-		TX = (EditText) findViewById(R.id.TX);
+		RX = (TextView)findViewById(R.id.RX);
+        RXn = (TextView)findViewById(R.id.RXn);
+		TX = (EditText)findViewById(R.id.TX);
         sepLab = (TextView)findViewById(R.id.sepLab);
         byteLab = (LinearLayout)findViewById(R.id.byteLab);
 //		TN = (CheckBox) findViewById(R.id.TN);
@@ -219,7 +224,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			ActionBar aB = getActionBar();//Support
+            ActionBar aB = getActionBar();//Support
 			if(aB != null)
 				aB.setDisplayHomeAsUpEnabled(true);
 		}
@@ -632,7 +637,9 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
         if(RN) {
             for(int val:ndato)
                 RXn.append(val + " ");
+            scron.fullScroll(ScrollView.FOCUS_DOWN);
         }
+        scro.fullScroll(ScrollView.FOCUS_DOWN);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -49,6 +50,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
     LinearLayout commander;
     LinearLayout commBase;
     LinearLayout byteLab;
+    LinearLayout P_LYT;
 
     Button comm1;
     Button comm2;
@@ -104,6 +106,9 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
             setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.principal);
+        P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && shapre.getBoolean(theme, false))
+            P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
         comunic = new Comunic();
 		Intent tip = getIntent();
 		WFM = (WifiManager) getSystemService(WIFI_SERVICE);
@@ -618,7 +623,9 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
         if(RN) {
             for(int val:ndato)
             	RXn.append(val + " ");
+            scron.fullScroll(ScrollView.FOCUS_DOWN);
         }
+        scro.fullScroll(ScrollView.FOCUS_DOWN);
 	}
 
 	@Override

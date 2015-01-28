@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		CB = (Button)findViewById(R.id.Sel_BT);
 		CW = (Button)findViewById(R.id.Sel_W);
