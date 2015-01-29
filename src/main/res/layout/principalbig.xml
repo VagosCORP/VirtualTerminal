@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <Button
             android:id="@+id/Conect"
@@ -81,7 +82,6 @@
         <!--android:text="@string/Check_Num" />-->
 
         <Button
-            style = "android:attr/buttonBarButtonStyle"
             android:id="@+id/DelTX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +89,6 @@
             android:text="@string/BTX" />
 
         <Button
-            style = "android:attr/buttonBarButtonStyle"
             android:id="@+id/DelRX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

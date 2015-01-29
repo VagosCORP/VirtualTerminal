@@ -77,14 +77,18 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/serverLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Servidores" />
+        android:text="@string/Servidores"
+        android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/serverBT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/ImageView01"
@@ -111,9 +115,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/serverW"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/imageView2"
