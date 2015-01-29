@@ -116,6 +116,14 @@
 
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/byteRCV"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone">
+    </LinearLayout>
+
     <TextView
         android:id="@+id/sepLab"
         android:layout_width="match_parent"
@@ -127,10 +135,10 @@
         android:id="@+id/scron"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarStyle="outsideOverlay"
-        android:visibility="gone"
-        android:layout_weight="1">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/RXn"
@@ -146,13 +154,12 @@
 
     <LinearLayout
         android:id="@+id/commBase"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <Button
-            style = "android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -161,7 +168,6 @@
             android:onClick="commClick" />
 
         <Button
-            style = "android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -170,15 +176,22 @@
             android:onClick="commClick" />
 
         <Button
-            style = "android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/commDVal"
             android:id="@+id/comm3"
             android:onClick="commClick" />
-    </LinearLayout>
 
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/commDVal"
+            android:id="@+id/comm4"
+            android:onClick="commClick" />
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/commander"
         android:layout_width="match_parent"
@@ -198,16 +211,6 @@
             android:layout_height="wrap_content">
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/commDVal"
-                android:id="@+id/comm4"
-                android:onClick="commClick" />
-
-            <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -216,21 +219,14 @@
                 android:onClick="commClick" />
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/commDVal"
                 android:id="@+id/comm6"
                 android:onClick="commClick" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -239,7 +235,6 @@
                 android:onClick="commClick" />
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -247,22 +242,22 @@
                 android:id="@+id/comm8"
                 android:onClick="commClick" />
 
-            <Button
-                style = "android:attr/buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/commDVal"
-                android:id="@+id/comm9"
-                android:onClick="commClick" />
         </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/commDVal"
+                android:id="@+id/comm9"
+                android:onClick="commClick" />
+
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -271,7 +266,6 @@
                 android:onClick="commClick" />
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -280,23 +274,14 @@
                 android:onClick="commClick" />
 
             <Button
-                style = "android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/commDVal"
                 android:id="@+id/comm12"
                 android:onClick="commClick" />
+
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/byteLab"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
     </LinearLayout>
 
     <!--android:visibility="gone"

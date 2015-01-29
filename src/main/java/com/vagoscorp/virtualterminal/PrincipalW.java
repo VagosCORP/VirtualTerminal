@@ -44,12 +44,11 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 	public TextView SD;
     public TextView inputTyp;
     TextView sepLab;
-//	private CheckBox TN;
     ScrollView scro;
     ScrollView scron;
     LinearLayout commander;
     LinearLayout commBase;
-    LinearLayout byteLab;
+    LinearLayout byteRCV;
     LinearLayout P_LYT;
 
     Button comm1;
@@ -117,8 +116,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
         RXn = (TextView) findViewById(R.id.RXn);
 		TX = (EditText) findViewById(R.id.TX);
         sepLab = (TextView)findViewById(R.id.sepLab);
-        byteLab = (LinearLayout)findViewById(R.id.byteLab);
-//		TN = (CheckBox) findViewById(R.id.TN);
+        byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
 		SD = (TextView) findViewById(R.id.label_ser);
 		Conect = (Button) findViewById(R.id.Conect);
 		Chan_Ser = (Button) findViewById(R.id.chan_ser);
@@ -165,14 +163,6 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
                                 break;
                             }
                         }
-                        //					if(!N) {
-                        //                        editor.putString(comm + n, Message);
-                        //                        editor.putString(commN + n, Message);
-                        //					}else {
-                        //						int Messagen = Integer.parseInt(Message);
-                        //						editor.putInt(comm + n, Messagen);
-                        //						editor.putString(commN + n, "#" + Messagen);
-                        //					}
                     }else {
                         N = false;
                         editor.putString(comm + n, getResources().getString(R.string.commDVal));
@@ -209,7 +199,6 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
         comm10.setOnLongClickListener(oLClistener);
         comm11.setOnLongClickListener(oLClistener);
         comm12.setOnLongClickListener(oLClistener);
-//		N = false;
         RN =  false;
         CM =  false;
 		serverip = defIP;
@@ -264,24 +253,10 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 //                Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
                 return true;
             }
-//            case R.id.rcvTyp: {
-//            if(!RN) {
-//                RN = true;
-//                item.setTitle(R.string.defRCV);
-//                scro.setVisibility(View.GONE);
-//                scron.setVisibility(View.VISIBLE);
-//            }else {
-//                RN = false;
-//                item.setTitle(R.string.numRCV);
-//                scro.setVisibility(View.VISIBLE);
-//                scron.setVisibility(View.GONE);
-//            }
-//            return true;
-//            }
             case R.id.rcvText: {
                 RN = false;
                 both = false;
-                byteLab.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.GONE);
                 sepLab.setVisibility(View.GONE);
                 scro.setVisibility(View.VISIBLE);
                 scron.setVisibility(View.GONE);
@@ -290,7 +265,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
             case R.id.rcvNum: {
                 RN = true;
                 both = false;
-                byteLab.setVisibility(View.VISIBLE);
+                byteRCV.setVisibility(View.VISIBLE);
                 sepLab.setVisibility(View.VISIBLE);
                 scro.setVisibility(View.GONE);
                 scron.setVisibility(View.VISIBLE);
@@ -299,7 +274,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
             case R.id.rcvBoth: {
                 RN = true;
                 both = true;
-                byteLab.setVisibility(View.VISIBLE);
+                byteRCV.setVisibility(View.VISIBLE);
                 sepLab.setVisibility(View.VISIBLE);
                 scro.setVisibility(View.VISIBLE);
                 scron.setVisibility(View.VISIBLE);
@@ -543,19 +518,6 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 			comunic.Detener_Actividad();
 	}
 
-//	public void tnum(View view) {
-//		BTX(view);
-//		if (TN.isChecked()) {
-//			TX.setHint(R.string.Text_TXn);
-//			TX.setInputType(InputType.TYPE_CLASS_NUMBER);
-//			N = true;
-//		} else {
-//			TX.setHint(R.string.Text_TX);
-//			TX.setInputType(InputType.TYPE_CLASS_TEXT);
-//			N = false;
-//		}
-//	}
-
 	public void enviar(View view) {
         if (TX.length() > 0) {
             String Message = TX.getText().toString();
@@ -595,11 +557,6 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
                     break;
                 }
             }
-//			if (N) {
-//				int Messagen = Integer.parseInt(Message);
-//				comunic.enviar(Messagen);
-//			} else
-//            comunic.enviar(Message);
         }
 	}
 
