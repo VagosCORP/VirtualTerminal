@@ -38,6 +38,11 @@ public class MainActivity extends Activity {
     boolean mkdirsDone = false;
     int readBuffDone = 0;
     Intent Init;
+    String baseVer = "1\n1\n0\n0\n0";
+    String config = "config";
+    String ext = ".vtconfig";
+    String proPack = "com.vagoscorp.virtualterminalprokey";
+    String sPath = "/Android/data/com.vagoscorp.vcvt";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,7 @@ public class MainActivity extends Activity {
 		CW = (Button)findViewById(R.id.Sel_W);
 		SB = (Button)findViewById(R.id.Sel_SBT);
 		SW = (Button)findViewById(R.id.Sel_SW);
-		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.Const_Path));
+		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + sPath);
         mkdirsDone = path.mkdirs();
         Init = new Intent(this, Principal.class);
 		getNames();
@@ -59,7 +64,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		if(nfil == 0) {
-			write(getString(R.string.Const_BaseVer));
+			write(baseVer);
 			getNames();
 		}
         checkPro();
@@ -119,7 +124,7 @@ public class MainActivity extends Activity {
     void checkPro() {
         Intent intent;
         PackageManager manager = getPackageManager();
-        intent = manager.getLaunchIntentForPackage(getString(R.string.Const_PROpack));
+        intent = manager.getLaunchIntentForPackage(proPack);
         if(intent != null) {
             serverLabel.setVisibility(View.VISIBLE);
             serverBT.setVisibility(View.VISIBLE);
@@ -134,7 +139,7 @@ public class MainActivity extends Activity {
 		String[] enab;
 		enab = file.split("\n");
 		if(enab.length != 5) {
-			write(getString(R.string.Const_BaseVer));
+			write(baseVer);
 			getNames();
 		}else {
 			if(enab[2].equals("1")) {
@@ -153,7 +158,7 @@ public class MainActivity extends Activity {
 		checkSD();
 		if(SDread && SDwrite) {
 			byte[] buff = data.getBytes();
-			File file = new File(path, getString(R.string.Const_Config) + getString(R.string.Const_Ext));
+			File file = new File(path, config + ext);
 			OutputStream os;
 			try {
 				os = new FileOutputStream(file);
@@ -170,7 +175,7 @@ public class MainActivity extends Activity {
 		String val = "";
 		if(SDread) {
 			byte[] buff;
-			File file = new File(path, getString(R.string.Const_Config) + getString(R.string.Const_Ext));
+			File file = new File(path, config + ext);
 			InputStream is;
 			try {
 				is = new FileInputStream(file);
@@ -197,7 +202,7 @@ public class MainActivity extends Activity {
 			if(nfil > 0) {
 				fileNames = new String[nfil];
 				for(File file:fileList) {
-					fileNames[i] = file.getName().split(getString(R.string.Const_Ext))[0];
+					fileNames[i] = file.getName().split(ext)[0];
 				}
 			}
 		}

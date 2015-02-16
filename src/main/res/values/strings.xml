@@ -82,18 +82,6 @@
     <string name="num16" translatable="false">16#</string>
     <string name="num32" translatable="false">32#</string>
 
-    <string name="Const_ColorBlack" translatable="false">#ff303030</string>
-    <string name="Const_DefIP" translatable="false">10.0.0.6</string>
-    <string name="Const_Config" translatable="false">config</string>
-    <string name="Const_Ext" translatable="false">.vtconfig</string>
-    <string name="Const_Path" translatable="false">/Android/data/com.vagoscorp.vcvt</string>
-    <string name="Const_PROpack" translatable="false">com.vagoscorp.virtualterminalprokey</string>
-    <string name="Const_BaseVer" translatable="false">1
-1
-0
-0
-0</string>
-
     <string name="Extra_NSI" translatable="false">NSIP</string>
     <string name="Extra_NSP" translatable="false">NSPort</string>
     <string name="Extra_SDev" translatable="false">SD</string>
@@ -103,12 +91,6 @@
     <string name="Extra_LD" translatable="false">LD</string>
     <string name="Extra_SI" translatable="false">SIP</string>
     <string name="Extra_SP" translatable="false">SPort</string>
-    <string name="Extra_indev" translatable="false">indev</string>
-    <string name="Extra_theme" translatable="false">Theme</string>
-    <string name="Extra_comm" translatable="false">comm</string>
-    <string name="Extra_commN" translatable="false">commN</string>
-    <string name="Extra_commT" translatable="false">commT</string>
-    <string name="Extra_commET" translatable="false">commET</string>
     <string name="Extra_RESULT_ACTION" translatable="false">RESULT_ACTION</string>
 
 </resources>
