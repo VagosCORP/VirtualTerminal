@@ -41,12 +41,20 @@
     <string name="noPro">Available for PRO Users only</string>
     <string name="typSend">Send Type</string>
     <string name="textTyp">Text Send</string>
-    <string name="numTyp">Numeric Send</string>
+    <string name="byteTyp">Byte Send</string>
     <string name="binTyp">Binary Send</string>
     <string name="hexTyp">Hexadecimal Send</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="MyLoc">en</string>
     <string name="Appearance">Theme</string>
     <string name="cThemeToast">Restart Activity to apply changes</string>
+    <string name="updRCV">Update Reception</string>
+    <string name="updRate">#Upd</string>
+    <string name="doubleTyp">Double Send</string>
+    <string name="floatTyp">Float Send</string>
+    <string name="intTyp">Int32 Send</string>
+    <string name="longTyp">Int64 Send</string>
+    <string name="shortTyp">Int16 Send</string>
+    <string name="advTypSend">Advanced Send Type</string>
 
 </resources>

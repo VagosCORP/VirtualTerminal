@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -36,13 +38,17 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	public Button Send;
 	public TextView SD;
     public TextView inputTyp;
-    public TextView sepLab;
     ScrollView scro;
     ScrollView scron;
     LinearLayout commander;
     LinearLayout commBase;
+    ScrollView commScroll;
     LinearLayout byteRCV;
     LinearLayout P_LYT;
+    LinearLayout layNAct;
+    LinearLayout layComp;
+    EditText editNAct;
+    CheckBox UpdN;
 
     Button comm1;
     Button comm2;
@@ -57,7 +63,6 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
     Button comm11;
     Button comm12;
 
-	public boolean N;
     public boolean RN;
     public boolean CM;
 	public int SC;
@@ -84,14 +89,28 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	public static final String comm = "comm";
 	public static final String commN = "commN";
 	public static final String commT = "commT";
+    public static final String commET = "commET";
 	public static final int defNcomm = 0;
 	public static final boolean defBcomm = false;
     public static final int TXTSEND = 0;
-    public static final int NUMSEND = 1;
+    public static final int BYTESEND = 1;
     public static final int BINSEND = 2;
     public static final int HEXSEND = 3;
+    public static final int SHORTSEND = 11;
+    public static final int INTSEND = 12;
+    public static final int FLOATSEND = 14;
+    public static final int COMMT_STRING = 0;
+    public static final int COMMT_INT8 = 1;
+    public static final int COMMT_INT16 = 11;
+    public static final int COMMT_INT32 = 12;
+    public static final int COMMT_FLOAT = 14;
 //    public boolean lowLvl = true;
     boolean both = false;
+    boolean upd = false;
+    boolean nextUpd = false;
+    boolean nextUpdn = false;
+    int contUpd = 0;
+    int numUpd = 1;
 	boolean pro = false;
 
 	@Override
@@ -100,7 +119,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
         if(shapre.getBoolean(theme, false))
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.principal);
+		setContentView(R.layout.layout_principal);
         P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && shapre.getBoolean(theme, false))
             P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
@@ -115,8 +134,11 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 		}
 		RX = (TextView)findViewById(R.id.RX);
         RXn = (TextView)findViewById(R.id.RXn);
+        layNAct = (LinearLayout)findViewById(R.id.layNAct);
+        layComp = (LinearLayout)findViewById(R.id.layComp);
+        editNAct = (EditText)findViewById(R.id.editNAct);
+        UpdN = (CheckBox)findViewById(R.id.UpdN);
 		TX = (EditText)findViewById(R.id.TX);
-        sepLab = (TextView)findViewById(R.id.sepLab);
         byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
 		SD = (TextView) findViewById(R.id.label_ser);
 		Conect = (Button) findViewById(R.id.Conect);
@@ -126,43 +148,86 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
         scron = (ScrollView)findViewById(R.id.scron);
         commander = (LinearLayout)findViewById(R.id.commander);
         commBase = (LinearLayout)findViewById(R.id.commBase);
+        commScroll = (ScrollView)findViewById(R.id.commScroll);
         inputTyp = (TextView)findViewById(R.id.inputTyp);
+        UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                RN = isChecked;
+                both = isChecked;
+                if(isChecked)
+                    byteRCV.setVisibility(View.VISIBLE);
+                else
+                    byteRCV.setVisibility(View.GONE);
+            }
+        });
         OnLongClickListener oLClistener = new OnLongClickListener() {
 			
 			@Override
 			public boolean onLongClick(View view) {
-				int n = nComm(view);
+                int commType = COMMT_STRING;
+                boolean N = true;
+                int n = nComm(view);
                 if(n != 0) {
                     SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = shapre.edit();
                     if(TX.length() > 0) {
                         String Message = TX.getText().toString();
-                        N = true;
-                        switch (sendTyp) {
-                            case (TXTSEND): {
-                                editor.putString(comm + n, Message);
-                                editor.putString(commN + n, Message);
-                                N = false;
-                                break;
+                        try {
+                            switch (sendTyp) {
+                                case (TXTSEND): {
+                                    editor.putString(comm + n, Message);
+                                    editor.putString(commN + n, Message);
+                                    commType = COMMT_STRING;
+                                    N = false;
+                                    break;
+                                }
+                                case (BYTESEND): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.num) + Message);
+                                    commType = COMMT_INT8;
+                                    break;
+                                }
+                                case (BINSEND): {
+                                    int Messagen = Integer.parseInt(Message, 2);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.bin) + Message);
+                                    commType = COMMT_INT8;
+                                    break;
+                                }
+                                case (HEXSEND): {
+                                    int Messagen = Integer.parseInt(Message, 16);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.hex) + Message);
+                                    commType = COMMT_INT8;
+                                    break;
+                                }
+                                case (SHORTSEND): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.num16) + Message);
+                                    commType = COMMT_INT16;
+                                    break;
+                                }
+                                case (INTSEND): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.num32) + Message);
+                                    commType = COMMT_INT32;
+                                    break;
+                                }
+                                case (FLOATSEND): {
+                                    float Messagen = Float.parseFloat(Message);
+                                    editor.putFloat(comm + n, Messagen);
+                                    editor.putString(commN + n, getString(R.string.fNum) + Message);
+                                    commType = COMMT_FLOAT;
+                                    break;
+                                }
                             }
-                            case (NUMSEND): {
-                                int Messagen = Integer.parseInt(Message);
-                                editor.putInt(comm + n, Messagen);
-                                editor.putString(commN + n, "#" + Message);
-                                break;
-                            }
-                            case (BINSEND): {
-                                int Messagen = Integer.parseInt(Message, 2);
-                                editor.putInt(comm + n, Messagen);
-                                editor.putString(commN + n, "0b" + Message);
-                                break;
-                            }
-                            case (HEXSEND): {
-                                int Messagen = Integer.parseInt(Message, 16);
-                                editor.putInt(comm + n, Messagen);
-                                editor.putString(commN + n, "0x" + Message);
-                                break;
-                            }
+                        } catch (NumberFormatException nEx) {
+                            nEx.printStackTrace();
+                            Toast.makeText(PrincipalBT.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
                         }
                     }else {
                         N = false;
@@ -170,6 +235,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                         editor.putString(commN + n, getResources().getString(R.string.commDVal));
                     }
                     editor.putBoolean(commT + n, N);
+                    editor.putInt(commET + n, commType);
                     editor.commit();
                     UcommUI();
                 }
@@ -213,7 +279,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar aB = getActionBar();//Support
+            ActionBar aB = getActionBar();
 			if(aB != null)
 				aB.setDisplayHomeAsUpEnabled(true);
 		}
@@ -221,8 +287,7 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.principal, menu);
+		getMenuInflater().inflate(R.menu.menu_principal, menu);
         MenuItem mItem = menu.findItem(R.id.commMode);
         if(pro)
             mItem.setTitle(R.string.commMode);
@@ -240,12 +305,17 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 if(!CM) {
                     CM = true;
                     item.setTitle(R.string.exitCommMode);
+                    layComp.setVisibility(View.VISIBLE);
+                    commScroll.setVisibility(View.VISIBLE);
                     commBase.setVisibility(View.VISIBLE);
                     if(pro)
                         commander.setVisibility(View.VISIBLE);
                 }else {
                     CM = false;
                     item.setTitle(R.string.commMode);
+                    if(!upd)
+                        layComp.setVisibility(View.GONE);
+                    commScroll.setVisibility(View.GONE);
                     commBase.setVisibility(View.GONE);
                     if (pro)
                         commander.setVisibility(View.GONE);
@@ -256,28 +326,45 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
             case R.id.rcvText: {
                 RN = false;
                 both = false;
+                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
                 byteRCV.setVisibility(View.GONE);
-                sepLab.setVisibility(View.GONE);
                 scro.setVisibility(View.VISIBLE);
-                scron.setVisibility(View.GONE);
                 return true;
             }
             case R.id.rcvNum: {
                 RN = true;
                 both = false;
+                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
                 byteRCV.setVisibility(View.VISIBLE);
-                sepLab.setVisibility(View.VISIBLE);
                 scro.setVisibility(View.GONE);
-                scron.setVisibility(View.VISIBLE);
                 return true;
             }
             case R.id.rcvBoth: {
                 RN = true;
                 both = true;
+                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
                 byteRCV.setVisibility(View.VISIBLE);
-                sepLab.setVisibility(View.VISIBLE);
                 scro.setVisibility(View.VISIBLE);
-                scron.setVisibility(View.VISIBLE);
+                return true;
+            }
+            case R.id.rcvUpd: {
+                RN = false;
+                both = false;
+                upd = true;
+                UpdN.setChecked(false);
+                layComp.setVisibility(View.VISIBLE);
+                layNAct.setVisibility(View.VISIBLE);
+                byteRCV.setVisibility(View.GONE);
+                scro.setVisibility(View.VISIBLE);
                 return true;
             }
             case R.id.endCOM: {
@@ -292,11 +379,12 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 inputTyp.setText(R.string.txt);
                 return true;
             }
-            case R.id.numSend: {
-                sendTyp = NUMSEND;
+            case R.id.byteSend: {
+                sendTyp = BYTESEND;
                 TX.setText("");
                 TX.setHint(R.string.Text_TXn);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
                 inputTyp.setText(R.string.num);
                 return true;
             }
@@ -304,7 +392,8 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 sendTyp = BINSEND;
                 TX.setText("");
                 TX.setHint(R.string.Text_TXb);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
                 inputTyp.setText(R.string.bin);
                 return true;
             }
@@ -314,6 +403,35 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
                 TX.setHint(R.string.Text_TXh);
                 TX.setInputType(InputType.TYPE_CLASS_TEXT);
                 inputTyp.setText(R.string.hex);
+                return true;
+            }
+            case R.id.shortSend: {
+                sendTyp = SHORTSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXn);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.num16);
+                return true;
+            }
+            case R.id.intSend: {
+                sendTyp = INTSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXn);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputTyp.setText(R.string.num32);
+                return true;
+            }
+            case R.id.floatSend: {
+                sendTyp = FLOATSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXf);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
+//                        InputType.TYPE_NUMBER_FLAG_SIGNED);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputTyp.setText(R.string.fNum);
                 return true;
             }
             case R.id.themeDark: {
@@ -468,10 +586,32 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 		int n = nComm(view);
 		if(n != 0) {
 			SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-			if(shapre.getBoolean(commT + n, defBcomm))
-				comunic.enviar(shapre.getInt(comm + n, defNcomm));
-			else
-				comunic.enviar(shapre.getString(comm + n, getResources().getString(R.string.commDVal)));
+            int commType = shapre.getInt(commET + n, COMMT_STRING);
+            boolean commN = shapre.getBoolean(commT + n, defBcomm);
+            switch(commType) {
+                case(COMMT_INT8): {
+                    comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    break;
+                }
+                case(COMMT_INT16): {
+                    comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                    break;
+                }
+                case(COMMT_INT32): {
+                    comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                    break;
+                }
+                case(COMMT_FLOAT): {
+                    comunic.enviar(shapre.getFloat(comm + n, defNcomm));
+                    break;
+                }
+                default: {
+                    if (!commN)
+                        comunic.enviar(shapre.getString(comm + n, getResources().getString(R.string.commDVal)));
+                    else
+                        comunic.enviar(shapre.getInt(comm + n, defNcomm));
+                }
+            }
 		}
 	}
 	
@@ -531,45 +671,50 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 	}
 
 	public void enviar(View view) {
-		if (TX.length() > 0) {
-			String Message = TX.getText().toString();
-            switch(sendTyp) {
-                case(TXTSEND):{
-                    comunic.enviar(Message);
-                    break;
-                }
-                case(NUMSEND):{
-                    try {
+        if (TX.length() > 0) {
+            String Message = TX.getText().toString();
+            try {
+                switch (sendTyp) {
+                    case (TXTSEND): {
+                        comunic.enviar(Message);
+                        break;
+                    }
+                    case (BYTESEND): {
                         int Messagen = Integer.parseInt(Message);
                         comunic.enviar(Messagen);
-                    }catch(NumberFormatException nEx) {
-                        nEx.printStackTrace();
-                        Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                        break;
                     }
-                    break;
-                }
-                case(BINSEND):{
-                    try {
+                    case (BINSEND): {
                         int Messagen = Integer.parseInt(Message, 2);
                         comunic.enviar(Messagen);
-                    }catch(NumberFormatException nEx) {
-                        nEx.printStackTrace();
-                        Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                        break;
                     }
-                    break;
-                }
-                case(HEXSEND):{
-                    try {
+                    case (HEXSEND): {
                         int Messagen = Integer.parseInt(Message, 16);
-				        comunic.enviar(Messagen);
-                    }catch(NumberFormatException nEx) {
-                        nEx.printStackTrace();
-                        Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                        comunic.enviar(Messagen);
+                        break;
                     }
-                    break;
+                    case (SHORTSEND): {
+                        int Messagen = Integer.parseInt(Message);
+                        comunic.enviar_Int16(Messagen);
+                        break;
+                    }
+                    case (INTSEND): {
+                        int Messagen = Integer.parseInt(Message);
+                        comunic.enviar_Int32(Messagen);
+                        break;
+                    }
+                    case (FLOATSEND): {
+                        float Messagen = Float.parseFloat(Message);
+                        comunic.enviar(Messagen);
+                        break;
+                    }
                 }
+            } catch (NumberFormatException nEx) {
+                nEx.printStackTrace();
+                Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
             }
-		}
+        }
 	}
 
 	public void BTX(View view) {
@@ -588,13 +733,45 @@ public class PrincipalBT extends Activity implements OnComunicationListener,OnCo
 
 	@Override
 	public void onDataReceived(String dato, int[] ndato) {
-        RX.append(dato);
+        if(nextUpd) {
+            RX.setText(dato);
+            nextUpd = false;
+        }else
+            RX.append(dato);
         if(RN) {
-            for(int val:ndato)
-                RXn.append(val + " ");
-            scron.fullScroll(ScrollView.FOCUS_DOWN);
+            for(int val:ndato) {
+                if (nextUpdn) {
+                    RXn.setText(val + " ");
+                    nextUpdn = false;
+                }else
+                    RXn.append(val + " ");
+            }
+            scron.post(new Runnable() {
+                @Override
+                public void run() {
+                    scron.scrollTo(0, scron.getBottom() + scron.getScrollY());//*/fullScroll(ScrollView.FOCUS_DOWN);
+                }
+            });
         }
-        scro.fullScroll(ScrollView.FOCUS_DOWN);
+        scro.post(new Runnable() {
+            @Override
+            public void run() {
+                scro.scrollTo(0, scro.getBottom() + scro.getScrollY());//*/fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+        if(upd && dato.endsWith("\n")) {
+            contUpd++;
+            String nup = editNAct.getText().toString();
+            if(!nup.equals(""))
+                numUpd = Integer.parseInt(nup);
+            else
+                numUpd = 1;
+            if(contUpd >= numUpd) {
+                nextUpd = true;
+                nextUpdn = true;
+                contUpd = 0;
+            }
+        }
 	}
 
 	@Override

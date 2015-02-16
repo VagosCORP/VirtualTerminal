@@ -14,6 +14,7 @@
     <string name="Text_TXn" translatable="false">0123456789</string>
     <string name="Text_TXb" translatable="false">01</string>
     <string name="Text_TXh" translatable="false">0123456789ABCDEF</string>
+    <string name="Text_TXf" translatable="false">123456789.123456789</string>
     <string name="NB">Your Device don\'t have Bluetooth</string>
     <string name="SincDev">Paired Devices</string>
     <string name="EncDev">Finded Devices</string>
@@ -52,13 +53,10 @@
     <string name="commModeNP">Commander Mode</string>
     <string name="noPro">Available for PRO Users only</string>
     <string name="typSend">Send Type</string>
-    <string name="textTyp">Text Send</string>
-    <string name="numTyp">Numeric Send</string>
-    <string name="binTyp">Binary Send</string>
-    <string name="hexTyp">Hexadecimal Send</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="txt" translatable="false">T</string>
     <string name="num" translatable="false">#</string>
+    <string name="fNum" translatable="false">F#</string>
     <string name="bin" translatable="false">0b</string>
     <string name="hex" translatable="false">0x</string>
     <string name="defvalup" translatable="false">255</string>
@@ -68,5 +66,29 @@
     <string name="darkTheme" translatable="false">Dark</string>
     <string name="Appearance">Theme</string>
     <string name="cThemeToast">Restart Activity to apply changes</string>
+    <string name="updRCV">Update Reception</string>
+    <string name="updRate">#Upd</string>
+    <string name="BRCV" translatable="false">Bytes</string>
+    <string name="shortTyp">Int16 Send</string>
+    <string name="intTyp">Int32 Send</string>
+    <string name="longTyp">Int64 Send</string>
+    <string name="floatTyp">Float Send</string>
+    <string name="doubleTyp">Double Send</string>
+    <string name="textTyp">Text Send</string>
+    <string name="byteTyp">Byte Send</string>
+    <string name="binTyp">Binary Send</string>
+    <string name="hexTyp">Hexadecimal Send</string>
+    <string name="advTypSend">Advanced Send Type</string>
+    <string name="num16" translatable="false">16#</string>
+    <string name="num32" translatable="false">32#</string>
+
+    <string name="Const_Config" translatable="false">config</string>
+    <string name="Const_Ext" translatable="false">.vtconfig</string>
+    <string name="Const_Path" translatable="false">/Android/data/com.vagoscorp.vcvt</string>
+    <string name="Const_PROpack" translatable="false">com.vagoscorp.virtualterminalprokey</string>
+
+    <string name="Extra_TCOM" translatable="false">TCOM</string>
+    <string name="Extra_TYP" translatable="false">TYPE</string>
+    <string name="Extra_LVL" translatable="false">LEVEL</string>
 
 </resources>

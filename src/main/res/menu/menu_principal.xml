@@ -10,8 +10,8 @@
                 android:id="@+id/txtSend"
                 android:title="@string/textTyp"/>
             <item
-                android:id="@+id/numSend"
-                android:title="@string/numTyp"/>
+                android:id="@+id/byteSend"
+                android:title="@string/byteTyp"/>
             <item
                 android:id="@+id/binSend"
                 android:title="@string/binTyp"/>
@@ -21,8 +21,25 @@
         </menu>
     </item>
     <item
-        android:id="@+id/rcvTyp"
+        android:id="@+id/advSendType"
         android:orderInCategory="2"
+        android:title="@string/advTypSend">
+        <menu>
+            <item
+                android:id="@+id/shortSend"
+                android:title="@string/shortTyp"/>
+            <item
+                android:id="@+id/intSend"
+                android:title="@string/intTyp"/>
+
+            <item
+                android:id="@+id/floatSend"
+                android:title="@string/floatTyp"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/rcvTyp"
+        android:orderInCategory="3"
         android:title="@string/RCVtype">
         <menu>
             <item
@@ -34,11 +51,14 @@
             <item
                 android:id="@+id/rcvBoth"
                 android:title="@string/bothRCV"/>
+            <item
+                android:id="@+id/rcvUpd"
+                android:title="@string/updRCV"/>
         </menu>
     </item>
     <item
         android:id="@+id/visual_settings"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:title="@string/Appearance">
         <menu>
             <item
@@ -51,16 +71,21 @@
     </item>
     <item
         android:id="@+id/commMode"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:title="@string/commModeNP"/>
     <item
         android:id="@+id/endCOM"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="@string/Cancel_Conn"
         android:visible="true"/>
     <!--<item-->
         <!--android:id="@+id/action_settings"-->
         <!--android:orderInCategory="100"-->
         <!--android:title="@string/action_settings"/>-->
-
+    <!--<item-->
+        <!--android:id="@+id/doubleSend"-->
+        <!--android:title="@string/doubleTyp"/>-->
+    <!--<item-->
+        <!--android:id="@+id/longSend"-->
+        <!--android:title="@string/longTyp"/>-->
 </menu>

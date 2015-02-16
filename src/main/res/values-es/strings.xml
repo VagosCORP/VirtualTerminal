@@ -40,13 +40,21 @@
     <string name="commModeNP">Modo Comando</string>
     <string name="noPro">Disponible solo para Usuarios Pro</string>
     <string name="typSend">Tipo de envío</string>
-    <string name="textTyp">Envio de Texto</string>
-    <string name="numTyp">Envio Numérico</string>
-    <string name="binTyp">Envio Binario</string>
-    <string name="hexTyp">Envio Hexadecimal</string>
+    <string name="textTyp">Envío de Texto</string>
+    <string name="byteTyp">Envío de Byte</string>
+    <string name="binTyp">Envío Binario</string>
+    <string name="hexTyp">Envío Hexadecimal</string>
     <string name="numFormExc">Formato Numérico Erróneo</string>
     <string name="MyLoc">es</string>
     <string name="Appearance">Apariencia</string>
     <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
+    <string name="updRCV">Recepción de Actualización</string>
+    <string name="updRate">#Act</string>
+    <string name="doubleTyp">Envío Double</string>
+    <string name="floatTyp">Envío de Flotantes</string>
+    <string name="shortTyp">Envío de Int16</string>
+    <string name="longTyp">Envío de Int64</string>
+    <string name="intTyp">Envío de Int32</string>
+    <string name="advTypSend">Tipo de envío Avanzado</string>
 
 </resources>

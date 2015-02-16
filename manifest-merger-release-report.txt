@@ -1,10 +1,10 @@
 -- Merging decision tree log ---
 manifest
-ADDED from AndroidManifest.xml:1:1
+ADDED from AndroidManifest.xml:2:1
 	xmlns:android
-		ADDED from AndroidManifest.xml:1:11
+		ADDED from AndroidManifest.xml:2:11
 	package
-		ADDED from AndroidManifest.xml:2:5
+		ADDED from AndroidManifest.xml:2:70
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:versionName
@@ -13,48 +13,148 @@ ADDED from AndroidManifest.xml:1:1
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from AndroidManifest.xml:6:5
+uses-permission#android.permission.BLUETOOTH
+ADDED from AndroidManifest.xml:4:5
+	android:required
+		ADDED from AndroidManifest.xml:6:9
 	android:name
-		ADDED from AndroidManifest.xml:6:22
-uses-permission#android.permission.READ_EXTERNAL_STORAGE
+		ADDED from AndroidManifest.xml:5:9
+uses-permission#android.permission.BLUETOOTH_ADMIN
 ADDED from AndroidManifest.xml:7:5
+	android:required
+		ADDED from AndroidManifest.xml:9:9
 	android:name
-		ADDED from AndroidManifest.xml:7:22
-application
+		ADDED from AndroidManifest.xml:8:9
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from AndroidManifest.xml:10:5
+	android:required
+		ADDED from AndroidManifest.xml:12:9
+	android:name
+		ADDED from AndroidManifest.xml:11:9
+uses-permission#android.permission.CHANGE_WIFI_STATE
 ADDED from AndroidManifest.xml:13:5
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:17:9
-	android:label
-		ADDED from AndroidManifest.xml:16:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:14:9
-	android:icon
+	android:required
 		ADDED from AndroidManifest.xml:15:9
-	android:theme
+	android:name
+		ADDED from AndroidManifest.xml:14:9
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:16:5
+	android:required
 		ADDED from AndroidManifest.xml:18:9
-activity#com.vagoscorp.virtualterminalprokey.MainActivity
-ADDED from AndroidManifest.xml:19:9
+	android:name
+		ADDED from AndroidManifest.xml:17:9
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from AndroidManifest.xml:19:5
+	android:required
+		ADDED from AndroidManifest.xml:21:9
+	android:name
+		ADDED from AndroidManifest.xml:20:9
+uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:22:5
+	android:required
+		ADDED from AndroidManifest.xml:24:9
+	android:name
+		ADDED from AndroidManifest.xml:23:9
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:26:5
+	android:name
+		ADDED from AndroidManifest.xml:26:22
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:27:5
+	android:name
+		ADDED from AndroidManifest.xml:27:22
+application
+ADDED from AndroidManifest.xml:29:5
+MERGED from VirtualTerminal:communication:unspecified:16:5
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:22:13
+		ADDED from AndroidManifest.xml:33:9
 	android:label
-		ADDED from AndroidManifest.xml:21:13
+		ADDED from AndroidManifest.xml:31:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:30:9
+	android:icon
+		ADDED from AndroidManifest.xml:32:9
 	android:theme
-		ADDED from AndroidManifest.xml:23:13
+		ADDED from AndroidManifest.xml:34:9
+activity#com.vagoscorp.virtualterminal.MainActivity
+ADDED from AndroidManifest.xml:35:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:38:13
+	android:label
+		ADDED from AndroidManifest.xml:37:13
+	android:theme
+		ADDED from AndroidManifest.xml:39:13
 	android:name
-		ADDED from AndroidManifest.xml:20:13
+		ADDED from AndroidManifest.xml:36:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:24:13
+ADDED from AndroidManifest.xml:40:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:25:17
+ADDED from AndroidManifest.xml:41:17
 	android:name
-		ADDED from AndroidManifest.xml:25:25
+		ADDED from AndroidManifest.xml:41:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:27:17
+ADDED from AndroidManifest.xml:42:17
 	android:name
-		ADDED from AndroidManifest.xml:27:27
+		ADDED from AndroidManifest.xml:42:27
+activity#com.vagoscorp.virtualterminal.Device_List
+ADDED from AndroidManifest.xml:45:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:48:13
+	android:label
+		ADDED from AndroidManifest.xml:47:13
+	android:theme
+		ADDED from AndroidManifest.xml:49:13
+	android:name
+		ADDED from AndroidManifest.xml:46:13
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from AndroidManifest.xml:50:13
+	android:name
+		ADDED from AndroidManifest.xml:51:17
+	android:value
+		ADDED from AndroidManifest.xml:52:17
+activity#com.vagoscorp.virtualterminal.Set_Server
+ADDED from AndroidManifest.xml:54:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:57:13
+	android:label
+		ADDED from AndroidManifest.xml:56:13
+	android:theme
+		ADDED from AndroidManifest.xml:58:13
+	android:name
+		ADDED from AndroidManifest.xml:55:13
+activity#com.vagoscorp.virtualterminal.Principal
+ADDED from AndroidManifest.xml:63:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:66:13
+	android:label
+		ADDED from AndroidManifest.xml:65:13
+	android:theme
+		ADDED from AndroidManifest.xml:67:13
+	android:name
+		ADDED from AndroidManifest.xml:64:13
+activity#com.vagoscorp.virtualterminal.PrincipalBT
+ADDED from AndroidManifest.xml:72:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:75:13
+	android:label
+		ADDED from AndroidManifest.xml:74:13
+	android:theme
+		ADDED from AndroidManifest.xml:76:13
+	android:name
+		ADDED from AndroidManifest.xml:73:13
+activity#com.vagoscorp.virtualterminal.PrincipalW
+ADDED from AndroidManifest.xml:81:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:84:13
+	android:label
+		ADDED from AndroidManifest.xml:83:13
+	android:theme
+		ADDED from AndroidManifest.xml:85:13
+	android:name
+		ADDED from AndroidManifest.xml:82:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
+MERGED from VirtualTerminal:communication:unspecified:7:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

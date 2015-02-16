@@ -3,6 +3,8 @@ package com.vagoscorp.virtualterminal;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -34,8 +36,9 @@ import java.nio.ByteOrder;
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Comunic;
+import vclibs.communication.android.ComunicBT;
 
-public class PrincipalW extends Activity implements OnComunicationListener,OnConnectionListener {
+public class Principal extends Activity implements OnComunicationListener,OnConnectionListener {
 
 	public TextView RX;// Received Data
     public TextView RXn;// Received Data
@@ -70,30 +73,46 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
     Button comm11;
     Button comm12;
 
-	public String serverip;// IP to Connect
-	public int serverport;// Port to Connect
-
+    public String serverip;// IP to Connect
+    public int serverport;// Port to Connect
     public boolean RN;
     public boolean CM;
 	public int SC;
     public int sendTyp = TXTSEND;
 
-	WifiManager WFM;
-	ConnectivityManager CTM;
-	String myIP = "";
-	Comunic comunic;
 
-	private final int REQUEST_ENABLE_WIFI = 15;
-	private final int REQUEST_CHANGE_SERVER = 12;
-	public static final String SI = "SIP";
-	public static final String SP = "SPort";
-	public static final String defIP = "10.0.0.6";
-	public static final int defPort = 2000;
+    public BluetoothAdapter BTAdapter;
+	public BluetoothDevice[] BondedDevices;
+	public BluetoothDevice mDevice;
+	public int mDeviceIndex;
+    WifiManager WFM;
+    ConnectivityManager CTM;
+    String myIP = "";
+    Comunic comunic;
+	ComunicBT comunicBT;
+
+	public int index;
+	public String[] DdeviceNames;
+	public String myName;
+	public String myAddress;
+
+    private final int REQUEST_ENABLE_BT = 1;
+	private final int SEL_BT_DEVICE = 2;
+	private final int defIndex = 0;
+    private final int REQUEST_ENABLE_WIFI = 15;
+    private final int REQUEST_CHANGE_SERVER = 12;
+    public static final String SI = "SIP";
+    public static final String SP = "SPort";
+    public static final String defIP = "10.0.0.6";
+    public static final int defPort = 2000;
+
+    public static final String LD = "LD";
+	public static final String indev = "indev";
+    public static final String theme = "Theme";
 	public static final String comm = "comm";
 	public static final String commN = "commN";
 	public static final String commT = "commT";
     public static final String commET = "commET";
-    public static final String theme = "Theme";
 	public static final int defNcomm = 0;
 	public static final boolean defBcomm = false;
     public static final int TXTSEND = 0;
@@ -115,30 +134,48 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
     boolean nextUpdn = false;
     int contUpd = 0;
     int numUpd = 1;
+    boolean TCOM = false;
 	boolean pro = false;
 
-
-    @Override
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         if(shapre.getBoolean(theme, false))
-            setTheme(R.style.DarkTheme);
+            this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_principal);
         P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && shapre.getBoolean(theme, false))
             P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
+        Intent tip = getIntent();
+        TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
+        SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
+        pro = tip.getBooleanExtra(getString(R.string.Extra_LVL), false);
+        RN =  false;
+        CM =  false;
         comunic = new Comunic();
-		Intent tip = getIntent();
-		WFM = (WifiManager) getSystemService(WIFI_SERVICE);
-		CTM = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-		RX = (TextView) findViewById(R.id.RX);
-        RXn = (TextView) findViewById(R.id.RXn);
+        comunicBT = new ComunicBT();
+        if(TCOM) {
+            comunicBT = new ComunicBT();
+            BTAdapter = BluetoothAdapter.getDefaultAdapter();
+            index = defIndex;
+            if (BTAdapter == null) {
+                Toast.makeText(Principal.this, R.string.NB, Toast.LENGTH_SHORT)
+                        .show();
+                finish();
+                return;
+            }
+        }else {
+            WFM = (WifiManager) getSystemService(WIFI_SERVICE);
+            CTM = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        }
+		RX = (TextView)findViewById(R.id.RX);
+        RXn = (TextView)findViewById(R.id.RXn);
         layNAct = (LinearLayout)findViewById(R.id.layNAct);
         layComp = (LinearLayout)findViewById(R.id.layComp);
         editNAct = (EditText)findViewById(R.id.editNAct);
         UpdN = (CheckBox)findViewById(R.id.UpdN);
-		TX = (EditText) findViewById(R.id.TX);
+		TX = (EditText)findViewById(R.id.TX);
         byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
 		SD = (TextView) findViewById(R.id.label_ser);
 		Conect = (Button) findViewById(R.id.Conect);
@@ -227,7 +264,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
                             }
                         } catch (NumberFormatException nEx) {
                             nEx.printStackTrace();
-                            Toast.makeText(PrincipalW.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Principal.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
                         }
                     }else {
                         N = false;
@@ -266,12 +303,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
         comm10.setOnLongClickListener(oLClistener);
         comm11.setOnLongClickListener(oLClistener);
         comm12.setOnLongClickListener(oLClistener);
-        RN =  false;
-        CM =  false;
-		serverip = defIP;
-		serverport = defPort;
-		SC = tip.getIntExtra(MainActivity.typ, MainActivity.CLIENT);
-		pro = tip.getBooleanExtra(MainActivity.lvl, false);
+
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 		setupActionBar();
@@ -280,7 +312,7 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			ActionBar aB = getActionBar();//Support
+            ActionBar aB = getActionBar();
 			if(aB != null)
 				aB.setDisplayHomeAsUpEnabled(true);
 		}
@@ -288,17 +320,16 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_principal, menu);
-        MenuItem mItem = menu.findItem(R.id.commMode);
-        if(pro)
-            mItem.setTitle(R.string.commMode);
+//        MenuItem mItem = menu.findItem(R.id.commMode);
+//        if(pro)
+//            mItem.setTitle(R.string.commMode);
 		return true;
 	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home: {
                 finish();
                 return true;
@@ -452,48 +483,147 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
                 Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
                 return true;
             }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+	private void initBTD(BluetoothDevice[] BonDev) {
+		myName = BTAdapter.getName();
+		myAddress = BTAdapter.getAddress();
+		if (BonDev.length > 0) {
+			if (BonDev.length < index)
+				index = 0;
+			mDevice = BondedDevices[index];
+			SD.setText(mDevice.getName() + "\n" + mDevice.getAddress());
+			if(SC == MainActivity.SERVER)
+				SD.setText(myName + "\n" + myAddress);
+			Conect.setEnabled(true);
+		} else {
+			SD.setText(R.string.NoPD);
+			Conect.setEnabled(false);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
 	protected void onResume() {
-		NetworkInfo nWI = CTM.getActiveNetworkInfo();
-		if (!WFM.isWifiEnabled() || !(nWI != null && nWI.getState() ==
-				NetworkInfo.State.CONNECTED)) {
-//			WFM.setWifiEnabled(true);
-			Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
-		}else {
-			int ipAddress = WFM.getConnectionInfo().getIpAddress();
-//			myIP = Formatter.formatIpAddress(ipAddress);
-			if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
-		        ipAddress = Integer.reverseBytes(ipAddress);
-			byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
-			try {
-				myIP = InetAddress.getByAddress(ipByteArray).getHostAddress();
-		    }catch (UnknownHostException ex) {
-		        Log.e("WIFIIP", "Unable to get host address.");
-		        myIP = "0.0.0.0";
-		    }
-		}
-		if(SC == MainActivity.SERVER)
-			Chan_Ser.setVisibility(View.GONE);//Enabled(false);
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         if(shapre.getBoolean(theme, false))
             setTheme(R.style.DarkTheme);
-		serverip = shapre.getString(SI, defIP);
-		serverport = shapre.getInt(SP, defPort);
-		SD.setText(serverip + ":" + serverport);
+        if(TCOM)
+            resumeBT(shapre);
+        else
+            resumeW(shapre);
 		if(SC == MainActivity.SERVER)
-			SD.setText(myIP + ":" + serverport);
+			Chan_Ser.setVisibility(View.GONE);
 		UcommUI();
 		super.onResume();
 	}
 
+    private void resumeW(SharedPreferences shapre) {
+        NetworkInfo nWI = CTM.getActiveNetworkInfo();
+        if (!WFM.isWifiEnabled() || !(nWI != null && nWI.getState() ==
+                NetworkInfo.State.CONNECTED)) {
+//			WFM.setWifiEnabled(true);
+            Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
+        }else {
+            int ipAddress = WFM.getConnectionInfo().getIpAddress();
+//			myIP = Formatter.formatIpAddress(ipAddress);
+            if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
+                ipAddress = Integer.reverseBytes(ipAddress);
+            byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
+            try {
+                myIP = InetAddress.getByAddress(ipByteArray).getHostAddress();
+            }catch (UnknownHostException ex) {
+                Log.e("WIFIIP", "Unable to get host address.");
+                myIP = "0.0.0.0";
+            }
+        }
+        serverip = shapre.getString(SI, defIP);
+        serverport = shapre.getInt(SP, defPort);
+        SD.setText(serverip + ":" + serverport);
+        if(SC == MainActivity.SERVER)
+            SD.setText(myIP + ":" + serverport);
+    }
+
+    private void resumeBT(SharedPreferences shapre) {
+        index = shapre.getInt(indev, defIndex);
+        if (BTAdapter.isEnabled()) {
+            BondedDevices = BTAdapter.getBondedDevices().toArray(
+                    new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
+            initBTD(BondedDevices);
+        } else {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case REQUEST_ENABLE_BT: {
+			if (resultCode != Activity.RESULT_OK) {
+				Toast.makeText(this, R.string.EnBT, Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				BondedDevices = BTAdapter.getBondedDevices().toArray(
+						new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
+				initBTD(BondedDevices);
+			}
+			break;
+		}
+		case SEL_BT_DEVICE: {
+			if (resultCode == Activity.RESULT_OK) {
+				index = data.getIntExtra(Device_List.SDev, defIndex);
+				SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+				SharedPreferences.Editor editor = shapre.edit();
+				editor.putInt(indev, index);
+				editor.commit();
+				mDevice = BondedDevices[index];
+				SD.setText(mDevice.getName() + "\n" + mDevice.getAddress());
+			}
+			break;
+		}
+        case REQUEST_ENABLE_WIFI: {
+            if(!WFM.isWifiEnabled()/*resultCode != Activity.RESULT_OK*/) {
+                Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                NetworkInfo nWI = CTM.getActiveNetworkInfo();
+                if(!(nWI != null && nWI.getType() == ConnectivityManager.TYPE_WIFI &&
+                        nWI.getState() == NetworkInfo.State.CONNECTED)){
+                    Toast.makeText(this, R.string.EWF, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+            break;
+        }
+        case REQUEST_CHANGE_SERVER: {
+            if (resultCode == Activity.RESULT_OK) {
+                serverip = data.getStringExtra(Set_Server.NSI);
+                serverport = data.getIntExtra(Set_Server.NSP, defPort);
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putString(SI, serverip);
+                editor.putInt(SP, serverport);
+                editor.commit();
+                if(SC == MainActivity.CLIENT)
+                    SD.setText(serverip + ":" + serverport);
+                else if(SC == MainActivity.SERVER)
+                    SD.setText(myIP + ":" + serverport);
+            }
+            break;
+        }
+		}
+	}
+
 	@Override
 	protected void onDestroy() {
-		comunic.Detener_Actividad();
+        if(TCOM)
+            comunicBT.Detener_Actividad();
+		else
+            comunic.Detener_Actividad();
 		super.onDestroy();
 	}
 	
@@ -551,113 +681,134 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
 		}
 		return num;
 	}
-
-    public void commClick(View view) {
-        int n = nComm(view);
-        if(n != 0) {
-            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+	
+	public void commClick(View view) {
+		int n = nComm(view);
+		if(n != 0) {
+			SharedPreferences shapre = getPreferences(MODE_PRIVATE);
             int commType = shapre.getInt(commET + n, COMMT_STRING);
             boolean commN = shapre.getBoolean(commT + n, defBcomm);
             switch(commType) {
                 case(COMMT_INT8): {
-                    comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    if(TCOM)
+                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    else
+                        comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                     break;
                 }
                 case(COMMT_INT16): {
-                    comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                    if(TCOM)
+                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    else
+                        comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                     break;
                 }
                 case(COMMT_INT32): {
-                    comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                    if(TCOM)
+                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    else
+                        comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                     break;
                 }
                 case(COMMT_FLOAT): {
-                    comunic.enviar(shapre.getFloat(comm + n, defNcomm));
+                    if(TCOM)
+                        comunicBT.enviar(shapre.getFloat(comm + n, defNcomm));
+                    else
+                        comunic.enviar(shapre.getFloat(comm + n, defNcomm));
                     break;
                 }
                 default: {
-                    if(!commN)
-                        comunic.enviar(shapre.getString(comm + n, getResources().getString(R.string.commDVal)));
+                    if (!commN)
+                        if(TCOM)
+                            comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                        else
+                            comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                    else
+                    if(TCOM)
+                        comunicBT.enviar(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar(shapre.getInt(comm + n, defNcomm));
                 }
             }
-        }
-    }
+		}
+	}
 	
 	void UcommUI() {
-        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        comm1.setText(shapre.getString(commN + 1, getResources().getString(R.string.commDVal)));
-        comm2.setText(shapre.getString(commN + 2, getResources().getString(R.string.commDVal)));
-        comm3.setText(shapre.getString(commN + 3, getResources().getString(R.string.commDVal)));
-        comm4.setText(shapre.getString(commN + 4, getResources().getString(R.string.commDVal)));
-        comm5.setText(shapre.getString(commN + 5, getResources().getString(R.string.commDVal)));
-        comm6.setText(shapre.getString(commN + 6, getResources().getString(R.string.commDVal)));
-        comm7.setText(shapre.getString(commN + 7, getResources().getString(R.string.commDVal)));
-        comm8.setText(shapre.getString(commN + 8, getResources().getString(R.string.commDVal)));
-        comm9.setText(shapre.getString(commN + 9, getResources().getString(R.string.commDVal)));
-        comm10.setText(shapre.getString(commN + 10, getResources().getString(R.string.commDVal)));
-        comm11.setText(shapre.getString(commN + 11, getResources().getString(R.string.commDVal)));
-        comm12.setText(shapre.getString(commN + 12, getResources().getString(R.string.commDVal)));
+		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+		comm1.setText(shapre.getString(commN + 1, getResources().getString(R.string.commDVal)));
+		comm2.setText(shapre.getString(commN + 2, getResources().getString(R.string.commDVal)));
+		comm3.setText(shapre.getString(commN + 3, getResources().getString(R.string.commDVal)));
+		comm4.setText(shapre.getString(commN + 4, getResources().getString(R.string.commDVal)));
+		comm5.setText(shapre.getString(commN + 5, getResources().getString(R.string.commDVal)));
+		comm6.setText(shapre.getString(commN + 6, getResources().getString(R.string.commDVal)));
+		comm7.setText(shapre.getString(commN + 7, getResources().getString(R.string.commDVal)));
+		comm8.setText(shapre.getString(commN + 8, getResources().getString(R.string.commDVal)));
+		comm9.setText(shapre.getString(commN + 9, getResources().getString(R.string.commDVal)));
+		comm10.setText(shapre.getString(commN + 10, getResources().getString(R.string.commDVal)));
+		comm11.setText(shapre.getString(commN + 11, getResources().getString(R.string.commDVal)));
+		comm12.setText(shapre.getString(commN + 12, getResources().getString(R.string.commDVal)));
 	}
 
 	public void Chan_Ser(View view) {
-		Intent CS = new Intent(this, Set_Server.class);
-		CS.putExtra(SI, serverip);
-		CS.putExtra(SP, serverport);
-		startActivityForResult(CS, REQUEST_CHANGE_SERVER);
-	}
+        if(TCOM) {
+            if (BondedDevices.length > 0) {
+                int deviceCount = BondedDevices.length;
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch(requestCode) {
-		case REQUEST_ENABLE_WIFI: {
-			if(!WFM.isWifiEnabled()/*resultCode != Activity.RESULT_OK*/) {
-				Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
-				finish();
-			}else {
-				NetworkInfo nWI = CTM.getActiveNetworkInfo();
-				if(!(nWI != null && nWI.getType() == ConnectivityManager.TYPE_WIFI &&
-						nWI.getState() == NetworkInfo.State.CONNECTED)){
-					Toast.makeText(this, R.string.EWF, Toast.LENGTH_SHORT).show();
-					finish();
-				}
-			}
-			break;
-		}
-		case REQUEST_CHANGE_SERVER: {
-			if (resultCode == Activity.RESULT_OK) {
-				serverip = data.getStringExtra(Set_Server.NSI);
-				serverport = data.getIntExtra(Set_Server.NSP, defPort);
-				SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-				SharedPreferences.Editor editor = shapre.edit();
-				editor.putString(SI, serverip);
-				editor.putInt(SP, serverport);
-				editor.commit();
-				if(SC == MainActivity.CLIENT)
-					SD.setText(serverip + ":" + serverport);
-				else if(SC == MainActivity.SERVER)
-					SD.setText(myIP + ":" + serverport);
-			}
-			break;
-		}
-		}
+                if (mDeviceIndex < deviceCount)
+                    mDevice = BondedDevices[mDeviceIndex];
+                else {
+                    mDeviceIndex = 0;
+                    mDevice = BondedDevices[0];
+                }
+                DdeviceNames = new String[deviceCount];
+                int i = 0;
+                for (BluetoothDevice device : BondedDevices) {
+                    DdeviceNames[i++] = device.getName() + "\n"
+                            + device.getAddress();
+                }
+                Intent sel_dev = new Intent(Principal.this, Device_List.class);
+                sel_dev.putExtra(LD, DdeviceNames);
+                startActivityForResult(sel_dev, SEL_BT_DEVICE);
+            } else
+                Toast.makeText(this, R.string.NoPD, Toast.LENGTH_SHORT).show();
+        }else {
+            Intent CS = new Intent(this, Set_Server.class);
+            CS.putExtra(SI, serverip);
+            CS.putExtra(SP, serverport);
+            startActivityForResult(CS, REQUEST_CHANGE_SERVER);
+        }
 	}
 
 	public void conect(View view) {
-		if(comunic.estado == comunic.NULL) {
-			if(SC == MainActivity.CLIENT) {
-				comunic = new Comunic(this, serverip, serverport);
-			}else if(SC == MainActivity.SERVER) {
-				comunic = new Comunic(this, serverport);
-			}
-			comunic.setComunicationListener(this);
-			comunic.setConnectionListener(this);
-			Chan_Ser.setEnabled(false);
-			Conect.setText(getResources().getString(R.string.Button_Conecting));
-			comunic.execute();
-		}else
-			comunic.Detener_Actividad();
+        if(TCOM) {
+            if (comunicBT.estado == comunic.NULL) {
+                if (SC == MainActivity.CLIENT) {
+                    comunicBT = new ComunicBT(this, mDevice);
+                } else if (SC == MainActivity.SERVER) {
+                    comunicBT = new ComunicBT(this, BTAdapter);
+                }
+                comunicBT.setComunicationListener(this);
+                comunicBT.setConnectionListener(this);
+                Chan_Ser.setEnabled(false);
+                Conect.setText(getString(R.string.Button_Conecting));
+                comunicBT.execute();
+            } else
+                comunicBT.Detener_Actividad();
+        }else {
+            if(comunic.estado == comunic.NULL) {
+                if(SC == MainActivity.CLIENT) {
+                    comunic = new Comunic(this, serverip, serverport);
+                }else if(SC == MainActivity.SERVER) {
+                    comunic = new Comunic(this, serverport);
+                }
+                comunic.setComunicationListener(this);
+                comunic.setConnectionListener(this);
+                Chan_Ser.setEnabled(false);
+                Conect.setText(getResources().getString(R.string.Button_Conecting));
+                comunic.execute();
+            }else
+                comunic.Detener_Actividad();
+        }
 	}
 
 	public void enviar(View view) {
@@ -666,37 +817,58 @@ public class PrincipalW extends Activity implements OnComunicationListener,OnCon
             try {
                 switch (sendTyp) {
                     case (TXTSEND): {
-                        comunic.enviar(Message);
+                        if(TCOM)
+                            comunicBT.enviar(Message);
+                        else
+                            comunic.enviar(Message);
                         break;
                     }
                     case (BYTESEND): {
                         int Messagen = Integer.parseInt(Message);
-                        comunic.enviar(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar(Messagen);
+                        else
+                            comunic.enviar(Messagen);
                         break;
                     }
                     case (BINSEND): {
                         int Messagen = Integer.parseInt(Message, 2);
-                        comunic.enviar(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar(Messagen);
+                        else
+                            comunic.enviar(Messagen);
                         break;
                     }
                     case (HEXSEND): {
                         int Messagen = Integer.parseInt(Message, 16);
-                        comunic.enviar(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar(Messagen);
+                        else
+                            comunic.enviar(Messagen);
                         break;
                     }
                     case (SHORTSEND): {
                         int Messagen = Integer.parseInt(Message);
-                        comunic.enviar_Int16(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar_Int16(Messagen);
+                        else
+                            comunic.enviar_Int16(Messagen);
                         break;
                     }
                     case (INTSEND): {
                         int Messagen = Integer.parseInt(Message);
-                        comunic.enviar_Int32(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar_Int32(Messagen);
+                        else
+                            comunic.enviar_Int32(Messagen);
                         break;
                     }
                     case (FLOATSEND): {
                         float Messagen = Float.parseFloat(Message);
-                        comunic.enviar(Messagen);
+                        if(TCOM)
+                            comunicBT.enviar(Messagen);
+                        else
+                            comunic.enviar(Messagen);
                         break;
                     }
                 }

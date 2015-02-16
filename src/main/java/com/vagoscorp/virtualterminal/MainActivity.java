@@ -27,12 +27,12 @@ public class MainActivity extends Activity {
     LinearLayout serverBT;
     LinearLayout serverW;
 	
-	public static final String typ = "type";
-	public static final String lvl = "level";
+//	public static final String typ = "type";
+//	public static final String lvl = "level";
 	public static final int CLIENT = 1;
 	public static final int SERVER = 2;
-	
-	private Intent Init;
+
+    Intent Init = new Intent(this, Principal.class);
 	
 	boolean SDread = false;
 	boolean SDwrite = false;
@@ -41,16 +41,16 @@ public class MainActivity extends Activity {
 	String[] fileNames;
 	int nfil = 0;
 	boolean pro = false;
-	static String config = "config";
-	static String ext = ".vtconfig";
-//	String bSel;
-//	String nPro;
+//	static String config = "config";
+//	static String ext = ".vtconfig";
+//    static String paths = "/Android/data/com.vagoscorp.vcvt";
+//    static String proPack = "com.vagoscorp.virtualterminalprokey";
 	String baseVer = "1\n1\n0\n0\n0";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.layout_activity_main);
         serverLabel = (TextView)findViewById(R.id.serverLabel);
         serverBT = (LinearLayout)findViewById(R.id.serverBT);
         serverW = (LinearLayout)findViewById(R.id.serverW);
@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 		SW = (Button)findViewById(R.id.Sel_SW);
 //		bSel = getResources().getString(R.string.Button_Sel);
 //		nPro = getResources().getString(R.string.needPro);
-		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.vagoscorp.vcvt");
+		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.Const_Path));
 		path.mkdirs();
 		getNames();
 	}
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		if(nfil == 0) {
-			write(config, baseVer);
+			write(getString(R.string.Const_Config), baseVer);
 			getNames();
 		}
         checkPro();
@@ -76,30 +76,34 @@ public class MainActivity extends Activity {
 	}
 
 	public void InitBT(View view) {
-		Init = new Intent(this, PrincipalBT.class);
-		Init.putExtra(typ, CLIENT);
-		Init.putExtra(lvl, pro);
+		Init = new Intent(this, Principal.class);
+        Init.putExtra(getString(R.string.Extra_TCOM), true);
+        Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
+        Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
 	public void InitW(View view) {
-		Init = new Intent(this, PrincipalW.class);
-		Init.putExtra(typ, CLIENT);
-		Init.putExtra(lvl, pro);
+		Init = new Intent(this, Principal.class);
+        Init.putExtra(getString(R.string.Extra_TCOM), false);
+        Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
+        Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
 	public void InitBTs(View view) {
-		Init = new Intent(this, PrincipalBT.class);
-		Init.putExtra(typ, SERVER);
-		Init.putExtra(lvl, pro);
+        Init = new Intent(this, Principal.class);
+        Init.putExtra(getString(R.string.Extra_TCOM), true);
+        Init.putExtra(getString(R.string.Extra_TYP), SERVER);
+        Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
 	public void InitWs(View view) {
-		Init = new Intent(this, PrincipalW.class);
-		Init.putExtra(typ, SERVER);
-		Init.putExtra(lvl, pro);
+        Init = new Intent(this, Principal.class);
+        Init.putExtra(getString(R.string.Extra_TCOM), false);
+		Init.putExtra(getString(R.string.Extra_TYP), SERVER);
+		Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 	
@@ -120,14 +124,14 @@ public class MainActivity extends Activity {
     void checkPro() {
         Intent intent;
         PackageManager manager = getPackageManager();
-        intent = manager.getLaunchIntentForPackage("com.vagoscorp.virtualterminalprokey");
+        intent = manager.getLaunchIntentForPackage(getString(R.string.Const_PROpack));
         if(intent != null) {
             serverLabel.setVisibility(View.VISIBLE);
             serverBT.setVisibility(View.VISIBLE);
             serverW.setVisibility(View.VISIBLE);
             pro = true;
         }else {
-            processFile(read(config));
+            processFile(read(getString(R.string.Const_Config)));
         }
     }
 	
@@ -135,7 +139,7 @@ public class MainActivity extends Activity {
 		String[] enab;
 		enab = file.split("\n");
 		if(enab.length != 5) {
-			write(config, baseVer);
+			write(getString(R.string.Const_Config), baseVer);
 			getNames();
 		}else {
 //			if(enab[0].equals("1")) {
@@ -174,7 +178,7 @@ public class MainActivity extends Activity {
 		checkSD();
 		if(SDread && SDwrite) {
 			byte[] buff = data.getBytes();
-			File file = new File(path, name + ext);
+			File file = new File(path, name + getString(R.string.Const_Ext));
 			OutputStream os;
 			try {
 				os = new FileOutputStream(file);
@@ -191,7 +195,7 @@ public class MainActivity extends Activity {
 		String val = "";
 		if(SDread) {
 			byte[] buff;
-			File file = new File(path, name + ext);
+			File file = new File(path, name + getString(R.string.Const_Ext));
 			InputStream is;
 			try {
 				is = new FileInputStream(file);
@@ -218,9 +222,37 @@ public class MainActivity extends Activity {
 			if(nfil > 0) {
 				fileNames = new String[nfil];
 				for(File file:fileList) {
-					fileNames[i] = file.getName().split(ext)[0];
+					fileNames[i] = file.getName().split(getString(R.string.Const_Ext))[0];
 				}
 			}
 		}
 	}
+
+//    public void InitBT(View view) {
+//        Init = new Intent(this, PrincipalBT.class);
+//        Init.putExtra(typ, CLIENT);
+//        Init.putExtra(lvl, pro);
+//        startActivity(Init);
+//    }
+//
+//    public void InitW(View view) {
+//        Init = new Intent(this, PrincipalW.class);
+//        Init.putExtra(typ, CLIENT);
+//        Init.putExtra(lvl, pro);
+//        startActivity(Init);
+//    }
+//
+//    public void InitBTs(View view) {
+//        Init = new Intent(this, PrincipalBT.class);
+//        Init.putExtra(typ, SERVER);
+//        Init.putExtra(lvl, pro);
+//        startActivity(Init);
+//    }
+//
+//    public void InitWs(View view) {
+//        Init = new Intent(this, PrincipalW.class);
+//        Init.putExtra(typ, SERVER);
+//        Init.putExtra(lvl, pro);
+//        startActivity(Init);
+//    }
 }

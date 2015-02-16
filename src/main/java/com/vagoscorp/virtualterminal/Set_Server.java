@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Set_Server extends Activity {
 
@@ -39,12 +40,17 @@ public class Set_Server extends Activity {
 
 	public void Cambiar(View view) {
 		final String SIP = Server_IP.getText().toString();
-		final int SPort = Integer.parseInt(Server_Port.getText().toString());
-		Intent result = new Intent("RESULT_ACTION");
-		result.putExtra(NSI, SIP);
-		result.putExtra(NSP, SPort);
-		setResult(Activity.RESULT_OK, result);
-		finish();
+        try {
+            final int SPort = Integer.parseInt(Server_Port.getText().toString());
+            Intent result = new Intent("RESULT_ACTION");
+            result.putExtra(NSI, SIP);
+            result.putExtra(NSP, SPort);
+            setResult(Activity.RESULT_OK, result);
+            finish();
+        } catch (NumberFormatException nEx) {
+            nEx.printStackTrace();
+            Toast.makeText(Set_Server.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+        }
 	}
 
 	@Override
