@@ -132,26 +132,6 @@ ADDED from AndroidManifest.xml:63:9
 		ADDED from AndroidManifest.xml:67:13
 	android:name
 		ADDED from AndroidManifest.xml:64:13
-activity#com.vagoscorp.virtualterminal.PrincipalBT
-ADDED from AndroidManifest.xml:72:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:75:13
-	android:label
-		ADDED from AndroidManifest.xml:74:13
-	android:theme
-		ADDED from AndroidManifest.xml:76:13
-	android:name
-		ADDED from AndroidManifest.xml:73:13
-activity#com.vagoscorp.virtualterminal.PrincipalW
-ADDED from AndroidManifest.xml:81:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:84:13
-	android:label
-		ADDED from AndroidManifest.xml:83:13
-	android:theme
-		ADDED from AndroidManifest.xml:85:13
-	android:name
-		ADDED from AndroidManifest.xml:82:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from VirtualTerminal:communication:unspecified:7:5

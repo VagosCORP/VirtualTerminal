@@ -26,14 +26,8 @@ public class MainActivity extends Activity {
     TextView serverLabel;
     LinearLayout serverBT;
     LinearLayout serverW;
-	
-//	public static final String typ = "type";
-//	public static final String lvl = "level";
 	public static final int CLIENT = 1;
 	public static final int SERVER = 2;
-
-    Intent Init = new Intent(this, Principal.class);
-	
 	boolean SDread = false;
 	boolean SDwrite = false;
 	File path;
@@ -41,11 +35,9 @@ public class MainActivity extends Activity {
 	String[] fileNames;
 	int nfil = 0;
 	boolean pro = false;
-//	static String config = "config";
-//	static String ext = ".vtconfig";
-//    static String paths = "/Android/data/com.vagoscorp.vcvt";
-//    static String proPack = "com.vagoscorp.virtualterminalprokey";
-	String baseVer = "1\n1\n0\n0\n0";
+    boolean mkdirsDone = false;
+    int readBuffDone = 0;
+    Intent Init;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +50,16 @@ public class MainActivity extends Activity {
 		CW = (Button)findViewById(R.id.Sel_W);
 		SB = (Button)findViewById(R.id.Sel_SBT);
 		SW = (Button)findViewById(R.id.Sel_SW);
-//		bSel = getResources().getString(R.string.Button_Sel);
-//		nPro = getResources().getString(R.string.needPro);
 		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.Const_Path));
-		path.mkdirs();
+        mkdirsDone = path.mkdirs();
+        Init = new Intent(this, Principal.class);
 		getNames();
 	}
 	
 	@Override
 	protected void onResume() {
 		if(nfil == 0) {
-			write(getString(R.string.Const_Config), baseVer);
+			write(getString(R.string.Const_BaseVer));
 			getNames();
 		}
         checkPro();
@@ -109,16 +100,20 @@ public class MainActivity extends Activity {
 	
 	void checkSD() {
 		String state = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(state)) {
-			SDread = true;
-			SDwrite = true;
-		}else if(Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			SDread = true;
-			SDwrite = false;
-		}else {
-			SDread = false;
-			SDwrite = false;
-		}
+        switch (state) {
+            case Environment.MEDIA_MOUNTED:
+                SDread = true;
+                SDwrite = true;
+                break;
+            case Environment.MEDIA_MOUNTED_READ_ONLY:
+                SDread = true;
+                SDwrite = false;
+                break;
+            default:
+                SDread = false;
+                SDwrite = false;
+                break;
+        }
 	}
 
     void checkPro() {
@@ -131,7 +126,7 @@ public class MainActivity extends Activity {
             serverW.setVisibility(View.VISIBLE);
             pro = true;
         }else {
-            processFile(read(getString(R.string.Const_Config)));
+            processFile(read());
         }
     }
 	
@@ -139,46 +134,26 @@ public class MainActivity extends Activity {
 		String[] enab;
 		enab = file.split("\n");
 		if(enab.length != 5) {
-			write(getString(R.string.Const_Config), baseVer);
+			write(getString(R.string.Const_BaseVer));
 			getNames();
 		}else {
-//			if(enab[0].equals("1")) {
-//				CB.setEnabled(true); CB.setText(bSel);
-//			}else {
-//				CB.setEnabled(false); CB.setText(nPro);
-//			}
-//			if(enab[1].equals("1")) {
-//				CW.setEnabled(true); CW.setText(bSel);
-//			}else {
-//				CW.setEnabled(false); CW.setText(nPro);
-//			}
 			if(enab[2].equals("1")) {
                 serverLabel.setVisibility(View.VISIBLE);
                 serverBT.setVisibility(View.VISIBLE);
-//				SB.setEnabled(true); SB.setText(bSel);
-//			}else {
-//                serverLabel.setVisibility(View.GONE);
-//                serverBT.setVisibility(View.GONE);
-//		        SB.setEnabled(false); SB.setText(nPro);
 			}
 			if(enab[3].equals("1")) {
                 serverLabel.setVisibility(View.VISIBLE);
                 serverW.setVisibility(View.VISIBLE);
-//				SW.setEnabled(true); SW.setText(bSel);
-//			}else {
-//                serverLabel.setVisibility(View.GONE);
-//                serverW.setVisibility(View.GONE);
-//				SW.setEnabled(false); SW.setText(nPro);
 			}
             pro = enab[4].equals("1");
 		}
 	}
 
-	void write(String name, String data) {
+	void write(/*String name, */String data) {
 		checkSD();
 		if(SDread && SDwrite) {
 			byte[] buff = data.getBytes();
-			File file = new File(path, name + getString(R.string.Const_Ext));
+			File file = new File(path, getString(R.string.Const_Config) + getString(R.string.Const_Ext));
 			OutputStream os;
 			try {
 				os = new FileOutputStream(file);
@@ -190,17 +165,17 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	String read(String name) {
+	String read(/*String name*/) {
 		checkSD();
 		String val = "";
 		if(SDread) {
 			byte[] buff;
-			File file = new File(path, name + getString(R.string.Const_Ext));
+			File file = new File(path, getString(R.string.Const_Config) + getString(R.string.Const_Ext));
 			InputStream is;
 			try {
 				is = new FileInputStream(file);
 				buff = new byte[is.available()];
-				is.read(buff);
+                readBuffDone = is.read(buff);
 				is.close();
 				val = new String(buff);
 			} catch (IOException e) {
@@ -227,32 +202,4 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-
-//    public void InitBT(View view) {
-//        Init = new Intent(this, PrincipalBT.class);
-//        Init.putExtra(typ, CLIENT);
-//        Init.putExtra(lvl, pro);
-//        startActivity(Init);
-//    }
-//
-//    public void InitW(View view) {
-//        Init = new Intent(this, PrincipalW.class);
-//        Init.putExtra(typ, CLIENT);
-//        Init.putExtra(lvl, pro);
-//        startActivity(Init);
-//    }
-//
-//    public void InitBTs(View view) {
-//        Init = new Intent(this, PrincipalBT.class);
-//        Init.putExtra(typ, SERVER);
-//        Init.putExtra(lvl, pro);
-//        startActivity(Init);
-//    }
-//
-//    public void InitWs(View view) {
-//        Init = new Intent(this, PrincipalW.class);
-//        Init.putExtra(typ, SERVER);
-//        Init.putExtra(lvl, pro);
-//        startActivity(Init);
-//    }
 }

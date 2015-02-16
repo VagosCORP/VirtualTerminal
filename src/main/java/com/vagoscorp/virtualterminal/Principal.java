@@ -101,18 +101,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	private final int defIndex = 0;
     private final int REQUEST_ENABLE_WIFI = 15;
     private final int REQUEST_CHANGE_SERVER = 12;
-    public static final String SI = "SIP";
-    public static final String SP = "SPort";
-    public static final String defIP = "10.0.0.6";
     public static final int defPort = 2000;
-
-    public static final String LD = "LD";
-	public static final String indev = "indev";
-    public static final String theme = "Theme";
-	public static final String comm = "comm";
-	public static final String commN = "commN";
-	public static final String commT = "commT";
-    public static final String commET = "commET";
 	public static final int defNcomm = 0;
 	public static final boolean defBcomm = false;
     public static final int TXTSEND = 0;
@@ -140,13 +129,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        if(shapre.getBoolean(theme, false))
+        boolean darkTheme = shapre.getBoolean(getString(R.string.Extra_theme), false);
+        if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_principal);
         P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && shapre.getBoolean(theme, false))
-            P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
+            P_LYT.setBackgroundColor(Color.parseColor(getString(R.string.Const_ColorBlack)));
         Intent tip = getIntent();
         TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
         SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
@@ -213,51 +203,51 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                         try {
                             switch (sendTyp) {
                                 case (TXTSEND): {
-                                    editor.putString(comm + n, Message);
-                                    editor.putString(commN + n, Message);
+                                    editor.putString(getString(R.string.Extra_comm) + n, Message);
+                                    editor.putString(getString(R.string.Extra_commN) + n, Message);
                                     commType = COMMT_STRING;
                                     N = false;
                                     break;
                                 }
                                 case (BYTESEND): {
                                     int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num) + Message);
+                                    editor.putInt(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.num) + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
                                 case (BINSEND): {
                                     int Messagen = Integer.parseInt(Message, 2);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.bin) + Message);
+                                    editor.putInt(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.bin) + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
                                 case (HEXSEND): {
                                     int Messagen = Integer.parseInt(Message, 16);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.hex) + Message);
+                                    editor.putInt(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.hex) + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
                                 case (SHORTSEND): {
                                     int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num16) + Message);
+                                    editor.putInt(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.num16) + Message);
                                     commType = COMMT_INT16;
                                     break;
                                 }
                                 case (INTSEND): {
                                     int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num32) + Message);
+                                    editor.putInt(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.num32) + Message);
                                     commType = COMMT_INT32;
                                     break;
                                 }
                                 case (FLOATSEND): {
                                     float Messagen = Float.parseFloat(Message);
-                                    editor.putFloat(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.fNum) + Message);
+                                    editor.putFloat(getString(R.string.Extra_comm) + n, Messagen);
+                                    editor.putString(getString(R.string.Extra_commN) + n, getString(R.string.fNum) + Message);
                                     commType = COMMT_FLOAT;
                                     break;
                                 }
@@ -268,11 +258,11 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                         }
                     }else {
                         N = false;
-                        editor.putString(comm + n, getResources().getString(R.string.commDVal));
-                        editor.putString(commN + n, getResources().getString(R.string.commDVal));
+                        editor.putString(getString(R.string.Extra_comm) + n, getResources().getString(R.string.commDVal));
+                        editor.putString(getString(R.string.Extra_commN) + n, getResources().getString(R.string.commDVal));
                     }
-                    editor.putBoolean(commT + n, N);
-                    editor.putInt(commET + n, commType);
+                    editor.putBoolean(getString(R.string.Extra_commT) + n, N);
+                    editor.putInt(getString(R.string.Extra_commET) + n, commType);
                     editor.commit();
                     UcommUI();
                 }
@@ -470,7 +460,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             case R.id.themeDark: {
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(theme, true);
+                editor.putBoolean(getString(R.string.Extra_theme), true);
                 editor.commit();
                 Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
                 return true;
@@ -478,7 +468,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             case R.id.themeNormal: {
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(theme, false);
+                editor.putBoolean(getString(R.string.Extra_theme), false);
                 editor.commit();
                 Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
                 return true;
@@ -507,7 +497,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	@Override
 	protected void onResume() {
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        if(shapre.getBoolean(theme, false))
+        if(shapre.getBoolean(getString(R.string.Extra_theme), false))
             setTheme(R.style.DarkTheme);
         if(TCOM)
             resumeBT(shapre);
@@ -539,15 +529,15 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 myIP = "0.0.0.0";
             }
         }
-        serverip = shapre.getString(SI, defIP);
-        serverport = shapre.getInt(SP, defPort);
+        serverip = shapre.getString(getString(R.string.Extra_SI), getString(R.string.Const_DefIP));
+        serverport = shapre.getInt(getString(R.string.Extra_SP), defPort);
         SD.setText(serverip + ":" + serverport);
         if(SC == MainActivity.SERVER)
             SD.setText(myIP + ":" + serverport);
     }
 
     private void resumeBT(SharedPreferences shapre) {
-        index = shapre.getInt(indev, defIndex);
+        index = shapre.getInt(getString(R.string.Extra_indev), defIndex);
         if (BTAdapter.isEnabled()) {
             BondedDevices = BTAdapter.getBondedDevices().toArray(
                     new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
@@ -575,10 +565,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 		}
 		case SEL_BT_DEVICE: {
 			if (resultCode == Activity.RESULT_OK) {
-				index = data.getIntExtra(Device_List.SDev, defIndex);
+				index = data.getIntExtra(getString(R.string.Extra_SDev), defIndex);
 				SharedPreferences shapre = getPreferences(MODE_PRIVATE);
 				SharedPreferences.Editor editor = shapre.edit();
-				editor.putInt(indev, index);
+				editor.putInt(getString(R.string.Extra_indev), index);
 				editor.commit();
 				mDevice = BondedDevices[index];
 				SD.setText(mDevice.getName() + "\n" + mDevice.getAddress());
@@ -601,12 +591,12 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         }
         case REQUEST_CHANGE_SERVER: {
             if (resultCode == Activity.RESULT_OK) {
-                serverip = data.getStringExtra(Set_Server.NSI);
-                serverport = data.getIntExtra(Set_Server.NSP, defPort);
+                serverip = data.getStringExtra(getString(R.string.Extra_NSI));
+                serverport = data.getIntExtra(getString(R.string.Extra_NSP), defPort);
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putString(SI, serverip);
-                editor.putInt(SP, serverport);
+                editor.putString(getString(R.string.Extra_SI), serverip);
+                editor.putInt(getString(R.string.Extra_SP), serverport);
                 editor.commit();
                 if(SC == MainActivity.CLIENT)
                     SD.setText(serverip + ":" + serverport);
@@ -630,54 +620,42 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	int nComm(View view) {
 		int num = 0;
 		switch (view.getId()) {
-		case R.id.comm1:{
-			num = 1;
-			break;
-		}
-		case R.id.comm2:{
-			num = 2;			
-			break;
-		}
-		case R.id.comm3:{
-			num = 3;
-			break;
-		}
-		case R.id.comm4:{
-			num = 4;
-			break;
-		}
-		case R.id.comm5:{
-			num = 5;
-			break;
-		}
-		case R.id.comm6:{
-			num = 6;
-			break;
-		}
-		case R.id.comm7:{
-			num = 7;
-			break;
-		}
-		case R.id.comm8:{
-			num = 8;
-			break;
-		}
-		case R.id.comm9:{
-			num = 9;
-			break;
-		}
-		case R.id.comm10:{
-			num = 10;
-			break;
-		}
-		case R.id.comm11:{
-			num = 11;			
-			break;
-						}
-		case R.id.comm12:{
-			num = 12;
-			break;
-		}
+            case R.id.comm1:
+                num = 1;
+                break;
+            case R.id.comm2:
+                num = 2;
+                break;
+            case R.id.comm3:
+                num = 3;
+                break;
+            case R.id.comm4:
+                num = 4;
+                break;
+            case R.id.comm5:
+                num = 5;
+                break;
+            case R.id.comm6:
+                num = 6;
+                break;
+            case R.id.comm7:
+                num = 7;
+                break;
+            case R.id.comm8:
+                num = 8;
+                break;
+            case R.id.comm9:
+                num = 9;
+                break;
+            case R.id.comm10:
+                num = 10;
+                break;
+            case R.id.comm11:
+                num = 11;
+                break;
+            case R.id.comm12:
+                num = 12;
+                break;
 		}
 		return num;
 	}
@@ -686,48 +664,48 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 		int n = nComm(view);
 		if(n != 0) {
 			SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-            int commType = shapre.getInt(commET + n, COMMT_STRING);
-            boolean commN = shapre.getBoolean(commT + n, defBcomm);
+            int commType = shapre.getInt(getString(R.string.Extra_commET) + n, COMMT_STRING);
+            boolean commN = shapre.getBoolean(getString(R.string.Extra_commT) + n, defBcomm);
             switch(commType) {
                 case(COMMT_INT8): {
                     if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar_Int8(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     else
-                        comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunic.enviar_Int8(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     break;
                 }
                 case(COMMT_INT16): {
                     if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar_Int8(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     else
-                        comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                        comunic.enviar_Int16(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     break;
                 }
                 case(COMMT_INT32): {
                     if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar_Int8(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     else
-                        comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                        comunic.enviar_Int32(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     break;
                 }
                 case(COMMT_FLOAT): {
                     if(TCOM)
-                        comunicBT.enviar(shapre.getFloat(comm + n, defNcomm));
+                        comunicBT.enviar(shapre.getFloat(getString(R.string.Extra_comm) + n, defNcomm));
                     else
-                        comunic.enviar(shapre.getFloat(comm + n, defNcomm));
+                        comunic.enviar(shapre.getFloat(getString(R.string.Extra_comm) + n, defNcomm));
                     break;
                 }
                 default: {
                     if (!commN)
                         if(TCOM)
-                            comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                            comunicBT.enviar(shapre.getString(getString(R.string.Extra_comm) + n, getString(R.string.commDVal)));
                         else
-                            comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                            comunic.enviar(shapre.getString(getString(R.string.Extra_comm) + n, getString(R.string.commDVal)));
                     else
                     if(TCOM)
-                        comunicBT.enviar(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                     else
-                        comunic.enviar(shapre.getInt(comm + n, defNcomm));
+                        comunic.enviar(shapre.getInt(getString(R.string.Extra_comm) + n, defNcomm));
                 }
             }
 		}
@@ -735,18 +713,18 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	
 	void UcommUI() {
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-		comm1.setText(shapre.getString(commN + 1, getResources().getString(R.string.commDVal)));
-		comm2.setText(shapre.getString(commN + 2, getResources().getString(R.string.commDVal)));
-		comm3.setText(shapre.getString(commN + 3, getResources().getString(R.string.commDVal)));
-		comm4.setText(shapre.getString(commN + 4, getResources().getString(R.string.commDVal)));
-		comm5.setText(shapre.getString(commN + 5, getResources().getString(R.string.commDVal)));
-		comm6.setText(shapre.getString(commN + 6, getResources().getString(R.string.commDVal)));
-		comm7.setText(shapre.getString(commN + 7, getResources().getString(R.string.commDVal)));
-		comm8.setText(shapre.getString(commN + 8, getResources().getString(R.string.commDVal)));
-		comm9.setText(shapre.getString(commN + 9, getResources().getString(R.string.commDVal)));
-		comm10.setText(shapre.getString(commN + 10, getResources().getString(R.string.commDVal)));
-		comm11.setText(shapre.getString(commN + 11, getResources().getString(R.string.commDVal)));
-		comm12.setText(shapre.getString(commN + 12, getResources().getString(R.string.commDVal)));
+		comm1.setText(shapre.getString(getString(R.string.Extra_commN) + 1, getResources().getString(R.string.commDVal)));
+		comm2.setText(shapre.getString(getString(R.string.Extra_commN) + 2, getResources().getString(R.string.commDVal)));
+		comm3.setText(shapre.getString(getString(R.string.Extra_commN) + 3, getResources().getString(R.string.commDVal)));
+		comm4.setText(shapre.getString(getString(R.string.Extra_commN) + 4, getResources().getString(R.string.commDVal)));
+		comm5.setText(shapre.getString(getString(R.string.Extra_commN) + 5, getResources().getString(R.string.commDVal)));
+		comm6.setText(shapre.getString(getString(R.string.Extra_commN) + 6, getResources().getString(R.string.commDVal)));
+		comm7.setText(shapre.getString(getString(R.string.Extra_commN) + 7, getResources().getString(R.string.commDVal)));
+		comm8.setText(shapre.getString(getString(R.string.Extra_commN) + 8, getResources().getString(R.string.commDVal)));
+		comm9.setText(shapre.getString(getString(R.string.Extra_commN) + 9, getResources().getString(R.string.commDVal)));
+		comm10.setText(shapre.getString(getString(R.string.Extra_commN) + 10, getResources().getString(R.string.commDVal)));
+		comm11.setText(shapre.getString(getString(R.string.Extra_commN) + 11, getResources().getString(R.string.commDVal)));
+		comm12.setText(shapre.getString(getString(R.string.Extra_commN) + 12, getResources().getString(R.string.commDVal)));
 	}
 
 	public void Chan_Ser(View view) {
@@ -766,15 +744,15 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     DdeviceNames[i++] = device.getName() + "\n"
                             + device.getAddress();
                 }
-                Intent sel_dev = new Intent(Principal.this, Device_List.class);
-                sel_dev.putExtra(LD, DdeviceNames);
+                Intent sel_dev = new Intent(this, Device_List.class);
+                sel_dev.putExtra(getString(R.string.Extra_LD), DdeviceNames);
                 startActivityForResult(sel_dev, SEL_BT_DEVICE);
             } else
                 Toast.makeText(this, R.string.NoPD, Toast.LENGTH_SHORT).show();
         }else {
             Intent CS = new Intent(this, Set_Server.class);
-            CS.putExtra(SI, serverip);
-            CS.putExtra(SP, serverport);
+            CS.putExtra(getString(R.string.Extra_SI), serverip);
+            CS.putExtra(getString(R.string.Extra_SP), serverport);
             startActivityForResult(CS, REQUEST_CHANGE_SERVER);
         }
 	}
