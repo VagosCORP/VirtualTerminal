@@ -156,7 +156,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         comunic = new Comunic();
         comunicBT = new ComunicBT();
         if(TCOM) {
-            comunicBT = new ComunicBT();
             BTAdapter = BluetoothAdapter.getDefaultAdapter();
             index = defIndex;
             if (BTAdapter == null) {
@@ -781,7 +780,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 
 	public void conect(View view) {
         if(TCOM) {
-            if (comunicBT.estado == comunic.NULL) {
+            if (comunicBT.estado == comunicBT.NULL) {
                 if (SC == MainActivity.CLIENT) {
                     comunicBT = new ComunicBT(this, mDevice);
                 } else if (SC == MainActivity.SERVER) {
