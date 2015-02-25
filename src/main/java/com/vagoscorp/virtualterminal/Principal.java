@@ -30,6 +30,7 @@ import android.widget.Toast;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import vclibs.communication.Eventos.OnComunicationListener;
@@ -135,6 +136,13 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     int numUpd = 1;
     boolean TCOM = false;
 	boolean pro = false;
+
+    int dataRcvtyp = COMMT_FLOAT;
+    boolean advRcv = false;
+    boolean dataInit = false;
+    byte[] dataBytes = new byte[4];
+    int dataCont = 0;
+    int dataNBytes = 4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -359,6 +367,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 RN = false;
                 both = false;
                 upd = false;
+                advRcv = false;
                 if(!CM)
                     layComp.setVisibility(View.GONE);
                 layNAct.setVisibility(View.GONE);
@@ -370,6 +379,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 RN = true;
                 both = false;
                 upd = false;
+                advRcv = false;
                 if(!CM)
                     layComp.setVisibility(View.GONE);
                 layNAct.setVisibility(View.GONE);
@@ -381,6 +391,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 RN = true;
                 both = true;
                 upd = false;
+                advRcv = false;
                 if(!CM)
                     layComp.setVisibility(View.GONE);
                 layNAct.setVisibility(View.GONE);
@@ -393,16 +404,62 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 both = false;
                 upd = true;
                 UpdN.setChecked(false);
+                advRcv = false;
                 layComp.setVisibility(View.VISIBLE);
                 layNAct.setVisibility(View.VISIBLE);
                 byteRCV.setVisibility(View.GONE);
                 scro.setVisibility(View.VISIBLE);
                 return true;
             }
-            case R.id.endCOM: {
-                comunic.Detener_Actividad();
+            case R.id.shortRcv: {
+                dataBytes = new byte[2];
+                dataNBytes = 2;
+                RN = true;
+                dataRcvtyp = COMMT_INT16;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
                 return true;
             }
+            case R.id.intRcv: {
+                dataBytes = new byte[4];
+                dataNBytes = 4;
+                RN = true;
+                dataRcvtyp = COMMT_INT32;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.floatRcv: {
+                dataBytes = new byte[4];
+                dataNBytes = 4;
+                RN = true;
+                dataRcvtyp = COMMT_FLOAT;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+//            case R.id.endCOM: {
+//                comunic.Detener_Actividad();
+//                return true;
+//            }
             case R.id.txtSend: {
                 sendTyp = TXTSEND;
                 TX.setText("");
@@ -711,9 +768,9 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 }
                 case(COMMT_FLOAT): {
                     if(TCOM)
-                        comunicBT.enviar(shapre.getFloat(comm + n, defNcomm));
+                        comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
                     else
-                        comunic.enviar(shapre.getFloat(comm + n, defNcomm));
+                        comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
                     break;
                 }
                 default: {
@@ -865,9 +922,9 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     case (FLOATSEND): {
                         float Messagen = Float.parseFloat(Message);
                         if(TCOM)
-                            comunicBT.enviar(Messagen);
+                            comunicBT.enviar_Float(Messagen);
                         else
-                            comunic.enviar(Messagen);
+                            comunic.enviar_Float(Messagen);
                         break;
                     }
                 }
@@ -892,20 +949,64 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             RXn.setText("");
 	}
 
-	@Override
-	public void onDataReceived(String dato, int[] ndato) {
-        if(nextUpd) {
-            RX.setText(dato);
-            nextUpd = false;
-        }else
-            RX.append(dato);
+	private void printOnTV(boolean isNum, TextView textView, String text) {
+        if(isNum) {
+            if (nextUpdn) {
+                textView.setText(text);
+                nextUpdn = false;
+            }
+            else
+                textView.append(text);
+        }else {
+            if (nextUpd) {
+                textView.setText(text);
+                nextUpd = false;
+            }
+            else
+                textView.append(text);
+        }
+    }
+
+    @Override
+	public void onDataReceived(final int nbytes, String dato, int[] ndato, final byte[] bdato) {
+        printOnTV(false, RX, dato);
         if(RN) {
-            for(int val:ndato) {
-                if (nextUpdn) {
-                    RXn.setText(val + " ");
-                    nextUpdn = false;
-                }else
-                    RXn.append(val + " ");
+            if(advRcv) {
+                for(int i = 0; i < nbytes; i++) {
+                    if(!dataInit) {
+                        if (bdato[i] == 13)
+                            dataInit = true;
+                    }else {
+                        if(dataCont < dataNBytes) {
+                            dataBytes[dataCont] = bdato[i];
+                            dataCont++;
+                        }else {
+                            if(bdato[i] == 10) {
+                                ByteBuffer byteBuffer = ByteBuffer.wrap(dataBytes);
+                                switch (dataRcvtyp) {
+                                    case(COMMT_FLOAT): {
+                                        printOnTV(true, RXn, byteBuffer.getFloat() + " ");
+                                        break;
+                                    }
+                                    case(COMMT_INT32): {
+                                        printOnTV(true, RXn, byteBuffer.getInt() + " ");
+                                        break;
+                                    }
+                                    case(COMMT_INT16): {
+                                        printOnTV(true, RXn, byteBuffer.getShort() + " ");
+                                        break;
+                                    }
+                                }
+                            }else
+                                RXn.append("Err");
+                            dataCont = 0;
+                            dataInit = false;
+                        }
+                    }
+                }
+            }else {
+                for (int val : ndato)
+                    printOnTV(true, RXn, val + " ");
             }
             scron.post(new Runnable() {
                 @Override

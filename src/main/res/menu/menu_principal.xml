@@ -21,25 +21,9 @@
         </menu>
     </item>
     <item
-        android:id="@+id/advSendType"
-        android:orderInCategory="2"
-        android:title="@string/advTypSend">
-        <menu>
-            <item
-                android:id="@+id/shortSend"
-                android:title="@string/shortTyp"/>
-            <item
-                android:id="@+id/intSend"
-                android:title="@string/intTyp"/>
-
-            <item
-                android:id="@+id/floatSend"
-                android:title="@string/floatTyp"/>
-        </menu>
-    </item>
-    <item
         android:id="@+id/rcvTyp"
-        android:orderInCategory="3"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
         android:title="@string/RCVtype">
         <menu>
             <item
@@ -57,8 +41,41 @@
         </menu>
     </item>
     <item
-        android:id="@+id/visual_settings"
+        android:id="@+id/advSendType"
+        android:orderInCategory="3"
+        android:title="@string/advTypSend">
+        <menu>
+            <item
+                android:id="@+id/shortSend"
+                android:title="@string/shortTyp"/>
+            <item
+                android:id="@+id/intSend"
+                android:title="@string/intTyp"/>
+
+            <item
+                android:id="@+id/floatSend"
+                android:title="@string/floatTyp"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/advRcvType"
         android:orderInCategory="4"
+        android:title="@string/advTypRCV">
+        <menu>
+            <item
+                android:id="@+id/shortRcv"
+                android:title="@string/shortRcvTyp"/>
+            <item
+                android:id="@+id/intRcv"
+                android:title="@string/intRcvTyp"/>
+            <item
+                android:id="@+id/floatRcv"
+                android:title="@string/floatRcvTyp"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/visual_settings"
+        android:orderInCategory="5"
         android:title="@string/Appearance">
         <menu>
             <item
@@ -71,13 +88,13 @@
     </item>
     <item
         android:id="@+id/commMode"
-        android:orderInCategory="5"
-        android:title="@string/commModeNP"/>
-    <item
-        android:id="@+id/endCOM"
         android:orderInCategory="6"
-        android:title="@string/Cancel_Conn"
-        android:visible="true"/>
+        android:title="@string/commModeNP"/>
+    <!--<item-->
+        <!--android:id="@+id/endCOM"-->
+        <!--android:orderInCategory="7"-->
+        <!--android:title="@string/Cancel_Conn"-->
+        <!--android:visible="true"/>-->
     <!--<item-->
         <!--android:id="@+id/action_settings"-->
         <!--android:orderInCategory="100"-->

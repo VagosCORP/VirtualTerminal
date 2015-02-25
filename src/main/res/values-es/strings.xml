@@ -55,6 +55,12 @@
     <string name="shortTyp">Envío de Int16</string>
     <string name="longTyp">Envío de Int64</string>
     <string name="intTyp">Envío de Int32</string>
-    <string name="advTypSend">Tipo de envío Avanzado</string>
+    <string name="advTypSend">Tipos de envío Avanzado</string>
+    <string name="shortRcvTyp">Recepcion Int16</string>
+    <string name="longRcvTyp">Recepcion Int64</string>
+    <string name="intRcvTyp">Recepcion Int32</string>
+    <string name="floatRcvTyp">Recepcion de Flotantes</string>
+    <string name="doubleRcvTyp">Recepcion Double</string>
+    <string name="advTypRCV">Tipos de Recepción Avanzada</string>
 
 </resources>
