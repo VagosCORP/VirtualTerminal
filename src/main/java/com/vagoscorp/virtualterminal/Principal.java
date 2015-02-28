@@ -27,11 +27,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.Collections;
 
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
@@ -87,7 +86,8 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	public int mDeviceIndex;
     WifiManager WFM;
     ConnectivityManager CTM;
-    String myIP = "";
+    String defMyIP = "No IP";
+    String myIP = defMyIP;
     Comunic comunic;
 	ComunicBT comunicBT;
 
@@ -143,6 +143,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     byte[] dataBytes = new byte[4];
     int dataCont = 0;
     int dataNBytes = 4;
+//    boolean NWiFi = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -576,25 +577,46 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	}
 
     private void resumeW(SharedPreferences shapre) {
-        NetworkInfo nWI = CTM.getActiveNetworkInfo();
-        if (!WFM.isWifiEnabled() || !(nWI != null && nWI.getState() ==
-                NetworkInfo.State.CONNECTED)) {
-//			WFM.setWifiEnabled(true);
-            Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
-        }else {
-            int ipAddress = WFM.getConnectionInfo().getIpAddress();
-//			myIP = Formatter.formatIpAddress(ipAddress);
-            if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
-                ipAddress = Integer.reverseBytes(ipAddress);
-            byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
-            try {
-                myIP = InetAddress.getByAddress(ipByteArray).getHostAddress();
-            }catch (UnknownHostException ex) {
-//                Log.e("WIFIIP", "Unable to get host address.");
-                myIP = "0.0.0.0";
+//    NetworkInfo nWI = CTM.getActiveNetworkInfo();
+//    if(!NWiFi && (!WFM.isWifiEnabled() || !(nWI != null && nWI.getState() ==
+//            NetworkInfo.State.CONNECTED))) {
+//        WFM.setWifiEnabled(true);
+//        Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+//        startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
+//    }else {
+        myIP = defMyIP;
+        try {
+            for (NetworkInterface intf : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InetAddress addr : Collections.list(intf.getInetAddresses())) {
+                    if (!addr.isLoopbackAddress()){
+                        myIP = addr.getHostAddress();
+//                            textStatus.append("\n" + addr.getHostName() );
+//                            textStatus.append("\n" + addr.getCanonicalHostName() );
+//                            textStatus.append("\n\n" + intf.toString() );
+//                            textStatus.append("\n\n" + intf.getName() );
+//                            textStatus.append("\n\n" + intf.isUp() );
+                    }
+                }
             }
+//            if(myIP.equals(defMyIP)) {
+////                Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
+////                    finish();
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+//        int ipAddress = WFM.getConnectionInfo().getIpAddress();
+////      myIP = Formatter.formatIpAddress(ipAddress);
+//        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
+//            ipAddress = Integer.reverseBytes(ipAddress);
+//        byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
+//        try {
+//            myIP = InetAddress.getByAddress(ipByteArray).getHostAddress();
+//        }catch (UnknownHostException ex) {
+////          Log.e("WIFIIP", "Unable to get host address.");
+//            myIP = "0.0.0.0";
+//        }
+//    }
         serverip = shapre.getString(getString(R.string.Extra_SI), defIP);
         serverport = shapre.getInt(getString(R.string.Extra_SP), defPort);
         SD.setText(serverip + ":" + serverport);
@@ -644,15 +666,16 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         case REQUEST_ENABLE_WIFI: {
             if(!WFM.isWifiEnabled()/*resultCode != Activity.RESULT_OK*/) {
                 Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
-                finish();
+//                finish();
             }else {
                 NetworkInfo nWI = CTM.getActiveNetworkInfo();
                 if(!(nWI != null && nWI.getType() == ConnectivityManager.TYPE_WIFI &&
                         nWI.getState() == NetworkInfo.State.CONNECTED)){
                     Toast.makeText(this, R.string.EWF, Toast.LENGTH_SHORT).show();
-                    finish();
+//                    finish();
                 }
             }
+//            NWiFi = true;
             break;
         }
         case REQUEST_CHANGE_SERVER: {
@@ -836,34 +859,39 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	}
 
 	public void conect(View view) {
-        if(TCOM) {
-            if (comunicBT.estado == comunicBT.NULL) {
-                if (SC == MainActivity.CLIENT) {
-                    comunicBT = new ComunicBT(this, mDevice);
-                } else if (SC == MainActivity.SERVER) {
-                    comunicBT = new ComunicBT(this, BTAdapter);
-                }
-                comunicBT.setComunicationListener(this);
-                comunicBT.setConnectionListener(this);
-                Chan_Ser.setEnabled(false);
-                Conect.setText(getString(R.string.Button_Conecting));
-                comunicBT.execute();
-            } else
-                comunicBT.Detener_Actividad();
+        if(myIP.equals(defMyIP)) {
+            Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
         }else {
-            if(comunic.estado == comunic.NULL) {
-                if(SC == MainActivity.CLIENT) {
-                    comunic = new Comunic(this, serverip, serverport);
-                }else if(SC == MainActivity.SERVER) {
-                    comunic = new Comunic(this, serverport);
-                }
-                comunic.setComunicationListener(this);
-                comunic.setConnectionListener(this);
-                Chan_Ser.setEnabled(false);
-                Conect.setText(getResources().getString(R.string.Button_Conecting));
-                comunic.execute();
-            }else
-                comunic.Detener_Actividad();
+            if(TCOM) {
+                if (comunicBT.estado == comunicBT.NULL) {
+                    if (SC == MainActivity.CLIENT) {
+                        comunicBT = new ComunicBT(this, mDevice);
+                    } else if (SC == MainActivity.SERVER) {
+                        comunicBT = new ComunicBT(this, BTAdapter);
+                    }
+                    comunicBT.setComunicationListener(this);
+                    comunicBT.setConnectionListener(this);
+                    Chan_Ser.setEnabled(false);
+                    Conect.setText(getString(R.string.Button_Conecting));
+                    comunicBT.execute();
+                } else
+                    comunicBT.Detener_Actividad();
+            }else {
+                if (comunic.estado == comunic.NULL) {
+                    if (SC == MainActivity.CLIENT) {
+                        comunic = new Comunic(this, serverip, serverport);
+                    } else if (SC == MainActivity.SERVER) {
+                        comunic = new Comunic(this, serverport);
+                    }
+                    comunic.setComunicationListener(this);
+                    comunic.setConnectionListener(this);
+                    Chan_Ser.setEnabled(false);
+                    Conect.setText(getResources().getString(R.string.Button_Conecting));
+                    comunic.execute();
+                } else
+                    comunic.Detener_Actividad();
+            }
         }
 	}
 
