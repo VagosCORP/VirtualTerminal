@@ -1,18 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 22
+    buildToolsVersion "22.0.0"
     defaultConfig {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
-        targetSdkVersion 21
-        versionName '1.5.50'
-        versionCode 20150228
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        targetSdkVersion 22
+        versionCode 20150313
+        versionName '1.5.52'
     }
     buildTypes {
         release {
@@ -21,6 +17,10 @@ android {
         }
     }
     productFlavors {
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 

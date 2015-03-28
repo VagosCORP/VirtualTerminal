@@ -1,0 +1,21 @@
+- Layout Upgrades
+- Theme selector, enabling a 'Dark' theme to protect your eyes
+- New RX Mode. 'Dual' let you see both byte and char reception options at the same time
+- Commander Mode now available!
+  - Enable a group of configurable buttons
+  - Just write on TX input the value you want to save, then do a long click on desired button
+  - Buttons will show what kind of data and value you just save (Text, Binary, etc.)
+  - Simple click will send your saved data automatically
+  - Erase your saved commands by long click with an empty TX input
+- Updated Menu for new options
+
+- Actualizaciones de visualización
+- Selector de apariencia, habilitando un tema 'Dark' para proteger sus ojos
+- Nuevo modo de Recepción. 'Dual' permite ver la información como bytes y caracteres al mismo tiempo
+- Modo Comando ahora disponible!
+  - Habilita un grupo de botones de comando configurables
+  - Solo escriba en la casilla de envío (TX) el valor que desee guardar y realice un toque largo sobre el botón de comando que desee
+  - Los botones de comando mostrarán tanto el tipo de dato guardado, como su valor (Texto, Binario, etc.)
+  - Al presionar un botón, se enviará el dato guardado automáticamente
+  - Borre sus comandos con un toque largo, teniendo la casilla TX vacia
+- Menú actualizado para cubrir las nuevas opciones

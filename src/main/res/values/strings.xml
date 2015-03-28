@@ -42,7 +42,6 @@
     <string name="EWF">Wait until WiFi Connection is Established</string>
     <string name="BT_Device">Bluetooth device</string>
     <string name="Cancel_Conn">Finish Connection</string>
-    <string name="rcvBytelab" translatable="false">Byte RX</string>
     <string name="RCVtype">Reception Type</string>
     <string name="bothRCV">Dual Reception</string>
     <string name="numRCV">Bytes Reception</string>
@@ -87,7 +86,10 @@
     <string name="advTypRCV">Advanced Reception Types</string>
     <string name="num16" translatable="false">16#</string>
     <string name="num32" translatable="false">32#</string>
-    <string name="floatRCV" translatable="false">FloatRCV</string>
+    <string name="byteRX" translatable="false">Byte RX</string>
+    <string name="shortRX" translatable="false">Int16 RX</string>
+    <string name="intRX" translatable="false">Int32 RX</string>
+    <string name="floatRX" translatable="false">Float RX</string>
 
     <string name="Extra_NSI" translatable="false">NSIP</string>
     <string name="Extra_NSP" translatable="false">NSPort</string>

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/main_horizontal_margin"
     android:paddingRight="@dimen/main_horizontal_margin"
     android:paddingTop="@dimen/main_vertical_margin"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
     <TextView
         android:layout_width="match_parent"

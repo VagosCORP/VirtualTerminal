@@ -41,6 +41,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 
 	public TextView RX;// Received Data
     public TextView RXn;// Received Data
+    public TextView sepLab;// Received Data
 	public EditText TX;// Data to Send
 	public Button Conect;
 	public Button Chan_Ser;
@@ -143,6 +144,9 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     byte[] dataBytes = new byte[4];
     int dataCont = 0;
     int dataNBytes = 4;
+
+    int charInit = 13;
+    int charEnd = 10;
 //    boolean NWiFi = false;
 
 	@Override
@@ -179,6 +183,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         }
 		RX = (TextView)findViewById(R.id.RX);
         RXn = (TextView)findViewById(R.id.RXn);
+        sepLab = (TextView)findViewById(R.id.sepLab);
         layNAct = (LinearLayout)findViewById(R.id.layNAct);
         layComp = (LinearLayout)findViewById(R.id.layComp);
         editNAct = (EditText)findViewById(R.id.editNAct);
@@ -200,6 +205,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 RN = isChecked;
                 both = isChecked;
+                sepLab.setText(R.string.byteRX);
                 if(isChecked)
                     byteRCV.setVisibility(View.VISIBLE);
                 else
@@ -342,6 +348,187 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 finish();
                 return true;
             }
+            case R.id.rcvText: {
+                RN = false;
+                both = false;
+                upd = false;
+                advRcv = false;
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.GONE);
+                scro.setVisibility(View.VISIBLE);
+                return true;
+            }
+            case R.id.rcvNum: {
+                RN = true;
+                both = false;
+                upd = false;
+                advRcv = false;
+                sepLab.setText(R.string.byteRX);
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.rcvBoth: {
+                RN = true;
+                both = true;
+                upd = false;
+                advRcv = false;
+                sepLab.setText(R.string.byteRX);
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.VISIBLE);
+                return true;
+            }
+            case R.id.rcvUpd: {
+                RN = false;
+                both = false;
+                upd = true;
+                UpdN.setEnabled(true);
+                UpdN.setChecked(false);
+                advRcv = false;
+                layComp.setVisibility(View.VISIBLE);
+                layNAct.setVisibility(View.VISIBLE);
+                byteRCV.setVisibility(View.GONE);
+                scro.setVisibility(View.VISIBLE);
+                return true;
+            }
+            case R.id.shortRcv: {
+                dataBytes = new byte[2];
+                dataNBytes = 2;
+                RN = true;
+                dataRcvtyp = COMMT_INT16;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                sepLab.setText(R.string.shortRX);
+                UpdN.setEnabled(false);
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.intRcv: {
+                dataBytes = new byte[4];
+                dataNBytes = 4;
+                RN = true;
+                dataRcvtyp = COMMT_INT32;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                sepLab.setText(R.string.intRX);
+                UpdN.setEnabled(false);
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.floatRcv: {
+                dataBytes = new byte[4];
+                dataNBytes = 4;
+                RN = true;
+                dataRcvtyp = COMMT_FLOAT;
+                advRcv = true;
+                both = false;
+//                upd = false;
+                sepLab.setText(R.string.floatRX);
+                UpdN.setEnabled(false);
+                if(!CM)
+                    layComp.setVisibility(View.GONE);
+//                layNAct.setVisibility(View.GONE);
+                byteRCV.setVisibility(View.VISIBLE);
+                scro.setVisibility(View.GONE);
+                return true;
+            }
+            case R.id.txtSend: {
+                sendTyp = TXTSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TX);
+                TX.setInputType(InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.txt);
+                return true;
+            }
+            case R.id.byteSend: {
+                sendTyp = BYTESEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXn);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.num);
+                return true;
+            }
+            case R.id.binSend: {
+                sendTyp = BINSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXb);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.bin);
+                return true;
+            }
+            case R.id.hexSend: {
+                sendTyp = HEXSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXh);
+                TX.setInputType(InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.hex);
+                return true;
+            }
+            case R.id.shortSend: {
+                sendTyp = SHORTSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXn);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
+                inputTyp.setText(R.string.num16);
+                return true;
+            }
+            case R.id.intSend: {
+                sendTyp = INTSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXn);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputTyp.setText(R.string.num32);
+                return true;
+            }
+            case R.id.floatSend: {
+                sendTyp = FLOATSEND;
+                TX.setText("");
+                TX.setHint(R.string.Text_TXf);
+                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
+                        InputType.TYPE_NUMBER_FLAG_SIGNED);
+//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
+//                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                inputTyp.setText(R.string.fNum);
+                return true;
+            }
+            case R.id.themeDark: {
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putBoolean(theme, true);
+                editor.commit();
+                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.themeNormal: {
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putBoolean(theme, false);
+                editor.commit();
+                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+                return true;
+            }
             case R.id.commMode: {
                 if(!CM) {
                     CM = true;
@@ -364,182 +551,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 //                Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
                 return true;
             }
-            case R.id.rcvText: {
-                RN = false;
-                both = false;
-                upd = false;
-                advRcv = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.GONE);
-                scro.setVisibility(View.VISIBLE);
-                return true;
-            }
-            case R.id.rcvNum: {
-                RN = true;
-                both = false;
-                upd = false;
-                advRcv = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.VISIBLE);
-                scro.setVisibility(View.GONE);
-                return true;
-            }
-            case R.id.rcvBoth: {
-                RN = true;
-                both = true;
-                upd = false;
-                advRcv = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.VISIBLE);
-                scro.setVisibility(View.VISIBLE);
-                return true;
-            }
-            case R.id.rcvUpd: {
-                RN = false;
-                both = false;
-                upd = true;
-                UpdN.setChecked(false);
-                advRcv = false;
-                layComp.setVisibility(View.VISIBLE);
-                layNAct.setVisibility(View.VISIBLE);
-                byteRCV.setVisibility(View.GONE);
-                scro.setVisibility(View.VISIBLE);
-                return true;
-            }
-            case R.id.shortRcv: {
-                dataBytes = new byte[2];
-                dataNBytes = 2;
-                RN = true;
-                dataRcvtyp = COMMT_INT16;
-                advRcv = true;
-                both = false;
-//                upd = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.VISIBLE);
-                scro.setVisibility(View.GONE);
-                return true;
-            }
-            case R.id.intRcv: {
-                dataBytes = new byte[4];
-                dataNBytes = 4;
-                RN = true;
-                dataRcvtyp = COMMT_INT32;
-                advRcv = true;
-                both = false;
-//                upd = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.VISIBLE);
-                scro.setVisibility(View.GONE);
-                return true;
-            }
-            case R.id.floatRcv: {
-                dataBytes = new byte[4];
-                dataNBytes = 4;
-                RN = true;
-                dataRcvtyp = COMMT_FLOAT;
-                advRcv = true;
-                both = false;
-//                upd = false;
-                if(!CM)
-                    layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
-                byteRCV.setVisibility(View.VISIBLE);
-                scro.setVisibility(View.GONE);
-                return true;
-            }
 //            case R.id.endCOM: {
 //                comunic.Detener_Actividad();
 //                return true;
 //            }
-            case R.id.txtSend: {
-                sendTyp = TXTSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TX);
-                TX.setInputType(InputType.TYPE_CLASS_TEXT);
-                inputTyp.setText(R.string.txt);
-                return true;
-            }
-            case R.id.byteSend: {
-                sendTyp = BYTESEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXn);
-//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                inputTyp.setText(R.string.num);
-                return true;
-            }
-            case R.id.binSend: {
-                sendTyp = BINSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXb);
-//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                inputTyp.setText(R.string.bin);
-                return true;
-            }
-            case R.id.hexSend: {
-                sendTyp = HEXSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXh);
-                TX.setInputType(InputType.TYPE_CLASS_TEXT);
-                inputTyp.setText(R.string.hex);
-                return true;
-            }
-            case R.id.shortSend: {
-                sendTyp = SHORTSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXn);
-//                TX.setInputType(InputType.TYPE_CLASS_NUMBER);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                inputTyp.setText(R.string.num16);
-                return true;
-            }
-            case R.id.intSend: {
-                sendTyp = INTSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXn);
-//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                inputTyp.setText(R.string.num32);
-                return true;
-            }
-            case R.id.floatSend: {
-                sendTyp = FLOATSEND;
-                TX.setText("");
-                TX.setHint(R.string.Text_TXf);
-//                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
-//                        InputType.TYPE_NUMBER_FLAG_SIGNED);
-                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                inputTyp.setText(R.string.fNum);
-                return true;
-            }
-            case R.id.themeDark: {
-                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(theme, true);
-                editor.commit();
-                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            case R.id.themeNormal: {
-                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(theme, false);
-                editor.commit();
-                Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
-                return true;
-            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -859,24 +874,24 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	}
 
 	public void conect(View view) {
-        if(myIP.equals(defMyIP)) {
-            Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
+        if(TCOM) {
+            if (comunicBT.estado == comunicBT.NULL) {
+                if (SC == MainActivity.CLIENT) {
+                    comunicBT = new ComunicBT(this, mDevice);
+                } else if (SC == MainActivity.SERVER) {
+                    comunicBT = new ComunicBT(this, BTAdapter);
+                }
+                comunicBT.setComunicationListener(this);
+                comunicBT.setConnectionListener(this);
+                Chan_Ser.setEnabled(false);
+                Conect.setText(getString(R.string.Button_Conecting));
+                comunicBT.execute();
+            } else
+                comunicBT.Detener_Actividad();
         }else {
-            if(TCOM) {
-                if (comunicBT.estado == comunicBT.NULL) {
-                    if (SC == MainActivity.CLIENT) {
-                        comunicBT = new ComunicBT(this, mDevice);
-                    } else if (SC == MainActivity.SERVER) {
-                        comunicBT = new ComunicBT(this, BTAdapter);
-                    }
-                    comunicBT.setComunicationListener(this);
-                    comunicBT.setConnectionListener(this);
-                    Chan_Ser.setEnabled(false);
-                    Conect.setText(getString(R.string.Button_Conecting));
-                    comunicBT.execute();
-                } else
-                    comunicBT.Detener_Actividad();
+            if(myIP.equals(defMyIP)) {
+                Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+                startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
             }else {
                 if (comunic.estado == comunic.NULL) {
                     if (SC == MainActivity.CLIENT) {
@@ -889,7 +904,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     Chan_Ser.setEnabled(false);
                     Conect.setText(getResources().getString(R.string.Button_Conecting));
                     comunic.execute();
-                } else
+                }else
                     comunic.Detener_Actividad();
             }
         }
@@ -1002,14 +1017,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             if(advRcv) {
                 for(int i = 0; i < nbytes; i++) {
                     if(!dataInit) {
-                        if (bdato[i] == 13)
+                        if (bdato[i] == charInit)
                             dataInit = true;
                     }else {
                         if(dataCont < dataNBytes) {
                             dataBytes[dataCont] = bdato[i];
                             dataCont++;
                         }else {
-                            if(bdato[i] == 10) {
+                            if(bdato[i] == charEnd) {
                                 ByteBuffer byteBuffer = ByteBuffer.wrap(dataBytes);
                                 switch (dataRcvtyp) {
                                     case(COMMT_FLOAT): {

@@ -1,6 +1,7 @@
 package com.vagoscorp.virtualterminal;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -37,17 +38,21 @@ public class MainActivity extends Activity {
 	boolean pro = false;
     boolean mkdirsDone = false;
     int readBuffDone = 0;
+
+    public BluetoothAdapter BTAdapter;
+
     Intent Init;
     String baseVer = "1\n1\n0\n0\n0";
     String config = "config";
     String ext = ".vtconfig";
-    String proPack = "com.vagoscorp.virtualterminalprokey";
+    String proPack = "com.vagoscorp.virtualterminal.prokey";
     String sPath = "/Android/data/com.vagoscorp.vcvt";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_activity_main);
+        BTAdapter = BluetoothAdapter.getDefaultAdapter();
         serverLabel = (TextView)findViewById(R.id.serverLabel);
         serverBT = (LinearLayout)findViewById(R.id.serverBT);
         serverW = (LinearLayout)findViewById(R.id.serverW);
@@ -58,6 +63,10 @@ public class MainActivity extends Activity {
 		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + sPath);
         mkdirsDone = path.mkdirs();
         Init = new Intent(this, Principal.class);
+        if(BTAdapter == null) {
+            CB.setEnabled(false);
+            SB.setEnabled(false);
+        }
 		getNames();
 	}
 	
@@ -121,17 +130,35 @@ public class MainActivity extends Activity {
         }
 	}
 
+//    void checkPro() {
+//        Intent intent;
+//        PackageManager manager = getPackageManager();
+//        intent = manager.getLaunchIntentForPackage(proPack);
+//        if(intent != null) {
+//            serverLabel.setVisibility(View.VISIBLE);
+//            serverBT.setVisibility(View.VISIBLE);
+//            serverW.setVisibility(View.VISIBLE);
+//            pro = true;
+//        }else {
+//            processFile(read());
+//        }
+//    }
+
     void checkPro() {
-        Intent intent;
+        processFile(read());
         PackageManager manager = getPackageManager();
-        intent = manager.getLaunchIntentForPackage(proPack);
-        if(intent != null) {
-            serverLabel.setVisibility(View.VISIBLE);
-            serverBT.setVisibility(View.VISIBLE);
-            serverW.setVisibility(View.VISIBLE);
-            pro = true;
-        }else {
-            processFile(read());
+        Intent intent = manager.getLaunchIntentForPackage(proPack);
+        if(intent != null && !pro) {
+            checkSD();
+            if(SDread) {
+                startActivity(intent);
+                finish();
+            }else {
+                serverLabel.setVisibility(View.VISIBLE);
+                serverBT.setVisibility(View.VISIBLE);
+                serverW.setVisibility(View.VISIBLE);
+                pro = true;
+            }
         }
     }
 	
