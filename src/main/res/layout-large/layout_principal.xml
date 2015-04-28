@@ -41,13 +41,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_weight="5" />
+
         <TextView
             android:id="@+id/inputTyp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/txt"
-            android:gravity="end" />
+            android:gravity="end"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/TX"
@@ -102,7 +109,7 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
             android:visibility="gone"
-            android:gravity="right">
+            android:gravity="end">
 
             <EditText
                 android:id="@+id/editNAct"
@@ -125,14 +132,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false" >
+        android:baselineAligned="false">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
             android:focusableInTouchMode="false"
+            android:layout_weight="20"
             android:id="@+id/layRCV"
             android:visibility="visible">
 
@@ -192,12 +199,95 @@
 
         </LinearLayout>
 
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent">-->
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/RCVtype"
+                    android:id="@+id/textView" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textRCV"
+                    android:id="@+id/radioButton"
+                    android:checked="true"
+                    android:onClick="setRcvTtxt" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/numRCV"
+                    android:id="@+id/radioButton2"
+                    android:onClick="setRcvTint8" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bothRCV"
+                    android:id="@+id/radioButton3"
+                    android:onClick="setRcvTboth" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/updRCV"
+                    android:id="@+id/radioButton4"
+                    android:onClick="setRcvTupd" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/advTypRCV"
+                    android:id="@+id/textView2" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shortRcvTyp"
+                    android:id="@+id/radioButton5"
+                    android:onClick="setRcvTint16" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/intRcvTyp"
+                    android:id="@+id/radioButton6"
+                    android:onClick="setRcvTint32" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New RadioButton"
+                    android:id="@+id/radioButton7"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/floatRcvTyp"
+                    android:id="@+id/radioButton8"
+                    android:onClick="setRcvTfloat" />
+            </RadioGroup>
+
+        <!--</LinearLayout>-->
+
         <LinearLayout
             android:id="@+id/commBase"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:visibility="gone"
             android:gravity="bottom">
 

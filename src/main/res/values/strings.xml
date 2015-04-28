@@ -73,17 +73,17 @@
     <string name="longTyp">Int64 Send</string>
     <string name="floatTyp">Float Send</string>
     <string name="doubleTyp">Double Send</string>
-    <string name="shortRcvTyp">Int16 Reception</string>
-    <string name="intRcvTyp">Int32 Reception</string>
-    <string name="longRcvTyp">Int64 Reception</string>
-    <string name="floatRcvTyp">Float Reception</string>
+    <string name="shortRcvTyp">Int16 RX</string>
+    <string name="intRcvTyp">Int32 RX</string>
+    <string name="longRcvTyp">Int64 RX</string>
+    <string name="floatRcvTyp">Float RX</string>
     <string name="doubleRcvTyp">Double Reception</string>
     <string name="textTyp">Text Send</string>
     <string name="byteTyp">Byte Send</string>
     <string name="binTyp">Binary Send</string>
     <string name="hexTyp">Hexadecimal Send</string>
-    <string name="advTypSend">Advanced Send Types</string>
-    <string name="advTypRCV">Advanced Reception Types</string>
+    <string name="advTypSend">Advanced Send </string>
+    <string name="advTypRCV">Advanced Reception</string>
     <string name="num16" translatable="false">16#</string>
     <string name="num32" translatable="false">32#</string>
     <string name="byteRX" translatable="false">Byte RX</string>
@@ -101,5 +101,14 @@
     <string name="Extra_SI" translatable="false">SIP</string>
     <string name="Extra_SP" translatable="false">SPort</string>
     <string name="Extra_RESULT_ACTION" translatable="false">RESULT_ACTION</string>
+    <string-array name="sendtypes_array" translatable="false">
+        <item>T</item>
+        <item>#</item>
+        <item>0b</item>
+        <item>0x</item>
+        <item>16#</item>
+        <item>32#</item>
+        <item>F#</item>
+    </string-array>
 
 </resources>

@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.0"
+    buildToolsVersion '22.0.1'
     defaultConfig {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
         targetSdkVersion 22
-        versionCode 20150313
-        versionName '1.5.52'
+        versionCode 20150426
+        versionName '1.5.55RC'
     }
     buildTypes {
         release {

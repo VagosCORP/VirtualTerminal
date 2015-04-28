@@ -55,12 +55,12 @@
     <string name="intTyp">Int32 Send</string>
     <string name="longTyp">Int64 Send</string>
     <string name="shortTyp">Int16 Send</string>
-    <string name="advTypSend">Advanced Send Types</string>
-    <string name="intRcvTyp">Int32 Reception</string>
-    <string name="longRcvTyp">Int64 Reception</string>
-    <string name="floatRcvTyp">Float Reception</string>
-    <string name="shortRcvTyp">Int16 Reception</string>
+    <string name="advTypSend">Advanced Send </string>
+    <string name="intRcvTyp">Int32 RX</string>
+    <string name="longRcvTyp">Int64 RX</string>
+    <string name="floatRcvTyp">Float RX</string>
+    <string name="shortRcvTyp">Int16 RX</string>
     <string name="doubleRcvTyp">Double Reception</string>
-    <string name="advTypRCV">Advanced Reception Types</string>
+    <string name="advTypRCV">Advanced Reception </string>
 
 </resources>
