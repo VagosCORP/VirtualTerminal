@@ -43,15 +43,14 @@ import vclibs.communication.android.ComunicBT;
 public class Principal extends Activity implements OnComunicationListener,OnConnectionListener {
 
     Spinner spinner;
-    public TextView RX;// Received Data
-    public TextView RXn;// Received Data
-    public TextView sepLab;// Received Data
-	public EditText TX;// Data to Send
-	public Button Conect;
-	public Button Chan_Ser;
-	public Button Send;
-	public TextView SD;
-    public TextView inputTyp;
+    TextView RX;// Received Data
+    TextView RXn;// Received Data
+    TextView sepLab;// Received Data
+	EditText TX;// Data to Send
+	Button Conect;
+	Button Chan_Ser;
+	Button Send;
+	TextView SD;
     ScrollView scro;
     ScrollView scron;
     LinearLayout commander;
@@ -82,7 +81,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     public boolean RN;
     public boolean CM;
 	public int SC;
-    public int sendTyp = TXTSEND;
+    public int sendTyp = SEND_TXT;
 
 
     public BluetoothAdapter BTAdapter;
@@ -120,14 +119,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     public static final int defPort = 2000;
 	public static final int defNcomm = 0;
 	public static final boolean defBcomm = false;
-    public static final int TXTSEND = 0;
-    public static final int BYTESEND = 1;
-    public static final int BINSEND = 2;
-    public static final int HEXSEND = 3;
-    public static final int SHORTSEND = 4;
-    public static final int INTSEND = 5;
-    public static final int LONGSEND = 6;
-    public static final int FLOATSEND = 7;
+    public static final int SEND_TXT = 0;
+    public static final int SEND_BYTE = 1;
+    public static final int SEND_BIN = 2;
+    public static final int SEND_HEX = 3;
+    public static final int SEND_SHORT = 4;
+    public static final int SEND_INT = 5;
+    public static final int SEND_FLOAT = 6;
+    public static final int SEND_LONG = 7;
     public static final int COMMT_STRING = 0;
     public static final int COMMT_INT8 = 1;
     public static final int COMMT_INT16 = 11;
@@ -189,13 +188,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             WFM = (WifiManager) getSystemService(WIFI_SERVICE);
             CTM = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         }
-        spinner = (Spinner)findViewById(R.id.spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
+        spinner = (Spinner)findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sendtypes_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+                R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 		RX = (TextView)findViewById(R.id.RX);
         RXn = (TextView)findViewById(R.id.RXn);
@@ -215,7 +211,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         commander = (LinearLayout)findViewById(R.id.commander);
         commBase = (LinearLayout)findViewById(R.id.commBase);
         commScroll = (ScrollView)findViewById(R.id.commScroll);
-        inputTyp = (TextView)findViewById(R.id.inputTyp);
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -242,52 +237,52 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                         String Message = TX.getText().toString();
                         try {
                             switch (sendTyp) {
-                                case (TXTSEND): {
+                                case (SEND_TXT): {
                                     editor.putString(comm + n, Message);
                                     editor.putString(commN + n, Message);
                                     commType = COMMT_STRING;
                                     N = false;
                                     break;
                                 }
-                                case (BYTESEND): {
+                                case (SEND_BYTE): {
                                     int Messagen = Integer.parseInt(Message);
                                     editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
-                                case (BINSEND): {
+                                case (SEND_BIN): {
                                     int Messagen = Integer.parseInt(Message, 2);
                                     editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.bin) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
-                                case (HEXSEND): {
+                                case (SEND_HEX): {
                                     int Messagen = Integer.parseInt(Message, 16);
                                     editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.hex) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + Message);
                                     commType = COMMT_INT8;
                                     break;
                                 }
-                                case (SHORTSEND): {
+                                case (SEND_SHORT): {
                                     int Messagen = Integer.parseInt(Message);
                                     editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num16) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + Message);
                                     commType = COMMT_INT16;
                                     break;
                                 }
-                                case (INTSEND): {
+                                case (SEND_INT): {
                                     int Messagen = Integer.parseInt(Message);
                                     editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.num32) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + Message);
                                     commType = COMMT_INT32;
                                     break;
                                 }
-                                case (FLOATSEND): {
+                                case (SEND_FLOAT): {
                                     float Messagen = Float.parseFloat(Message);
                                     editor.putFloat(comm + n, Messagen);
-                                    editor.putString(commN + n, getString(R.string.fNum) + Message);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + Message);
                                     commType = COMMT_FLOAT;
                                     break;
                                 }
@@ -344,7 +339,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         comm10.setOnLongClickListener(oLClistener);
         comm11.setOnLongClickListener(oLClistener);
         comm12.setOnLongClickListener(oLClistener);
-
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 		setupActionBar();
@@ -362,9 +356,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_principal, menu);
-//        MenuItem mItem = menu.findItem(R.id.commMode);
-//        if(pro)
-//            mItem.setTitle(R.string.commMode);
 		return true;
 	}
 
@@ -426,12 +417,12 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         dataRcvtyp = COMMT_INT16;
         advRcv = true;
         both = false;
-//                upd = false;
+//        upd = false;
         sepLab.setText(R.string.shortRX);
         UpdN.setEnabled(false);
         if(!CM)
             layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -443,12 +434,12 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         dataRcvtyp = COMMT_INT32;
         advRcv = true;
         both = false;
-//                upd = false;
+//        upd = false;
         sepLab.setText(R.string.intRX);
         UpdN.setEnabled(false);
         if(!CM)
             layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -457,15 +448,15 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         dataBytes = new byte[8];
         dataNBytes = 8;
         RN = true;
-        dataRcvtyp = COMMT_INT32;
+        dataRcvtyp = COMMT_INT64;
         advRcv = true;
         both = false;
-//                upd = false;
+//        upd = false;
         sepLab.setText(R.string.intRX);
         UpdN.setEnabled(false);
         if(!CM)
             layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -477,12 +468,12 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         dataRcvtyp = COMMT_FLOAT;
         advRcv = true;
         both = false;
-//                upd = false;
+//        upd = false;
         sepLab.setText(R.string.floatRX);
         UpdN.setEnabled(false);
         if(!CM)
             layComp.setVisibility(View.GONE);
-//                layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -492,53 +483,46 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             sendTyp = sendType;
             TX.setText("");
             switch (sendType) {
-                case (TXTSEND): {
+                case (SEND_TXT): {
                     TX.setHint(R.string.Text_TX);
                     TX.setInputType(InputType.TYPE_CLASS_TEXT);
-                    inputTyp.setText(R.string.txt);
                     break;
                 }
-                case (BYTESEND): {
+                case (SEND_BYTE): {
                     TX.setHint(R.string.Text_TXn);
                     TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    inputTyp.setText(R.string.num);
                     break;
                 }
-                case (BINSEND): {
+                case (SEND_BIN): {
                     TX.setHint(R.string.Text_TXb);
                     TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    inputTyp.setText(R.string.bin);
                     break;
                 }
-                case (HEXSEND): {
+                case (SEND_HEX): {
                     TX.setHint(R.string.Text_TXh);
                     TX.setInputType(InputType.TYPE_CLASS_TEXT);
-                    inputTyp.setText(R.string.hex);
                     break;
                 }
-                case (SHORTSEND): {
+                case (SEND_SHORT): {
                     TX.setHint(R.string.Text_TXn);
                     TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    inputTyp.setText(R.string.num16);
                     break;
                 }
-                case (INTSEND): {
+                case (SEND_INT): {
                     TX.setHint(R.string.Text_TXn);
                     TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                    inputTyp.setText(R.string.num32);
                     break;
                 }
-                case (FLOATSEND): {
+                case (SEND_FLOAT): {
                     TX.setHint(R.string.Text_TXf);
                     TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
                             InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
 //                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                    inputTyp.setText(R.string.fNum);
                     break;
                 }
             }
@@ -580,34 +564,34 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 setRcvTfloat(null);
                 return true;
             }
-            case R.id.txtSend: {
-                setSendType(TXTSEND);
-                return true;
-            }
-            case R.id.byteSend: {
-                setSendType(BYTESEND);
-                return true;
-            }
-            case R.id.binSend: {
-                setSendType(BINSEND);
-                return true;
-            }
-            case R.id.hexSend: {
-                setSendType(HEXSEND);
-                return true;
-            }
-            case R.id.shortSend: {
-                setSendType(SHORTSEND);
-                return true;
-            }
-            case R.id.intSend: {
-                setSendType(INTSEND);
-                return true;
-            }
-            case R.id.floatSend: {
-                setSendType(FLOATSEND);
-                return true;
-            }
+//            case R.id.txtSend: {
+//                setSendType(SEND_TXT);
+//                return true;
+//            }
+//            case R.id.byteSend: {
+//                setSendType(SEND_BYTE);
+//                return true;
+//            }
+//            case R.id.binSend: {
+//                setSendType(SEND_BIN);
+//                return true;
+//            }
+//            case R.id.hexSend: {
+//                setSendType(SEND_HEX);
+//                return true;
+//            }
+//            case R.id.shortSend: {
+//                setSendType(SEND_SHORT);
+//                return true;
+//            }
+//            case R.id.intSend: {
+//                setSendType(SEND_INT);
+//                return true;
+//            }
+//            case R.id.floatSend: {
+//                setSendType(SEND_FLOAT);
+//                return true;
+//            }
             case R.id.themeDark: {
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
@@ -1012,14 +996,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             String Message = TX.getText().toString();
             try {
                 switch (sendTyp) {
-                    case (TXTSEND): {
+                    case (SEND_TXT): {
                         if(TCOM)
                             comunicBT.enviar(Message);
                         else
                             comunic.enviar(Message);
                         break;
                     }
-                    case (BYTESEND): {
+                    case (SEND_BYTE): {
                         int Messagen = Integer.parseInt(Message);
                         if(TCOM)
                             comunicBT.enviar(Messagen);
@@ -1027,7 +1011,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                             comunic.enviar(Messagen);
                         break;
                     }
-                    case (BINSEND): {
+                    case (SEND_BIN): {
                         int Messagen = Integer.parseInt(Message, 2);
                         if(TCOM)
                             comunicBT.enviar(Messagen);
@@ -1035,7 +1019,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                             comunic.enviar(Messagen);
                         break;
                     }
-                    case (HEXSEND): {
+                    case (SEND_HEX): {
                         int Messagen = Integer.parseInt(Message, 16);
                         if(TCOM)
                             comunicBT.enviar(Messagen);
@@ -1043,7 +1027,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                             comunic.enviar(Messagen);
                         break;
                     }
-                    case (SHORTSEND): {
+                    case (SEND_SHORT): {
                         int Messagen = Integer.parseInt(Message);
                         if(TCOM)
                             comunicBT.enviar_Int16(Messagen);
@@ -1051,7 +1035,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                             comunic.enviar_Int16(Messagen);
                         break;
                     }
-                    case (INTSEND): {
+                    case (SEND_INT): {
                         int Messagen = Integer.parseInt(Message);
                         if(TCOM)
                             comunicBT.enviar_Int32(Messagen);
@@ -1059,7 +1043,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                             comunic.enviar_Int32(Messagen);
                         break;
                     }
-                    case (FLOATSEND): {
+                    case (SEND_FLOAT): {
                         float Messagen = Float.parseFloat(Message);
                         if(TCOM)
                             comunicBT.enviar_Float(Messagen);

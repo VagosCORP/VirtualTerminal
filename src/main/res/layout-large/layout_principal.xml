@@ -47,15 +47,6 @@
             android:id="@+id/spinner"
             android:layout_weight="5" />
 
-        <TextView
-            android:id="@+id/inputTyp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/txt"
-            android:gravity="end"
-            android:visibility="gone" />
-
         <EditText
             android:id="@+id/TX"
             android:layout_width="0dp"
@@ -79,14 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <!--<CheckBox-->
-        <!--android:id="@+id/TN"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:checked="false"-->
-        <!--android:onClick="tnum"-->
-        <!--android:text="@string/Check_Num" />-->
 
         <Button
             android:id="@+id/DelTX"
@@ -199,88 +182,81 @@
 
         </LinearLayout>
 
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent">-->
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
-            <RadioGroup
-                android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="match_parent"
-                android:gravity="bottom">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/RCVtype"
+                android:id="@+id/textView" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/RCVtype"
-                    android:id="@+id/textView" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textRCV"
+                android:id="@+id/radioButton"
+                android:checked="true"
+                android:onClick="setRcvTtxt" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/textRCV"
-                    android:id="@+id/radioButton"
-                    android:checked="true"
-                    android:onClick="setRcvTtxt" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/numRCV"
+                android:id="@+id/radioButton2"
+                android:onClick="setRcvTint8" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/numRCV"
-                    android:id="@+id/radioButton2"
-                    android:onClick="setRcvTint8" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bothRCV"
+                android:id="@+id/radioButton3"
+                android:onClick="setRcvTboth" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bothRCV"
-                    android:id="@+id/radioButton3"
-                    android:onClick="setRcvTboth" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/updRCV"
+                android:id="@+id/radioButton4"
+                android:onClick="setRcvTupd" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/updRCV"
-                    android:id="@+id/radioButton4"
-                    android:onClick="setRcvTupd" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/advTypRCV"
+                android:id="@+id/textView2" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/advTypRCV"
-                    android:id="@+id/textView2" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shortRcvTyp"
+                android:id="@+id/radioButton5"
+                android:onClick="setRcvTint16" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/shortRcvTyp"
-                    android:id="@+id/radioButton5"
-                    android:onClick="setRcvTint16" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/intRcvTyp"
+                android:id="@+id/radioButton6"
+                android:onClick="setRcvTint32" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/intRcvTyp"
-                    android:id="@+id/radioButton6"
-                    android:onClick="setRcvTint32" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New RadioButton"
+                android:id="@+id/radioButton7"
+                android:visibility="gone" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New RadioButton"
-                    android:id="@+id/radioButton7"
-                    android:visibility="gone" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/floatRcvTyp"
-                    android:id="@+id/radioButton8"
-                    android:onClick="setRcvTfloat" />
-            </RadioGroup>
-
-        <!--</LinearLayout>-->
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/floatRcvTyp"
+                android:id="@+id/radioButton8"
+                android:onClick="setRcvTfloat" />
+        </RadioGroup>
 
         <LinearLayout
             android:id="@+id/commBase"
@@ -339,11 +315,6 @@
                     android:gravity="bottom"
                     android:orientation="vertical"
                     android:visibility="gone">
-
-                    <!--<SurfaceView -->
-                    <!--android:id="@+id/surfaceView1" -->
-                    <!--android:layout_width="match_parent" -->
-                    <!--android:layout_height="match_parent" /> -->
 
                     <Button
                         android:layout_width="fill_parent"
@@ -406,15 +377,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-
-    <!--android:visibility="gone"
-        android:inputType="textMultiLine"
-		android:layout_marginTop="90dp"
-		android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    -->
-
 
 </LinearLayout>
