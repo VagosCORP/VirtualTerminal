@@ -7,7 +7,6 @@
     <string name="Button_Conect">Connect</string>
     <string name="Button_Conecting">Connecting…</string>
     <string name="Button_DisConect">Disconnect</string>
-    <!--<string name="Check_Num">#</string>-->
     <string name="BSend">Send</string>
     <string name="Text_RX" translatable="false">RX</string>
     <string name="Text_TX" translatable="false">Vagos CORP</string>
@@ -35,7 +34,6 @@
     <string name="Sel_BTs">Bluetooth Server</string>
     <string name="Clientes">Wireless Clients</string>
     <string name="Servidores">Wireless Servers</string>
-    <!--<string name="Button_Des">Soon</string>-->
     <string name="EnBT">Bluetooth Activation Denied by User</string>
     <string name="EnWF">WiFi Disabled</string>
     <string name="EWF">Wait until WiFi Connection is Established</string>
