@@ -20,7 +20,7 @@ public class Device_List extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent SD = getIntent();
-		LDev = SD.getStringArrayExtra(getString(R.string.Extra_LD));
+		LDev = SD.getStringArrayExtra(Principal.LD);
 		setContentView(R.layout.device_list);
 		LD = (ListView) findViewById(R.id.LD);
 		Adapter = new ArrayAdapter<>(this,
@@ -30,8 +30,8 @@ public class Device_List extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent SelDev = new Intent(getString(R.string.Extra_RESULT_ACTION));
-				SelDev.putExtra(getString(R.string.Extra_SDev), position);
+				Intent SelDev = new Intent(Principal.RESULT_ACTION);
+				SelDev.putExtra(Principal.SDev, position);
 				setResult(Activity.RESULT_OK, SelDev);
 				finish();
 			}

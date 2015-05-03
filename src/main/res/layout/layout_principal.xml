@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:id="@+id/P_LYT"
+    android:id="@+id/layout_principal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,33 +19,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="conect"
-            android:text="@string/Button_Conect" />
-
-        <TextView
-            android:id="@+id/label_ser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Ser_Dat" />
+            android:text="@string/Button_Conect"/>
 
         <Button
             android:id="@+id/chan_ser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="Chan_Ser"
-            android:text="@string/set_server" />
+            android:text="@string/Ser_Dat"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/spinner"
-            android:layout_weight="17" />
+            android:layout_weight="17"/>
 
         <EditText
             android:id="@+id/TX"
@@ -53,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="30"
             android:hint="@string/Text_TX"
-            android:inputType="text" >
+            android:inputType="text">
 
             <requestFocus />
         </EditText>
@@ -63,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="enviar"
-            android:text="@string/BSend" />
+            android:text="@string/BSend"/>
 
     </LinearLayout>
 
@@ -77,14 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="BTX"
-            android:text="@string/BTX" />
+            android:text="@string/BTX"/>
 
         <Button
             android:id="@+id/DelRX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="BRX"
-            android:text="@string/BRX" />
+            android:text="@string/BRX"/>
 
         <LinearLayout
             android:id="@+id/layNAct"
@@ -99,14 +93,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/updRate"
-                android:inputType="number" />
+                android:inputType="number"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/BRCV"
                 android:id="@+id/UpdN"
-                android:singleLine="true" />
+                android:checked="false"
+                android:singleLine="true"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -140,8 +135,7 @@
                     android:inputType="none"
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbars="vertical"
-                    android:textIsSelectable="true" />
-
+                    android:textIsSelectable="true"/>
             </ScrollView>
 
             <LinearLayout
@@ -156,7 +150,7 @@
                     android:id="@+id/sepLab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/byteRX" />
+                    android:text="@string/byteRX"/>
 
                 <ScrollView
                     android:id="@+id/scron"
@@ -174,13 +168,10 @@
                         android:inputType="none"
                         android:scrollbarAlwaysDrawVerticalTrack="true"
                         android:scrollbars="vertical"
-                        android:textIsSelectable="true" />
-
+                        android:textIsSelectable="true"/>
                 </ScrollView>
             </LinearLayout>
-
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/commBase"
             android:orientation="vertical"
@@ -195,35 +186,35 @@
                 android:layout_height="wrap_content"
                 android:text="@string/commDVal"
                 android:id="@+id/comm1"
-               android:onClick="commClick" />
+               android:onClick="commClick"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/commDVal"
                 android:id="@+id/comm2"
-               android:onClick="commClick" />
+               android:onClick="commClick"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/commDVal"
                 android:id="@+id/comm3"
-                android:onClick="commClick" />
+                android:onClick="commClick"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/commDVal"
                 android:id="@+id/comm4"
-                android:onClick="commClick" />
+                android:onClick="commClick"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/commDVal"
                 android:id="@+id/comm5"
-                android:onClick="commClick" />
+                android:onClick="commClick"/>
 
             <ScrollView
                 android:id="@+id/commScroll"
@@ -236,69 +227,87 @@
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:orientation="vertical"
-                     android:visibility="gone" >
+                     android:visibility="gone">
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                         android:id="@+id/comm6"
-                        android:onClick="commClick" />
+                        android:onClick="commClick"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                         android:id="@+id/comm7"
-                       android:onClick="commClick" />
+                       android:onClick="commClick"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                         android:id="@+id/comm8"
-                       android:onClick="commClick" />
+                       android:onClick="commClick"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                         android:id="@+id/comm9"
-                       android:onClick="commClick" />
+                       android:onClick="commClick"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                         android:id="@+id/comm10"
-                       android:onClick="commClick" />
+                       android:onClick="commClick"/>
 
                     <Button
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                          android:id="@+id/comm11"
-                        android:onClick="commClick" />
+                        android:onClick="commClick"/>
 
                     <Button
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                         android:text="@string/commDVal"
                          android:id="@+id/comm12"
-                        android:onClick="commClick" />
+                        android:onClick="commClick"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/commDVal"
+                        android:id="@+id/comm13"
+                        android:onClick="commClick"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/commDVal"
+                        android:id="@+id/comm14"
+                        android:onClick="commClick"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/commDVal"
+                        android:id="@+id/comm15"
+                        android:onClick="commClick"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/commDVal"
+                        android:id="@+id/comm16"
+                        android:onClick="commClick"/>
 
                 </LinearLayout>
             </ScrollView>
-
         </LinearLayout>
-
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layComp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
 </LinearLayout>

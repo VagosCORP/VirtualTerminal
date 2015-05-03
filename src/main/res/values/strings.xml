@@ -23,7 +23,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="Ser_Dat">Server Data</string>
     <string name="NoPD">No Paired Devices</string>
-    <string name="set_server">Change Server</string>
+    <!--<string name="set_server">Select Server</string>-->
     <string name="Server_IP" translatable="false">10.0.0.6</string>
     <string name="Server_Port" translatable="false">2000</string>
     <string name="OK">Accept</string>
@@ -32,6 +32,7 @@
     <string name="Sel_BT">Bluetooth Client</string>
     <string name="Sel_Ws">WiFi Server</string>
     <string name="Sel_BTs">Bluetooth Server</string>
+    <string name="set_server">Connection Data</string>
     <string name="Clientes">Wireless Clients</string>
     <string name="Servidores">Wireless Servers</string>
     <string name="EnBT">Bluetooth Activation Denied by User</string>
@@ -43,15 +44,12 @@
     <string name="bothRCV">Dual Reception</string>
     <string name="numRCV">Bytes Reception</string>
     <string name="textRCV">Text Reception</string>
-    <string name="commMode">Commander Mode</string>
+    <string name="commMode">Toggle Commander Mode</string>
     <string name="commDVal" translatable="false">NO_DAT</string>
-    <string name="exitCommMode">Normal Mode</string>
-    <string name="commModeNP">Commander Mode</string>
     <string name="typSend">Send Type</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="defvalup" translatable="false">255</string>
     <string name="defvaldwn" translatable="false">0</string>
-    <string name="MyLoc">en</string>
     <string name="normalTheme" translatable="false">Normal</string>
     <string name="darkTheme" translatable="false">Dark</string>
     <string name="Appearance">Theme</string>
@@ -70,16 +68,45 @@
     <string name="shortRX" translatable="false">Int16 RX</string>
     <string name="intRX" translatable="false">Int32 RX</string>
     <string name="floatRX" translatable="false">Float RX</string>
-    <string name="Extra_NSI" translatable="false">NSIP</string>
-    <string name="Extra_NSP" translatable="false">NSPort</string>
-    <string name="Extra_SDev" translatable="false">SD</string>
     <string name="Extra_TCOM" translatable="false">TCOM</string>
     <string name="Extra_TYP" translatable="false">TYPE</string>
     <string name="Extra_LVL" translatable="false">LEVEL</string>
-    <string name="Extra_LD" translatable="false">LD</string>
-    <string name="Extra_SI" translatable="false">SIP</string>
-    <string name="Extra_SP" translatable="false">SPort</string>
-    <string name="Extra_RESULT_ACTION" translatable="false">RESULT_ACTION</string>
+    <string name="instructions">Instructions\n
+        > Click on connection info button to change it\n
+        > Click on Connect button to start/stop communication\n
+        > LongClick on Connect button to show/hide ActionBar\n
+        > Use the TX Spinner to select what kind of data you want to send\n
+        > Write on the TX input the information you want to send\n
+        > Use the app menu to access other options:\n
+        *   Select how to show and manage the incoming data\n
+        *   Select advanced numeric reception options (int16, int32, float)\n
+        *   Start/Stop Commander Mode\n
+        *   Select appearance options: Normal or Dark theme\n
+        > Tablet users can select the reception options without entering to menu\n
+        > When connected, LongClick on \'Send\' button to start/stop Commander Mode without entering to menu\n
+        > Operating \'Commander Mode\': Save data in to buttons to send it with a simple button click\n
+        *   Select from TX Spinner the kind of data you want to save on a Command Button\n
+        *   Write data on the TX input\n
+        *   Start commander mode (if not running yet)\n
+        *   LongClick on one Commander Button to save the TX data on the button\n
+        *   Simple Click on Commander Button to automatically send the saved data\n
+        *   If TX input is empty, LongClick on a Commander Button will erase saved data\n
+        *   Commander Buttons will show type and data you just save\n
+        > Operating \'Update Reception\': New incoming data will replace the old ones\n
+        *   Select the \'Update Reception\' Reception Type\n
+        *   Write number of received data to accumulate before replacing with new one (empty means 1)\n
+        *   Enable/Disable byte reception if desired by using the CheckBox\n
+        > Operating \'Advanced Reception\' types: Receive and show big numbers (16 and 32 bit integers) and float numbers (32 bit)\n
+        *   Requires the sender device to send a start byte = 13\n
+        *   Then send the data bytes in order from MSB to LSB\n
+        *   And finally send an end byte = 10\n
+        > Update mode can be mixed with the advanced reception types:\n
+        *   First select \'Update Reception\'\n
+        *   Then select the advanced reception type to be interpreted and showed
+    </string>
+    <string name="viewInstructions">View Instructions</string>
+    <string name="NSIAS">Never show again at startup</string>
+    <string name="close">Close instructions</string>
     <string-array name="sendtypes_array" translatable="false">
         <item>T</item>
         <item>#</item>
@@ -89,5 +116,6 @@
         <item>32#</item>
         <item>F#</item>
     </string-array>
+    <string name="title_activity_instructions">Instructions</string>
 
 </resources>

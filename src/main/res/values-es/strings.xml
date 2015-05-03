@@ -15,7 +15,7 @@
     <string name="hello_world">Hola mundo!</string>
     <string name="Ser_Dat">Datos de Servidor</string>
     <string name="NoPD">Ningún Dispositivo Sincronizado</string>
-    <string name="set_server">Cambiar Servidor</string>
+    <string name="set_server">Datos de Conexión</string>
     <string name="OK">Aceptar</string>
     <string name="Button_Sel">Iniciar</string>
     <string name="Sel_W">Cliente WiFi</string>
@@ -33,13 +33,10 @@
     <string name="bothRCV">Recepción Dual</string>
     <string name="numRCV">Recepción de Bytes</string>
     <string name="textRCV">Recepción de Texto</string>
-    <string name="commMode">Modo Comando</string>
-    <string name="exitCommMode">Modo Normal</string>
-    <string name="commModeNP">Modo Comando</string>
+    <string name="commMode">Conmutar Modo Comando</string>
     <string name="typSend">Tipo de envío</string>
     <string name="textTyp">Envío de Texto</string>
     <string name="numFormExc">Formato Numérico Erróneo</string>
-    <string name="MyLoc">es</string>
     <string name="Appearance">Apariencia</string>
     <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
     <string name="updRCV">Recepción Update</string>
@@ -50,5 +47,42 @@
     <string name="floatRcvTyp">Float RX</string>
     <string name="doubleRcvTyp">Recepcion Double</string>
     <string name="advTypRCV">Recepción Avanzada</string>
+    <string name="instructions">Instrucciones\n
+        > Pulse el botón de información de conexión para cambiarla\n
+        > Pulse el botón Conectar para iniciar/finalizar la conexión\n
+        > Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones\n
+        > Use la lista desplegable TX para seleccionar el tipo de información que desea enviar\n
+        > Escriba en la entrada de texto TX  la información que desea enviar\n
+        > Use el menú de la App para acceder a otras opciones:\n
+        *   Seleccionar como mostrar y administrar los datos entrantes\n
+        *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float)\n
+        *   Iniciar/Finalizar el Modo Comando\n
+        *   Seleccionar opción de apariencia: Tema Normal o Dark\n
+        > Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú\n
+        > Cuando se está conectado, Inicie/Finalice el modo comando manteniendo pulsado el botón \'Enviar\' sin necesidad de entrar al menú\n
+        > Operando el \'Modo Comando\': Almacene información en botones para enviarla con el simple pulsar de un botón\n
+        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de Comando\n
+        *   Escriba la información en la entrada de texto TX\n
+        *   Inicie el Modo Comando (Si no lo ha iniciado todavía)\n
+        *   Haga una pulsación larga en un botón de Comando para salvar la información de la entrada de texto TX en el botón\n
+        *   Haga una pulsación en un botón de Comando para enviar automáticamente la información almacenada\n
+        *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de Comando borrará la información almacenada\n
+        *   Los Botones de Comando mostrarán el tipo de datos y la información almacenada\n
+        > Operando el modo \'Recepción Update\': Los nuevos datos recibidos reemplazarán a los antiguos\n
+        *   Seleccione el modo \'Recepción Update\'\n
+        *   Escriba el número de datos recibidos a acumular antes de sobrescribir con datos nuevos (vacío significa 1)\n
+        *   Habilita/Deshabilita la recepción de Bytes de ser necesaria mediante el CheckBox\n
+        > Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit)\n
+        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio igual a 13\n
+        *   Entonces enviar los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB)\n
+        *   Y finalmente enviar un Byte de finalización igual a 10\n
+        > El modo Update puede ser mezclado con los modos de recepción avanzada:\n
+        *   Primero escoja el modo \'Recepción Update\'\n
+        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado
+    </string>
+    <string name="viewInstructions">Ver Instrucciones</string>
+    <string name="NSIAS">No mostrar de nuevo al inicio</string>
+    <string name="close">Cerrar instrucciones</string>
+    <string name="title_activity_instructions">Instrucciones</string>
 
 </resources>

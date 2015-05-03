@@ -40,7 +40,7 @@ import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
-public class Principal extends Activity implements OnComunicationListener,OnConnectionListener {
+public class Principal extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener {
 
     Spinner spinner;
     TextView RX;// Received Data
@@ -50,16 +50,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	Button Conect;
 	Button Chan_Ser;
 	Button Send;
-	TextView SD;
     ScrollView scro;
     ScrollView scron;
     LinearLayout commander;
     LinearLayout commBase;
     ScrollView commScroll;
     LinearLayout byteRCV;
-    LinearLayout P_LYT;
+    LinearLayout layout_principal;
     LinearLayout layNAct;
-    LinearLayout layComp;
     EditText editNAct;
     CheckBox UpdN;
 
@@ -75,11 +73,16 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     Button comm10;
     Button comm11;
     Button comm12;
+    Button comm13;
+    Button comm14;
+    Button comm15;
+    Button comm16;
 
+    ActionBar actionBar;
     public String serverip;// IP to Connect
     public int serverport;// Port to Connect
-    public boolean RN;
-    public boolean CM;
+    public boolean RN = false;
+    public boolean CM = false;
 	public int SC;
     public int sendTyp = SEND_TXT;
 
@@ -105,12 +108,20 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	private final int defIndex = 0;
     private final int REQUEST_ENABLE_WIFI = 15;
     private final int REQUEST_CHANGE_SERVER = 12;
+    private final int SHOW_INSTRUCTIONS = 16;
 
+    public static final String SIoS = "SIoS";
     public static final String SI = "SIP";
     public static final String SP = "SPort";
+    public static final String NSI = "NSIP";
+    public static final String NSP = "NSPort";
+    public static final String RESULT_ACTION = "RESULT_ACTION";
+    public static final String SDev = "SD";
     public static final String LD = "LD";
 	public static final String indev = "indev";
     public static final String theme = "Theme";
+    public static final String abH = "abH";
+    public static final String SnIP = "SnIP";
 	public static final String comm = "comm";
 	public static final String commN = "commN";
 	public static final String commT = "commT";
@@ -154,25 +165,27 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 
     int charInit = 13;
     int charEnd = 10;
+    boolean abHidden = false;
+    boolean checked = false;
 //    boolean NWiFi = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        boolean darkTheme = shapre.getBoolean(theme, false);
+        abHidden = shapre.getBoolean(abH, false);
+        boolean darkTheme = shapre.getBoolean(theme, true);
+        checked = shapre.getBoolean(Principal.SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_principal);
-        P_LYT = (LinearLayout)findViewById(R.id.P_LYT);
+        layout_principal = (LinearLayout)findViewById(R.id.layout_principal);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            P_LYT.setBackgroundColor(Color.parseColor("#ff303030"));
+            layout_principal.setBackgroundColor(Color.parseColor("#ff303030"));
         Intent tip = getIntent();
         TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
         SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
         pro = tip.getBooleanExtra(getString(R.string.Extra_LVL), false);
-        RN =  false;
-        CM =  false;
         comunic = new Comunic();
         comunicBT = new ComunicBT();
         if(TCOM) {
@@ -197,12 +210,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         RXn = (TextView)findViewById(R.id.RXn);
         sepLab = (TextView)findViewById(R.id.sepLab);
         layNAct = (LinearLayout)findViewById(R.id.layNAct);
-        layComp = (LinearLayout)findViewById(R.id.layComp);
         editNAct = (EditText)findViewById(R.id.editNAct);
         UpdN = (CheckBox)findViewById(R.id.UpdN);
 		TX = (EditText)findViewById(R.id.TX);
         byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
-		SD = (TextView) findViewById(R.id.label_ser);
 		Conect = (Button) findViewById(R.id.Conect);
 		Chan_Ser = (Button) findViewById(R.id.chan_ser);
 		Send = (Button) findViewById(R.id.Send);
@@ -214,96 +225,23 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                RN = isChecked;
-                both = isChecked;
-                sepLab.setText(R.string.byteRX);
-                if(isChecked)
-                    byteRCV.setVisibility(View.VISIBLE);
-                else
-                    byteRCV.setVisibility(View.GONE);
+                updPNum(isChecked);
             }
         });
-        OnLongClickListener oLClistener = new OnLongClickListener() {
-			
-			@Override
-			public boolean onLongClick(View view) {
-                int commType = COMMT_STRING;
-                boolean N = true;
-                int n = nComm(view);
-                if(n != 0) {
-                    SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = shapre.edit();
-                    if(TX.length() > 0) {
-                        String Message = TX.getText().toString();
-                        try {
-                            switch (sendTyp) {
-                                case (SEND_TXT): {
-                                    editor.putString(comm + n, Message);
-                                    editor.putString(commN + n, Message);
-                                    commType = COMMT_STRING;
-                                    N = false;
-                                    break;
-                                }
-                                case (SEND_BYTE): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + Message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                }
-                                case (SEND_BIN): {
-                                    int Messagen = Integer.parseInt(Message, 2);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + Message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                }
-                                case (SEND_HEX): {
-                                    int Messagen = Integer.parseInt(Message, 16);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + Message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                }
-                                case (SEND_SHORT): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + Message);
-                                    commType = COMMT_INT16;
-                                    break;
-                                }
-                                case (SEND_INT): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + Message);
-                                    commType = COMMT_INT32;
-                                    break;
-                                }
-                                case (SEND_FLOAT): {
-                                    float Messagen = Float.parseFloat(Message);
-                                    editor.putFloat(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + Message);
-                                    commType = COMMT_FLOAT;
-                                    break;
-                                }
-                            }
-                        } catch (NumberFormatException nEx) {
-                            nEx.printStackTrace();
-                            Toast.makeText(Principal.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        N = false;
-                        editor.putString(comm + n, getResources().getString(R.string.commDVal));
-                        editor.putString(commN + n, getResources().getString(R.string.commDVal));
-                    }
-                    editor.putBoolean(commT + n, N);
-                    editor.putInt(commET + n, commType);
-                    editor.commit();
-                    UcommUI();
-                }
-				return true;
-			}
-		};
+        Conect.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                hideActionBar();
+                return true;
+            }
+        });
+        Send.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                commanderMode();
+                return true;
+            }
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -327,31 +265,157 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         comm10 = (Button)findViewById(R.id.comm10);
         comm11 = (Button)findViewById(R.id.comm11);
         comm12 = (Button)findViewById(R.id.comm12);
-        comm1.setOnLongClickListener(oLClistener);
-        comm2.setOnLongClickListener(oLClistener);
-        comm3.setOnLongClickListener(oLClistener);
-        comm4.setOnLongClickListener(oLClistener);
-        comm5.setOnLongClickListener(oLClistener);
-        comm6.setOnLongClickListener(oLClistener);
-        comm7.setOnLongClickListener(oLClistener);
-        comm8.setOnLongClickListener(oLClistener);
-        comm9.setOnLongClickListener(oLClistener);
-        comm10.setOnLongClickListener(oLClistener);
-        comm11.setOnLongClickListener(oLClistener);
-        comm12.setOnLongClickListener(oLClistener);
+        comm13 = (Button)findViewById(R.id.comm13);
+        comm14 = (Button)findViewById(R.id.comm14);
+        comm15 = (Button)findViewById(R.id.comm15);
+        comm16 = (Button)findViewById(R.id.comm16);
+        comm1.setOnLongClickListener(this);
+        comm2.setOnLongClickListener(this);
+        comm3.setOnLongClickListener(this);
+        comm4.setOnLongClickListener(this);
+        comm5.setOnLongClickListener(this);
+        comm6.setOnLongClickListener(this);
+        comm7.setOnLongClickListener(this);
+        comm8.setOnLongClickListener(this);
+        comm9.setOnLongClickListener(this);
+        comm10.setOnLongClickListener(this);
+        comm11.setOnLongClickListener(this);
+        comm12.setOnLongClickListener(this);
+        comm13.setOnLongClickListener(this);
+        comm14.setOnLongClickListener(this);
+        comm15.setOnLongClickListener(this);
+        comm16.setOnLongClickListener(this);
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 		setupActionBar();
+        if(!checked)
+            showInstructions();
+        UpdN.setChecked(false);
 	}
+
+    private void updPNum(boolean bool) {
+        RN = bool;
+        both = bool;
+        sepLab.setText(R.string.byteRX);
+        if (bool)
+            byteRCV.setVisibility(View.VISIBLE);
+        else
+            byteRCV.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        int commType = COMMT_STRING;
+        boolean N = true;
+        int n = nComm(view);
+        if(n != 0) {
+            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = shapre.edit();
+            if(TX.length() > 0) {
+                String Message = TX.getText().toString();
+                try {
+                    switch (sendTyp) {
+                        case (SEND_TXT): {
+                            editor.putString(comm + n, Message);
+                            editor.putString(commN + n, Message);
+                            commType = COMMT_STRING;
+                            N = false;
+                            break;
+                        }
+                        case (SEND_BYTE): {
+                            int Messagen = Integer.parseInt(Message);
+                            editor.putInt(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + Message);
+                            commType = COMMT_INT8;
+                            break;
+                        }
+                        case (SEND_BIN): {
+                            int Messagen = Integer.parseInt(Message, 2);
+                            editor.putInt(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + Message);
+                            commType = COMMT_INT8;
+                            break;
+                        }
+                        case (SEND_HEX): {
+                            int Messagen = Integer.parseInt(Message, 16);
+                            editor.putInt(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + Message);
+                            commType = COMMT_INT8;
+                            break;
+                        }
+                        case (SEND_SHORT): {
+                            int Messagen = Integer.parseInt(Message);
+                            editor.putInt(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + Message);
+                            commType = COMMT_INT16;
+                            break;
+                        }
+                        case (SEND_INT): {
+                            int Messagen = Integer.parseInt(Message);
+                            editor.putInt(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + Message);
+                            commType = COMMT_INT32;
+                            break;
+                        }
+                        case (SEND_FLOAT): {
+                            float Messagen = Float.parseFloat(Message);
+                            editor.putFloat(comm + n, Messagen);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + Message);
+                            commType = COMMT_FLOAT;
+                            break;
+                        }
+                    }
+                } catch (NumberFormatException nEx) {
+                    nEx.printStackTrace();
+                    Toast.makeText(Principal.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                N = false;
+                editor.putString(comm + n, getResources().getString(R.string.commDVal));
+                editor.putString(commN + n, getResources().getString(R.string.commDVal));
+            }
+            editor.putBoolean(commT + n, N);
+            editor.putInt(commET + n, commType);
+            editor.commit();
+            UcommUI();
+        }
+        return true;
+    }
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar aB = getActionBar();
-			if(aB != null)
-				aB.setDisplayHomeAsUpEnabled(true);
+            actionBar = getActionBar();
+			if(actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                if(abHidden)
+                    actionBar.hide();
+            }
 		}
 	}
+
+//    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+//    private void menuKP() {
+//        if(ViewConfiguration.get(this).hasPermanentMenuKey())
+//            hideActionBar();
+//    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void hideActionBar() {
+        if(actionBar != null) {
+            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = shapre.edit();
+            if(!abHidden) {
+                actionBar.hide();
+                abHidden = true;
+            }else {
+                actionBar.show();
+                abHidden = false;
+            }
+            editor.putBoolean(abH, abHidden);
+            editor.commit();
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -364,8 +428,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         both = false;
         upd = false;
         advRcv = false;
-        if(!CM)
-            layComp.setVisibility(View.GONE);
         layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.GONE);
         scro.setVisibility(View.VISIBLE);
@@ -377,8 +439,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         upd = false;
         advRcv = false;
         sepLab.setText(R.string.byteRX);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
         layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
@@ -390,8 +450,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         upd = false;
         advRcv = false;
         sepLab.setText(R.string.byteRX);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
         layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.VISIBLE);
@@ -404,7 +462,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         UpdN.setEnabled(true);
         UpdN.setChecked(false);
         advRcv = false;
-        layComp.setVisibility(View.VISIBLE);
         layNAct.setVisibility(View.VISIBLE);
         byteRCV.setVisibility(View.GONE);
         scro.setVisibility(View.VISIBLE);
@@ -420,8 +477,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 //        upd = false;
         sepLab.setText(R.string.shortRX);
         UpdN.setEnabled(false);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
 //            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
@@ -437,29 +492,25 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 //        upd = false;
         sepLab.setText(R.string.intRX);
         UpdN.setEnabled(false);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
 //            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
 
-    public void setRcvTint64(View view) {
-        dataBytes = new byte[8];
-        dataNBytes = 8;
-        RN = true;
-        dataRcvtyp = COMMT_INT64;
-        advRcv = true;
-        both = false;
-//        upd = false;
-        sepLab.setText(R.string.intRX);
-        UpdN.setEnabled(false);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
-//            layNAct.setVisibility(View.GONE);
-        byteRCV.setVisibility(View.VISIBLE);
-        scro.setVisibility(View.GONE);
-    }
+//    public void setRcvTint64(View view) {
+//        dataBytes = new byte[8];
+//        dataNBytes = 8;
+//        RN = true;
+//        dataRcvtyp = COMMT_INT64;
+//        advRcv = true;
+//        both = false;
+////        upd = false;
+//        sepLab.setText(R.string.intRX);
+//        UpdN.setEnabled(false);
+////            layNAct.setVisibility(View.GONE);
+//        byteRCV.setVisibility(View.VISIBLE);
+//        scro.setVisibility(View.GONE);
+//    }
 
     public void setRcvTfloat(View view) {
         dataBytes = new byte[4];
@@ -471,8 +522,6 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 //        upd = false;
         sepLab.setText(R.string.floatRX);
         UpdN.setEnabled(false);
-        if(!CM)
-            layComp.setVisibility(View.GONE);
 //            layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
@@ -529,6 +578,24 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         }
     }
 
+    void commanderMode() {
+        if(!CM) {
+            CM = true;
+//            item.setTitle(R.string.exitCommMode);
+            commScroll.setVisibility(View.VISIBLE);
+            commBase.setVisibility(View.VISIBLE);
+            if(pro)
+                commander.setVisibility(View.VISIBLE);
+        }else {
+            CM = false;
+//            item.setTitle(R.string.commMode);
+            commScroll.setVisibility(View.GONE);
+            commBase.setVisibility(View.GONE);
+            if (pro)
+                commander.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -564,34 +631,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 setRcvTfloat(null);
                 return true;
             }
-//            case R.id.txtSend: {
-//                setSendType(SEND_TXT);
-//                return true;
-//            }
-//            case R.id.byteSend: {
-//                setSendType(SEND_BYTE);
-//                return true;
-//            }
-//            case R.id.binSend: {
-//                setSendType(SEND_BIN);
-//                return true;
-//            }
-//            case R.id.hexSend: {
-//                setSendType(SEND_HEX);
-//                return true;
-//            }
-//            case R.id.shortSend: {
-//                setSendType(SEND_SHORT);
-//                return true;
-//            }
-//            case R.id.intSend: {
-//                setSendType(SEND_INT);
-//                return true;
-//            }
-//            case R.id.floatSend: {
-//                setSendType(SEND_FLOAT);
-//                return true;
-//            }
+            case R.id.viewInstructions: {
+                showInstructions();
+                return true;
+            }
             case R.id.themeDark: {
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
@@ -609,24 +652,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 return true;
             }
             case R.id.commMode: {
-                if(!CM) {
-                    CM = true;
-                    item.setTitle(R.string.exitCommMode);
-                    layComp.setVisibility(View.VISIBLE);
-                    commScroll.setVisibility(View.VISIBLE);
-                    commBase.setVisibility(View.VISIBLE);
-                    if(pro)
-                        commander.setVisibility(View.VISIBLE);
-                }else {
-                    CM = false;
-                    item.setTitle(R.string.commMode);
-                    if(!upd)
-                        layComp.setVisibility(View.GONE);
-                    commScroll.setVisibility(View.GONE);
-                    commBase.setVisibility(View.GONE);
-                    if (pro)
-                        commander.setVisibility(View.GONE);
-                }
+                commanderMode();
 //                Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
                 return true;
             }
@@ -645,29 +671,29 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 			if (BonDev.length < index)
 				index = 0;
 			mDevice = BondedDevices[index];
-			SD.setText(mDevice.getName() + "\n" + mDevice.getAddress());
-			if(SC == MainActivity.SERVER)
-				SD.setText(myName + "\n" + myAddress);
-			Conect.setEnabled(true);
-            Chan_Ser.setVisibility(View.VISIBLE);
+            Conect.setEnabled(true);
+            Chan_Ser.setEnabled(true);
+            Chan_Ser/*SD*/.setText(mDevice.getName() + "\n" + mDevice.getAddress());
+			if(SC == MainActivity.SERVER) {
+                Chan_Ser/*SD*/.setText(myName + "\n" + myAddress);
+                Chan_Ser.setEnabled(false);
+            }
 		} else {
-			SD.setText(R.string.NoPD);
-            Chan_Ser.setVisibility(View.GONE);
-			Conect.setEnabled(false);
+            Chan_Ser/*SD*/.setText(R.string.NoPD);
+            Chan_Ser.setEnabled(false);
+            Conect.setEnabled(false);
 		}
 	}
 	
 	@Override
 	protected void onResume() {
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        if(shapre.getBoolean(theme, false))
-            setTheme(R.style.DarkTheme);
+//        if(shapre.getBoolean(theme, false))
+//            setTheme(R.style.DarkTheme);
         if(TCOM)
             resumeBT(shapre);
         else
             resumeW(shapre);
-		if(SC == MainActivity.SERVER)
-			Chan_Ser.setVisibility(View.GONE);
 		UcommUI();
 		super.onResume();
 	}
@@ -686,11 +712,11 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 for (InetAddress addr : Collections.list(intf.getInetAddresses())) {
                     if (!addr.isLoopbackAddress()){
                         myIP = addr.getHostAddress();
-//                            textStatus.append("\n" + addr.getHostName() );
-//                            textStatus.append("\n" + addr.getCanonicalHostName() );
-//                            textStatus.append("\n\n" + intf.toString() );
-//                            textStatus.append("\n\n" + intf.getName() );
-//                            textStatus.append("\n\n" + intf.isUp() );
+//                          textStatus.append("\n" + addr.getHostName() );
+//                          textStatus.append("\n" + addr.getCanonicalHostName() );
+//                          textStatus.append("\n\n" + intf.toString() );
+//                          textStatus.append("\n\n" + intf.getName() );
+//                          textStatus.append("\n\n" + intf.isUp() );
                     }
                 }
             }
@@ -701,8 +727,9 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+//        if(myIP == defMyIP && WFM.isWifiEnabled()) {}
 //        int ipAddress = WFM.getConnectionInfo().getIpAddress();
-////      myIP = Formatter.formatIpAddress(ipAddress);
+//        myIP = Formatter.formatIpAddress(ipAddress);
 //        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
 //            ipAddress = Integer.reverseBytes(ipAddress);
 //        byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
@@ -713,11 +740,11 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 //            myIP = "0.0.0.0";
 //        }
 //    }
-        serverip = shapre.getString(getString(R.string.Extra_SI), defIP);
-        serverport = shapre.getInt(getString(R.string.Extra_SP), defPort);
-        SD.setText(serverip + ":" + serverport);
+        serverip = shapre.getString(SI, defIP);
+        serverport = shapre.getInt(SP, defPort);
+        Chan_Ser/*SD*/.setText(serverip + ":" + serverport);
         if(SC == MainActivity.SERVER)
-            SD.setText(myIP + ":" + serverport);
+            Chan_Ser/*SD*/.setText(myIP + ":" + serverport);
     }
 
     private void resumeBT(SharedPreferences shapre) {
@@ -731,6 +758,11 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
+    }
+
+    void showInstructions() {
+        Intent enableIntent = new Intent(this, InstructionsActivity.class);
+        startActivityForResult(enableIntent, SHOW_INSTRUCTIONS);
     }
 
     @Override
@@ -749,13 +781,13 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 		}
 		case SEL_BT_DEVICE: {
 			if (resultCode == Activity.RESULT_OK) {
-				index = data.getIntExtra(getString(R.string.Extra_SDev), defIndex);
+				index = data.getIntExtra(SDev, defIndex);
 				SharedPreferences shapre = getPreferences(MODE_PRIVATE);
 				SharedPreferences.Editor editor = shapre.edit();
 				editor.putInt(indev, index);
 				editor.commit();
 				mDevice = BondedDevices[index];
-				SD.setText(mDevice.getName() + "\n" + mDevice.getAddress());
+                Chan_Ser/*SD*/.setText(mDevice.getName() + "\n" + mDevice.getAddress());
 			}
 			break;
 		}
@@ -776,17 +808,27 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         }
         case REQUEST_CHANGE_SERVER: {
             if (resultCode == Activity.RESULT_OK) {
-                serverip = data.getStringExtra(getString(R.string.Extra_NSI));
-                serverport = data.getIntExtra(getString(R.string.Extra_NSP), defPort);
+                serverip = data.getStringExtra(NSI);
+                serverport = data.getIntExtra(NSP, defPort);
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putString(getString(R.string.Extra_SI), serverip);
-                editor.putInt(getString(R.string.Extra_SP), serverport);
+                editor.putString(SI, serverip);
+                editor.putInt(SP, serverport);
                 editor.commit();
                 if(SC == MainActivity.CLIENT)
-                    SD.setText(serverip + ":" + serverport);
+                    Chan_Ser/*SD*/.setText(serverip + ":" + serverport);
                 else if(SC == MainActivity.SERVER)
-                    SD.setText(myIP + ":" + serverport);
+                    Chan_Ser/*SD*/.setText(myIP + ":" + serverport);
+            }
+            break;
+        }
+        case SHOW_INSTRUCTIONS: {
+            if(resultCode == Activity.RESULT_OK) {
+                checked = data.getBooleanExtra(SIoS, false);
+                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = shapre.edit();
+                editor.putBoolean(Principal.SIoS, checked);
+                editor.commit();
             }
             break;
         }
@@ -853,6 +895,22 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 			num = 12;
 			break;
 		}
+        case R.id.comm13:{
+            num = 13;
+            break;
+        }
+        case R.id.comm14:{
+            num = 14;
+            break;
+        }
+        case R.id.comm15:{
+            num = 15;
+            break;
+        }
+        case R.id.comm16:{
+            num = 16;
+            break;
+        }
 		}
 		return num;
 	}
@@ -922,6 +980,10 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 		comm10.setText(shapre.getString(commN + 10, getResources().getString(R.string.commDVal)));
 		comm11.setText(shapre.getString(commN + 11, getResources().getString(R.string.commDVal)));
 		comm12.setText(shapre.getString(commN + 12, getResources().getString(R.string.commDVal)));
+        comm13.setText(shapre.getString(commN + 13, getResources().getString(R.string.commDVal)));
+        comm14.setText(shapre.getString(commN + 14, getResources().getString(R.string.commDVal)));
+        comm15.setText(shapre.getString(commN + 15, getResources().getString(R.string.commDVal)));
+        comm16.setText(shapre.getString(commN + 16, getResources().getString(R.string.commDVal)));
 	}
 
 	public void Chan_Ser(View view) {
@@ -949,6 +1011,8 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         }else {
             Intent CS = new Intent(this, Set_Server.class);
             CS.putExtra(SI, serverip);
+            if(SC == MainActivity.SERVER)
+                CS.putExtra(SnIP, true);
             CS.putExtra(SP, serverport);
             startActivityForResult(CS, REQUEST_CHANGE_SERVER);
         }
@@ -983,7 +1047,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     comunic.setComunicationListener(this);
                     comunic.setConnectionListener(this);
                     Chan_Ser.setEnabled(false);
-                    Conect.setText(getResources().getString(R.string.Button_Conecting));
+                    Conect.setText(getString(R.string.Button_Conecting));
                     comunic.execute();
                 }else
                     comunic.Detener_Actividad();
@@ -1172,7 +1236,8 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
 	public void onConnectionfinished() {
 		Conect.setText(getResources().getString(R.string.Button_Conect));
 		Conect.setEnabled(true);
-		Chan_Ser.setEnabled(true);
+        if(!(TCOM && SC == MainActivity.SERVER))
+		    Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 	}
 }

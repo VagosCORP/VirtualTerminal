@@ -50,9 +50,13 @@
         </menu>
     </item>
     <item
-        android:id="@+id/commMode"
+        android:id="@+id/viewInstructions"
         android:orderInCategory="4"
-        android:title="@string/commModeNP"/>
+        android:title="@string/viewInstructions"/>
+    <item
+        android:id="@+id/commMode"
+        android:orderInCategory="5"
+        android:title="@string/commMode"/>
     <!--<item-->
         <!--android:id="@+id/endCOM"-->
         <!--android:orderInCategory="7"-->
