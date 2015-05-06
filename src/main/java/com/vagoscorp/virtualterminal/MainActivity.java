@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 		SW = (Button)findViewById(R.id.Sel_SW);
 		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + sPath);
         mkdirsDone = path.mkdirs();
-        Init = new Intent(this, Principal.class);
+        Init = new Intent(this, PrincipalActivity.class);
         if(BTAdapter == null) {
             CB.setEnabled(false);
             SB.setEnabled(false);
@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void InitBT(View view) {
-		Init = new Intent(this, Principal.class);
+		Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
         Init.putExtra(getString(R.string.Extra_LVL), pro);
@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void InitW(View view) {
-		Init = new Intent(this, Principal.class);
+		Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), false);
         Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
         Init.putExtra(getString(R.string.Extra_LVL), pro);
@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void InitBTs(View view) {
-        Init = new Intent(this, Principal.class);
+        Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), SERVER);
         Init.putExtra(getString(R.string.Extra_LVL), pro);
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void InitWs(View view) {
-        Init = new Intent(this, Principal.class);
+        Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), false);
 		Init.putExtra(getString(R.string.Extra_TYP), SERVER);
 		Init.putExtra(getString(R.string.Extra_LVL), pro);

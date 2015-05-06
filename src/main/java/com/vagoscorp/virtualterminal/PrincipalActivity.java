@@ -40,7 +40,7 @@ import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
-public class Principal extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener {
+public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener {
 
     Spinner spinner;
     TextView RX;// Received Data
@@ -54,7 +54,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
     ScrollView scron;
     LinearLayout commander;
     LinearLayout commBase;
-    ScrollView commScroll;
+//    ScrollView commScroll;
     LinearLayout byteRCV;
     LinearLayout layout_principal;
     LinearLayout layNAct;
@@ -174,11 +174,11 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
         boolean darkTheme = shapre.getBoolean(theme, true);
-        checked = shapre.getBoolean(Principal.SIoS, false);
+        checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_principal);
+		setContentView(R.layout.layout_activity_principal);
         layout_principal = (LinearLayout)findViewById(R.id.layout_principal);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_principal.setBackgroundColor(Color.parseColor("#ff303030"));
@@ -192,7 +192,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
             BTAdapter = BluetoothAdapter.getDefaultAdapter();
             index = defIndex;
             if (BTAdapter == null) {
-                Toast.makeText(Principal.this, R.string.NB, Toast.LENGTH_SHORT)
+                Toast.makeText(PrincipalActivity.this, R.string.NB, Toast.LENGTH_SHORT)
                         .show();
                 finish();
                 return;
@@ -221,7 +221,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         scron = (ScrollView)findViewById(R.id.scron);
         commander = (LinearLayout)findViewById(R.id.commander);
         commBase = (LinearLayout)findViewById(R.id.commBase);
-        commScroll = (ScrollView)findViewById(R.id.commScroll);
+//        commScroll = (ScrollView)findViewById(R.id.commScroll);
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -367,7 +367,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                     }
                 } catch (NumberFormatException nEx) {
                     nEx.printStackTrace();
-                    Toast.makeText(Principal.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PrincipalActivity.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
                 }
             }else {
                 N = false;
@@ -582,14 +582,14 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
         if(!CM) {
             CM = true;
 //            item.setTitle(R.string.exitCommMode);
-            commScroll.setVisibility(View.VISIBLE);
+//            commScroll.setVisibility(View.VISIBLE);
             commBase.setVisibility(View.VISIBLE);
             if(pro)
                 commander.setVisibility(View.VISIBLE);
         }else {
             CM = false;
 //            item.setTitle(R.string.commMode);
-            commScroll.setVisibility(View.GONE);
+//            commScroll.setVisibility(View.GONE);
             commBase.setVisibility(View.GONE);
             if (pro)
                 commander.setVisibility(View.GONE);
@@ -827,7 +827,7 @@ public class Principal extends Activity implements OnComunicationListener,OnConn
                 checked = data.getBooleanExtra(SIoS, false);
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(Principal.SIoS, checked);
+                editor.putBoolean(PrincipalActivity.SIoS, checked);
                 editor.commit();
             }
             break;

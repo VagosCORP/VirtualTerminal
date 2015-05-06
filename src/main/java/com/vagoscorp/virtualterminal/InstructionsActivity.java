@@ -23,7 +23,7 @@ public class InstructionsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instructions);
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        checked = shapre.getBoolean(Principal.SIoS, false);
+        checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
         slayout = (LinearLayout)findViewById(R.id.slayout);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             slayout.setBackgroundColor(Color.parseColor("#ff303030"));
@@ -32,12 +32,12 @@ public class InstructionsActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checked = isChecked;
-                Intent result = new Intent(Principal.RESULT_ACTION);
-                result.putExtra(Principal.SIoS, checked);
+                Intent result = new Intent(PrincipalActivity.RESULT_ACTION);
+                result.putExtra(PrincipalActivity.SIoS, checked);
                 setResult(Activity.RESULT_OK, result);
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(Principal.SIoS, isChecked);
+                editor.putBoolean(PrincipalActivity.SIoS, isChecked);
                 editor.commit();
             }
         });
