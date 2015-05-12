@@ -127,6 +127,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public static final String commT = "commT";
     public static final String commET = "commET";
     public static final String defIP = "10.0.0.6";
+    public static final String VER = "VER";
     public static final int defPort = 2000;
 	public static final int defNcomm = 0;
 	public static final boolean defBcomm = false;
@@ -168,13 +169,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     boolean abHidden = false;
     boolean checked = false;
 //    boolean NWiFi = false;
+    int defversion = 20150000;
+    int version = 20150506;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
         boolean darkTheme = shapre.getBoolean(theme, true);
-        checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
+        checked = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
@@ -288,7 +291,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 		setupActionBar();
-        if(!checked)
+        int ver = shapre.getInt(VER, defversion);
+        if(ver != version) {
+            SharedPreferences.Editor editor = shapre.edit();
+            editor.putInt(VER, version);
+            editor.commit();
+            showInstructions();
+        }else if(!checked)
             showInstructions();
         UpdN.setChecked(false);
 	}
@@ -762,6 +771,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     void showInstructions() {
         Intent enableIntent = new Intent(this, InstructionsActivity.class);
+        enableIntent.putExtra(getString(R.string.Extra_LVL), pro);
         startActivityForResult(enableIntent, SHOW_INSTRUCTIONS);
     }
 

@@ -7,7 +7,7 @@ android {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
         targetSdkVersion 22
-        versionCode 20150505
+        versionCode 20150506
         versionName '1.5.57'
     }
     buildTypes {

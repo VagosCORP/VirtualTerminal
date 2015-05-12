@@ -102,11 +102,15 @@
         *   And finally send an end byte = 10\n
         > Update mode can be mixed with the advanced reception types:\n
         *   First select \'Update Reception\'\n
-        *   Then select the advanced reception type to be interpreted and showed
+        *   Then select the advanced reception type to be interpreted and showed\n
+        > Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
+        *   A scrollable 16 button Commander Mode\n
+        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes
     </string>
     <string name="viewInstructions">View Instructions</string>
     <string name="NSIAS">Never show again at startup</string>
     <string name="close">Close instructions</string>
+    <string name="getPRO">Get PRO features</string>
     <string-array name="sendtypes_array" translatable="false">
         <item>T</item>
         <item>#</item>

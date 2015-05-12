@@ -78,11 +78,15 @@
         *   Y finalmente enviar un Byte de finalización igual a 10\n
         > El modo Update puede ser mezclado con los modos de recepción avanzada:\n
         *   Primero escoja el modo \'Recepción Update\'\n
-        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado
+        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado\n
+        > Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
+        *   Un Modo Comando de 16 botones desplazables\n
+        *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth
     </string>
     <string name="viewInstructions">Ver Instrucciones</string>
     <string name="NSIAS">No mostrar de nuevo al inicio</string>
     <string name="close">Cerrar instrucciones</string>
+    <string name="getPRO">Obtener funciones PRO</string>
     <string name="title_activity_instructions">Instrucciones</string>
 
 </resources>
