@@ -1,5 +1,7 @@
 package com.vagoscorp.virtualterminal;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,18 +9,22 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 public class InstructionsActivity extends Activity {
 
+    TextView InspVer;
     LinearLayout slayout;
     CheckBox checkBox;
     Button getPRO;
+    ActionBar actionBar;
     boolean checked = false;
     boolean pro = false;
 
@@ -35,6 +41,8 @@ public class InstructionsActivity extends Activity {
         getPRO = (Button)findViewById(R.id.getPRO);
         if(pro)
             getPRO.setVisibility(View.GONE);
+        InspVer = (TextView)findViewById(R.id.InspVer);
+        InspVer.setText(getString(R.string.Version) + getString(R.string.versionnum));
         checkBox = (CheckBox)findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -50,6 +58,7 @@ public class InstructionsActivity extends Activity {
             }
         });
         checkBox.setChecked(checked);
+        setupActionBar();
     }
 
     public void closeIns(View view) {
@@ -60,5 +69,30 @@ public class InstructionsActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("market://details?id=com.vagoscorp.virtualterminal.prokey"));
         startActivity(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            actionBar = getActionBar();
+            if(actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+            case R.id.action_settings: {
+
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

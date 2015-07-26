@@ -74,17 +74,16 @@
             android:text="@string/BTX" />
 
         <Spinner
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:layout_weight="15" />
+            android:id="@+id/spinner" />
 
         <EditText
             android:id="@+id/TX"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="30"
-            android:hint="@string/Text_TX"
+            android:layout_weight="1"
+            android:hint="@string/VagosCORP"
             android:inputType="text" >
 
             <requestFocus />

@@ -170,10 +170,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     boolean checked = false;
 //    boolean NWiFi = false;
     int defversion = 20150000;
-    int version = 20150506;
+    int version;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        version = Integer.parseInt(getString(R.string.versionnum));
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
         boolean darkTheme = shapre.getBoolean(theme, true);
@@ -296,9 +297,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             SharedPreferences.Editor editor = shapre.edit();
             editor.putInt(VER, version);
             editor.commit();
-            showInstructions();
-        }else if(!checked)
-            showInstructions();
+            if(!checked)
+                showInstructions();
+        }
         UpdN.setChecked(false);
 	}
 
@@ -542,7 +543,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             TX.setText("");
             switch (sendType) {
                 case (SEND_TXT): {
-                    TX.setHint(R.string.Text_TX);
+                    TX.setHint(R.string.VagosCORP);
                     TX.setInputType(InputType.TYPE_CLASS_TEXT);
                     break;
                 }
@@ -642,6 +643,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
             case R.id.viewInstructions: {
                 showInstructions();
+                return true;
+            }
+            case R.id.CommanderX: {
+                startActivity(new Intent(this, CommanderX.class));
                 return true;
             }
             case R.id.themeDark: {

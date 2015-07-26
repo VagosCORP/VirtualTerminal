@@ -12,11 +12,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_Lab" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/Clientes" />
 
     <LinearLayout
@@ -143,6 +138,24 @@
             android:onClick="InitWs"
             android:text="@string/Button_Sel" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/VagosCORP"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/verLab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Version" />
     </LinearLayout>
 
 </LinearLayout>

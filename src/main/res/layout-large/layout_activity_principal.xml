@@ -28,6 +28,12 @@
             android:onClick="Chan_Ser"
             android:text="@string/Ser_Dat"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xtring"
+            android:id="@+id/button8" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -36,17 +42,16 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:layout_weight="5"/>
+            android:id="@+id/spinner" />
 
         <EditText
             android:id="@+id/TX"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="32"
-            android:hint="@string/Text_TX"
+            android:layout_weight="1"
+            android:hint="@string/VagosCORP"
             android:inputType="text">
             <requestFocus />
         </EditText>
@@ -227,29 +232,22 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/shortRcvTyp"
+                android:text="@string/shortRCV"
                 android:id="@+id/radioButton5"
                 android:onClick="setRcvTint16"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/intRcvTyp"
+                android:text="@string/intRCV"
                 android:id="@+id/radioButton6"
                 android:onClick="setRcvTint32"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New RadioButton"
+                android:text="@string/floatRCV"
                 android:id="@+id/radioButton7"
-                android:visibility="gone"/>
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/floatRcvTyp"
-                android:id="@+id/radioButton8"
                 android:onClick="setRcvTfloat"/>
         </RadioGroup>
 

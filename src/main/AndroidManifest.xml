@@ -74,10 +74,17 @@
             android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/DarkTheme">
+            android:theme="@style/DarkTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CommanderX"
+            android:label="@string/title_activity_commander_x" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vagoscorp.virtualterminal.PrincipalActivity" />
         </activity>
     </application>
 

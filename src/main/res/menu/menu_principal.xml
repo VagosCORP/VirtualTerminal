@@ -2,9 +2,9 @@
 
     <item
         android:id="@+id/rcvTyp"
-        android:orderInCategory="1"
         android:showAsAction="ifRoom"
-        android:title="@string/RCVtype">
+        android:orderInCategory="1"
+        android:title="@string/Text_RX">
         <menu>
             <item
                 android:id="@+id/rcvText"
@@ -18,27 +18,34 @@
             <item
                 android:id="@+id/rcvUpd"
                 android:title="@string/updRCV"/>
-        </menu>
-    </item>
-    <item
-        android:id="@+id/advRcvType"
-        android:orderInCategory="2"
-        android:title="@string/advTypRCV">
-        <menu>
+            <item
+                android:enabled="false"
+                android:title="@string/advTypRCV"/>
             <item
                 android:id="@+id/shortRcv"
-                android:title="@string/shortRcvTyp"/>
+                android:title="@string/shortRCV"/>
             <item
                 android:id="@+id/intRcv"
-                android:title="@string/intRcvTyp"/>
+                android:title="@string/intRCV"/>
             <item
                 android:id="@+id/floatRcv"
-                android:title="@string/floatRcvTyp"/>
+                android:title="@string/floatRCV"/>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/commMode"
+        android:orderInCategory="2"
+        android:title="@string/commMode"/>
+
+    <item
+        android:id="@+id/CommanderX"
+        android:orderInCategory="3"
+        android:title="@string/title_activity_commander_x"/>
+
     <item
         android:id="@+id/visual_settings"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:title="@string/Appearance">
         <menu>
             <item
@@ -51,12 +58,8 @@
     </item>
     <item
         android:id="@+id/viewInstructions"
-        android:orderInCategory="4"
-        android:title="@string/viewInstructions"/>
-    <item
-        android:id="@+id/commMode"
         android:orderInCategory="5"
-        android:title="@string/commMode"/>
+        android:title="@string/viewInstructions"/>
     <!--<item-->
         <!--android:id="@+id/endCOM"-->
         <!--android:orderInCategory="7"-->
@@ -66,4 +69,5 @@
         <!--android:id="@+id/action_settings"-->
         <!--android:orderInCategory="100"-->
         <!--android:title="@string/action_settings"/>-->
+    <!--android:orderInCategory="7"-->
 </menu>

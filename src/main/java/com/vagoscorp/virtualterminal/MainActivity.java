@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 	Button SB;
 	Button SW;
     TextView serverLabel;
+	TextView verLab;
     LinearLayout serverBT;
     LinearLayout serverW;
 	public static final int CLIENT = 1;
@@ -53,6 +54,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
+		verLab = (TextView)findViewById(R.id.verLab);
+		verLab.setText(getString(R.string.Version) + getString(R.string.versionnum));
         serverLabel = (TextView)findViewById(R.id.serverLabel);
         serverBT = (LinearLayout)findViewById(R.id.serverBT);
         serverW = (LinearLayout)findViewById(R.id.serverW);

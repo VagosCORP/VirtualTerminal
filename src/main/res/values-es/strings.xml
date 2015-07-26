@@ -33,11 +33,14 @@
     <string name="bothRCV">Recepción Dual</string>
     <string name="numRCV">Recepción de Bytes</string>
     <string name="textRCV">Recepción de Texto</string>
-    <string name="commMode">Conmutar Modo Comando</string>
+    <string name="commMode">Modo Comando</string>
     <string name="typSend">Tipo de envío</string>
     <string name="textTyp">Envío de Texto</string>
     <string name="numFormExc">Formato Numérico Erróneo</string>
     <string name="Appearance">Apariencia</string>
+    <string name="ComXConstant">Constante</string>
+    <string name="ComXdeleteItem">Borrar Item</string>
+    <string name="ComXSendX">enviar</string>
     <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
     <string name="updRCV">Recepción Update</string>
     <string name="updRate">#Act</string>
@@ -47,7 +50,8 @@
     <string name="floatRcvTyp">Float RX</string>
     <string name="doubleRcvTyp">Recepcion Double</string>
     <string name="advTypRCV">Recepción Avanzada</string>
-    <string name="instructions">Instrucciones\n
+    <string name="instruTitle">Instrucciones</string>
+    <string name="instructions">\n
         > Pulse el botón de información de conexión para cambiarla\n
         > Pulse el botón Conectar para iniciar/finalizar la conexión\n
         > Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones\n
@@ -88,5 +92,10 @@
     <string name="close">Cerrar instrucciones</string>
     <string name="getPRO">Obtener funciones PRO</string>
     <string name="title_activity_instructions">Instrucciones</string>
+    <string name="doubleRCV">Recepción Double</string>
+    <string name="floatRCV">Recepción Float</string>
+    <string name="intRCV">Recepción Int32</string>
+    <string name="longRCV">Recepción Int64</string>
+    <string name="shortRCV">Recepción Int16</string>
 
 </resources>
