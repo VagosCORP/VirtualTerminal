@@ -17,7 +17,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/Server_IP"
-            android:inputType="number|text" />
+            android:inputType="number|text">
+            <requestFocus />
+        </EditText>
 
         <EditText
             android:id="@+id/Server_Port"

@@ -3,6 +3,8 @@ package com.vagoscorp.virtualterminal;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +32,8 @@ public class MainActivity extends Activity {
     LinearLayout serverW;
 	public static final int CLIENT = 1;
 	public static final int SERVER = 2;
+	public static final String VER = "VER";
+	int defversion = 20150000;
 	boolean SDread = false;
 	boolean SDwrite = false;
 	File path;
@@ -48,14 +52,17 @@ public class MainActivity extends Activity {
     String ext = ".vtconfig";
     String proPack = "com.vagoscorp.virtualterminal.prokey";
     String sPath = "/Android/data/com.vagoscorp.vcvt";
+
+    int versionCode = defversion;
+    String versionName = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		verLab = (TextView)findViewById(R.id.verLab);
-		verLab.setText(getString(R.string.Version) + getString(R.string.versionnum));
         serverLabel = (TextView)findViewById(R.id.serverLabel);
         serverBT = (LinearLayout)findViewById(R.id.serverBT);
         serverW = (LinearLayout)findViewById(R.id.serverW);
@@ -71,6 +78,22 @@ public class MainActivity extends Activity {
             SB.setEnabled(false);
         }
 		getNames();
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionCode = pInfo.versionCode;
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        verLab.setText("v" + versionName + " b" + versionCode);
+        int ver = shapre.getInt(VER, defversion);
+        if(ver != versionCode) {
+            SharedPreferences.Editor editor = shapre.edit();
+            editor.putInt(VER, versionCode);
+            editor.commit();
+            write(baseVer);
+        }
+
 	}
 	
 	@Override

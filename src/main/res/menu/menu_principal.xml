@@ -39,9 +39,9 @@
         android:title="@string/commMode"/>
 
     <item
-        android:id="@+id/CommanderX"
+        android:id="@+id/XtringMode"
         android:orderInCategory="3"
-        android:title="@string/title_activity_commander_x"/>
+        android:title="@string/title_activity_xtring"/>
 
     <item
         android:id="@+id/visual_settings"

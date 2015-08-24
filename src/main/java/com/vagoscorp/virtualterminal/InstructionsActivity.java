@@ -5,6 +5,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -21,12 +23,17 @@ import android.widget.TextView;
 public class InstructionsActivity extends Activity {
 
     TextView InspVer;
+    TextView insGP;
     LinearLayout slayout;
     CheckBox checkBox;
     Button getPRO;
     ActionBar actionBar;
     boolean checked = false;
     boolean pro = false;
+
+    int defversion = 20150000;
+    int versionCode = defversion;
+    String versionName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +46,20 @@ public class InstructionsActivity extends Activity {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             slayout.setBackgroundColor(Color.parseColor("#ff303030"));
         getPRO = (Button)findViewById(R.id.getPRO);
-        if(pro)
-            getPRO.setVisibility(View.GONE);
+        insGP = (TextView)findViewById(R.id.insGP);
         InspVer = (TextView)findViewById(R.id.InspVer);
-        InspVer.setText(getString(R.string.Version) + getString(R.string.versionnum));
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionCode = pInfo.versionCode;
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        InspVer.setText("v" + versionName + " b" + versionCode);
+        if(pro) {
+            getPRO.setVisibility(View.GONE);
+            insGP.setVisibility(View.GONE);
+        }
         checkBox = (CheckBox)findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

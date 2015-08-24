@@ -33,7 +33,7 @@
     <string name="bothRCV">Recepción Dual</string>
     <string name="numRCV">Recepción de Bytes</string>
     <string name="textRCV">Recepción de Texto</string>
-    <string name="commMode">Modo Comando</string>
+    <string name="commMode">Modo EnvíoRápido</string>
     <string name="typSend">Tipo de envío</string>
     <string name="textTyp">Envío de Texto</string>
     <string name="numFormExc">Formato Numérico Erróneo</string>
@@ -50,41 +50,46 @@
     <string name="floatRcvTyp">Float RX</string>
     <string name="doubleRcvTyp">Recepcion Double</string>
     <string name="advTypRCV">Recepción Avanzada</string>
+    <string name="dataString">Cadena de Datos</string>
     <string name="instruTitle">Instrucciones</string>
     <string name="instructions">\n
-        > Pulse el botón de información de conexión para cambiarla\n
+        > Pulse el botón de información de conexión para cambiar los datos de conexión\n
         > Pulse el botón Conectar para iniciar/finalizar la conexión\n
         > Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones\n
         > Use la lista desplegable TX para seleccionar el tipo de información que desea enviar\n
-        > Escriba en la entrada de texto TX  la información que desea enviar\n
+        > Escriba en la entrada de texto TX la información que desea enviar\n
         > Use el menú de la App para acceder a otras opciones:\n
         *   Seleccionar como mostrar y administrar los datos entrantes\n
         *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float)\n
-        *   Iniciar/Finalizar el Modo Comando\n
+        *   Iniciar/Finalizar el Modo EnvíoRápido\n
         *   Seleccionar opción de apariencia: Tema Normal o Dark\n
         > Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú\n
-        > Cuando se está conectado, Inicie/Finalice el modo comando manteniendo pulsado el botón \'Enviar\' sin necesidad de entrar al menú\n
-        > Operando el \'Modo Comando\': Almacene información en botones para enviarla con el simple pulsar de un botón\n
-        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de Comando\n
+        > Cuando se está conectado, Inicie/Finalice el modo EnvíoRápido manteniendo pulsado el botón \'Enviar\'\n
+        > Operando el \'Modo EnvíoRápido\': Almacene información en botones para enviarla más agilmente\n
+        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de EnvíoRápido\n
         *   Escriba la información en la entrada de texto TX\n
-        *   Inicie el Modo Comando (Si no lo ha iniciado todavía)\n
-        *   Haga una pulsación larga en un botón de Comando para salvar la información de la entrada de texto TX en el botón\n
-        *   Haga una pulsación en un botón de Comando para enviar automáticamente la información almacenada\n
-        *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de Comando borrará la información almacenada\n
-        *   Los Botones de Comando mostrarán el tipo de datos y la información almacenada\n
+        *   Inicie el Modo EnvíoRápido (Si no lo ha iniciado aún)\n
+        *   Haga una pulsación larga en un botón de EnvíoRápido para salvar la información en él\n
+        *   Haga una pulsación en un botón de EnvíoRápido para enviar automáticamente la información almacenada\n
+        *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de EnvíoRápido borrará su información actual\n
+        *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada\n
         > Operando el modo \'Recepción Update\': Los nuevos datos recibidos reemplazarán a los antiguos\n
+        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de finalización igual a 10\n
         *   Seleccione el modo \'Recepción Update\'\n
         *   Escriba el número de datos recibidos a acumular antes de sobrescribir con datos nuevos (vacío significa 1)\n
         *   Habilita/Deshabilita la recepción de Bytes de ser necesaria mediante el CheckBox\n
         > Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit)\n
         *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio igual a 13\n
-        *   Entonces enviar los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB)\n
-        *   Y finalmente enviar un Byte de finalización igual a 10\n
+        *   Entonces envíe los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB)\n
+        *   Y finalmente envíe un Byte de finalización de valor 10\n
         > El modo Update puede ser mezclado con los modos de recepción avanzada:\n
         *   Primero escoja el modo \'Recepción Update\'\n
-        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado\n
+        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado
+
+    </string>
+    <string name="insGP">\n
         > Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
-        *   Un Modo Comando de 16 botones desplazables\n
+        *   Un Modo EnvíoRápido de 16 botones desplazables\n
         *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth
     </string>
     <string name="viewInstructions">Ver Instrucciones</string>
@@ -97,5 +102,7 @@
     <string name="intRCV">Recepción Int32</string>
     <string name="longRCV">Recepción Int64</string>
     <string name="shortRCV">Recepción Int16</string>
+    <string name="title_activity_xtring">Modo Xtring</string>
+    <string name="title_activity_xtring_editor">Editor Xtring</string>
 
 </resources>

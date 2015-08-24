@@ -7,6 +7,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -170,11 +172,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     boolean checked = false;
 //    boolean NWiFi = false;
     int defversion = 20150000;
-    int version;
+    int versionCode = defversion;
+    String versionName = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        version = Integer.parseInt(getString(R.string.versionnum));
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
         boolean darkTheme = shapre.getBoolean(theme, true);
@@ -291,16 +293,23 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         comm16.setOnLongClickListener(this);
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
-		setupActionBar();
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionCode = pInfo.versionCode;
+            versionName = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         int ver = shapre.getInt(VER, defversion);
-        if(ver != version) {
+        if(ver != versionCode) {
             SharedPreferences.Editor editor = shapre.edit();
-            editor.putInt(VER, version);
+            editor.putInt(VER, versionCode);
             editor.commit();
             if(!checked)
                 showInstructions();
         }
         UpdN.setChecked(false);
+        setupActionBar();
 	}
 
     private void updPNum(boolean bool) {
@@ -645,8 +654,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 showInstructions();
                 return true;
             }
-            case R.id.CommanderX: {
-                startActivity(new Intent(this, CommanderX.class));
+            case R.id.XtringMode: {
+                startActivity(new Intent(this, XtringActivity.class));
                 return true;
             }
             case R.id.themeDark: {
@@ -782,7 +791,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
 		case REQUEST_ENABLE_BT: {
 			if (resultCode != Activity.RESULT_OK) {
 				Toast.makeText(this, R.string.EnBT, Toast.LENGTH_SHORT).show();

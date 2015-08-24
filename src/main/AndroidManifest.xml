@@ -79,13 +79,34 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.MainActivity" />
         </activity>
+        <!-- <activity -->
+        <!-- android:name=".CommanderX" -->
+        <!-- android:windowSoftInputMode="adjustPan" -->
+        <!-- android:label="@string/title_activity_commander_x" > -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value="com.vagoscorp.virtualterminal.PrincipalActivity" /> -->
+        <!-- </activity> -->
         <activity
-            android:name=".CommanderX"
-            android:label="@string/title_activity_commander_x" >
+            android:name=".XtringActivity"
+            android:label="@string/title_activity_xtring"
+            android:parentActivityName=".PrincipalActivity"
+            android:screenOrientation="sensorPortrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.PrincipalActivity" />
         </activity>
+        <activity
+            android:name=".XtringEditor"
+            android:label="@string/title_activity_xtring_editor"
+            android:theme="@style/Dialog"
+            android:windowSoftInputMode="stateVisible"
+            android:parentActivityName=".XtringActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vagoscorp.virtualterminal.XtringActivity" />
+        </activity>
     </application>
 
 </manifest>
+    <!-- |adjustResize -->

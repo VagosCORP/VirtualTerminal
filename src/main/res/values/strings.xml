@@ -7,8 +7,6 @@
     <string name="Button_Conecting">Connecting…</string>
     <string name="Button_DisConect">Disconnect</string>
     <string name="BSend">Send</string>
-    <string name="versionnum" translatable="false">20150718</string>
-    <string name="Version" translatable="false"> v1.5.58 b</string>
     <string name="Text_RX" translatable="false">RX</string>
     <string name="VagosCORP" translatable="false">Vagos CORP</string>
     <string name="Text_TXn" translatable="false">0123456789</string>
@@ -17,14 +15,13 @@
     <string name="Text_TXf" translatable="false">123456789.123456789</string>
     <string name="NB">Your Device don\'t have Bluetooth</string>
     <string name="SincDev">Paired Devices</string>
-    <string name="EncDev">Finded Devices</string>
+    <string name="EncDev">Found Devices</string>
     <string name="device_list">Select a Device</string>
     <string name="BRX">Erase RX</string>
     <string name="BTX">Erase TX</string>
     <string name="hello_world">Hello world!</string>
     <string name="Ser_Dat">Server Data</string>
     <string name="NoPD">No Paired Devices</string>
-    <!--<string name="set_server">Select Server</string>-->
     <string name="Server_IP" translatable="false">10.0.0.6</string>
     <string name="Server_Port" translatable="false">2000</string>
     <string name="OK">Accept</string>
@@ -45,7 +42,7 @@
     <string name="bothRCV">Dual Reception</string>
     <string name="numRCV">Bytes Reception</string>
     <string name="textRCV">Text Reception</string>
-    <string name="commMode">Commander Mode</string>
+    <string name="commMode">FastSend Mode</string>
     <string name="commDVal" translatable="false">NO_DAT</string>
     <string name="typSend">Send Type</string>
     <string name="numFormExc">Numeric Format Exception</string>
@@ -87,6 +84,7 @@
     <string name="Extra_TCOM" translatable="false">TCOM</string>
     <string name="Extra_TYP" translatable="false">TYPE</string>
     <string name="Extra_LVL" translatable="false">LEVEL</string>
+    <string name="dataString">DataString</string>
     <string name="instruTitle">Instructions</string>
     <string name="instructions">\n
         > Click on connection info button to change it\n
@@ -97,19 +95,20 @@
         > Use the app menu to access other options:\n
         *   Select how to show and manage the incoming data\n
         *   Select advanced numeric reception options (int16, int32, float)\n
-        *   Start/Stop Commander Mode\n
+        *   Start/Stop FastSend Mode\n
         *   Select appearance options: Normal or Dark theme\n
         > Tablet users can select the reception options without entering to menu\n
-        > When connected, LongClick on \'Send\' button to start/stop Commander Mode without entering to menu\n
-        > Operating \'Commander Mode\': Save data in to buttons to send it with a simple button click\n
-        *   Select from TX Spinner the kind of data you want to save on a Command Button\n
+        > When connected, LongClick on \'Send\' button to start/stop FastSend Mode without entering to menu\n
+        > Operating \'FastSend Mode\': Save data in to buttons to send it with a single click\n
+        *   Select from TX Spinner the kind of data you want to save on a FastSend Button\n
         *   Write data on the TX input\n
-        *   Start commander mode (if not running yet)\n
-        *   LongClick on one Commander Button to save the TX data on the button\n
-        *   Simple Click on Commander Button to automatically send the saved data\n
-        *   If TX input is empty, LongClick on a Commander Button will erase saved data\n
-        *   Commander Buttons will show type and data you just save\n
-        > Operating \'Update Reception\': New incoming data will replace the old ones\n
+        *   Start FastSend mode (if not running yet)\n
+        *   LongClick on one FastSend Button to save the TX data on the button\n
+        *   Simple Click on FastSend Button to automatically send the saved data\n
+        *   If TX input is empty, LongClick on a FastSend Button will erase saved data\n
+        *   FastSend Buttons will show type and data you just save\n
+        > Operating \'Update Reception\': New incoming data will replace the old one\n
+        *   Requires the sender device to send an end byte = 10\n
         *   Select the \'Update Reception\' Reception Type\n
         *   Write number of received data to accumulate before replacing with new one (empty means 1)\n
         *   Enable/Disable byte reception if desired by using the CheckBox\n
@@ -119,9 +118,12 @@
         *   And finally send an end byte = 10\n
         > Update mode can be mixed with the advanced reception types:\n
         *   First select \'Update Reception\'\n
-        *   Then select the advanced reception type to be interpreted and showed\n
+        *   Then select the advanced reception type to be interpreted and showed
+
+    </string>
+    <string name="insGP">\n
         > Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
-        *   A scrollable 16 button Commander Mode\n
+        *   A scrollable 16 button FastSend Mode\n
         *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes
     </string>
     <string name="viewInstructions">View Instructions</string>
@@ -139,5 +141,7 @@
     </string-array>
     <string name="title_activity_instructions">Instructions</string>
     <string name="title_activity_commander_x" translatable="false">CommanderX</string>
+    <string name="title_activity_xtring">Xtring Mode</string>
+    <string name="title_activity_xtring_editor">XtringEditor</string>
 
 </resources>

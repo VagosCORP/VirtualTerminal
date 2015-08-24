@@ -35,6 +35,13 @@
             android:onClick="BRX"
             android:text="@string/BRX" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dataString"
+            android:id="@+id/dataString"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/layNAct"
             android:orientation="horizontal"
