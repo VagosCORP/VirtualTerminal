@@ -8,71 +8,184 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
 
-public class XtringActivity extends Activity implements AdapterView.OnItemSelectedListener,CompoundButton.OnCheckedChangeListener {
+public class XtringActivity extends Activity implements GestureDetector.OnGestureListener{
 
-    LinearLayout layout_commander_x;
+    LinearLayout layout_xtring;
+    LinearLayout xtringList;
     ActionBar actionBar;
-    ListView listView;
+    public static int numItems = 8;
+
+    public static final int XTRING_EDITOR = 199;
+
+    public static final String NEWTX = "NEWTX";
+    public static final String POS = "POS";
+    public static final String SENDTYPE = "SENDTYPE";
+    public static final String sendTypeX = "sendTypeX";
+    public static final String valTXX = "valTXX";
+    public static final String constantX = "constantX";
+    public static final String enabledX = "enabledX";
+
+    int[] ListIDs = {0, R.id.XtringItem01,R.id.XtringItem02,R.id.XtringItem03,R.id.XtringItem04,R.id.XtringItem05,
+            R.id.XtringItem06,R.id.XtringItem07,R.id.XtringItem08,R.id.XtringItem09,R.id.XtringItem10,R.id.XtringItem11,
+            R.id.XtringItem12,R.id.XtringItem13,R.id.XtringItem14,R.id.XtringItem15,R.id.XtringItem16,R.id.XtringItem17,
+            R.id.XtringItem18,R.id.XtringItem19,R.id.XtringItem20,R.id.XtringItem21,R.id.XtringItem22,R.id.XtringItem23,
+            R.id.XtringItem24,R.id.XtringItem25,R.id.XtringItem26,R.id.XtringItem27,R.id.XtringItem28,R.id.XtringItem29,
+            R.id.XtringItem30,R.id.XtringItem31,R.id.XtringItem32};
+    XtringItem[] listItems;
+    XtringItem[] tempListItems;
+    GestureDetector gesDetector;
+    float height = 0;
+    float width = 0;
 
     int comCont = 0;
-    int[] ButtIDs = {R.id.button1,R.id.button2,R.id.button3,R.id.button4,R.id.button5,R.id.button6,R.id.button7};
+    int[] ButtIDs = {R.id.txtButton,R.id.byteButton,R.id.binButton,R.id.hexButton,R.id.shortButton,R.id.intButton,R.id.floatButton};
     Button[] Buttons = new Button[7];
 
-    ArrayList<XtringItem> listItems;
-    XtringAdapter xtringAdapter;
+    @Override
+    protected void onStop() {
+        saveAll();
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        boolean darkTheme = shapre.getBoolean(PrincipalActivity.theme, true);
+        boolean isPro = getIntent().getBooleanExtra(PrincipalActivity.IS_PRO, false);
+        boolean darkTheme = getIntent().getBooleanExtra(PrincipalActivity.theme, true);
+        if(isPro)
+            numItems = 32;
+        listItems = new XtringItem[numItems + 1];
+        tempListItems = new XtringItem[numItems + 1];
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sendtypes_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_commander_x);
-        layout_commander_x = (LinearLayout)findViewById(R.id.layout_commander_x);
+        setContentView(R.layout.activity_xtring);
+        layout_xtring = (LinearLayout)findViewById(R.id.layout_xtring);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            layout_commander_x.setBackgroundColor(Color.parseColor("#ff303030"));
+            layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
         for(int i = 0; i < 7; i++)
             Buttons[i] = (Button)findViewById(ButtIDs[i]);
-        listItems = new ArrayList<XtringItem>(1);
-        xtringAdapter = new XtringAdapter(this, listItems);
-        listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(xtringAdapter);
-        listView.setOnItemSelectedListener(this);
-//        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-//        for(int i = 1; i < 33; i++) {
-//            ListItems[i] = (LinearLayout) findViewById(ListIDs[i]);
-//            ListItems[i].setVisibility(View.GONE);
-//            Spinners[i] = (Spinner)findViewById(SpinnerIDs[i]);
-//            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                    R.array.sendtypes_array, android.R.layout.simple_spinner_item);
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            Spinners[i].setAdapter(adapter);
-//            Spinners[i].setOnItemSelectedListener(this);
-//            EditTexts[i] = (EditText)findViewById(EditTextIDs[i]);
-//            CheckBoxs[i] = (CheckBox)findViewById(CheckBoxIDs[i]);
-//            CheckBoxs[i].setOnCheckedChangeListener(this);
-//        }
+        xtringList = (LinearLayout)findViewById(R.id.xtringList);
+        for(int i = 1; i <= numItems; i++) {
+            final XtringItem item = new XtringItem(this, i);
+            item.linearLayoutX = (LinearLayout)findViewById(ListIDs[i]);
+            item.enabled = false;
+            item.itemIndeX = (TextView)item.linearLayoutX.findViewById(R.id.itemIndeX);
+            item.spinnerX = (Spinner)item.linearLayoutX.findViewById(R.id.spinnerX);
+            item.textViewX = (TextView)item.linearLayoutX.findViewById(R.id.textViewX);
+            item.checkBoxX = (CheckBox)item.linearLayoutX.findViewById(R.id.checkBoxX);
+            item.itemIndeX.setText("" + i);
+            item.spinnerX.setAdapter(adapter);
+            item.spinnerX.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int positionT, long id) {
+                    item.setSendType(positionT, false);
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            item.textViewX.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    item.openEditor();
+                }
+            });
+            item.checkBoxX.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    item.setConstant(isChecked);
+                }
+            });
+            listItems[i] = item;
+            tempListItems[i] = item;
+            restore(i);
+        }
+        gesDetector = new GestureDetector(this, this);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        height = metrics.heightPixels;
+        width = metrics.widthPixels;
         setupActionBar();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        gesDetector.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
+    }
+
+    public void restore(int n) {
+        if(n > 0) {
+            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+            boolean enX = shapre.getBoolean(enabledX + n, false);
+            if (enX) {
+                int commType = shapre.getInt(sendTypeX + n, PrincipalActivity.SEND_TXT);
+                String valTX = shapre.getString(valTXX + n, "");
+                boolean constX = shapre.getBoolean(constantX + n, false);
+                listItems[n].sendType = commType;
+                listItems[n].setSendType(commType, false);
+                listItems[n].setvalTX(valTX);
+                listItems[n].checkBoxX.setChecked(constX);
+                listItems[n].enabled = enX;
+                listItems[n].linearLayoutX.setVisibility(View.VISIBLE);
+                comCont++;
+            }
+            if(comCont == numItems)
+                enableButtons(false);
+        }
+    }
+
+    public void saveAll() {
+        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = shapre.edit();
+        for(int n = 1; n <= numItems; n++) {
+            editor.putInt(sendTypeX + n, listItems[n].sendType);
+            editor.putString(valTXX + n, listItems[n].tx);
+            editor.putBoolean(constantX + n, listItems[n].constant);
+            editor.putBoolean(enabledX + n, listItems[n].enabled);
+        }
+        editor.commit();
+    }
+
+    public void save(int n) {
+        if(n > 0 && n <= numItems) {
+            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = shapre.edit();
+            editor.putInt(sendTypeX + n, listItems[n].sendType);
+            editor.putString(valTXX + n, listItems[n].tx);
+            editor.putBoolean(constantX + n, listItems[n].constant);
+            editor.putBoolean(enabledX + n, listItems[n].enabled);
+            editor.commit();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_commander_x, menu);
+        getMenuInflater().inflate(R.menu.menu_xtring, menu);
         return true;
     }
 
@@ -86,11 +199,16 @@ public class XtringActivity extends Activity implements AdapterView.OnItemSelect
         }
     }
 
+    void exitXtring() {
+        finish();
+        overridePendingTransition(R.animator.slide_in_right, R.animator.slide_out_left);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                finish();
+                exitXtring();
                 return true;
             }
             case R.id.action_settings: {
@@ -101,154 +219,253 @@ public class XtringActivity extends Activity implements AdapterView.OnItemSelect
         return super.onOptionsItemSelected(item);
     }
 
-    void addItem(int txT) {
-        if(comCont < 32) {
-            comCont++;
-            listItems.add(new XtringItem(txT));
-            xtringAdapter.notifyDataSetChanged();
-            if(comCont >= 32) {
-                for(int i = 0; i < 7; i++)
-                    Buttons[i].setEnabled(false);
+    void enableButtons(boolean en) {
+        for(int i = 0; i < 7; i++)
+            Buttons[i].setEnabled(en);
+    }
+
+    public void addItem(View view) {
+        int txT = 0;
+        int pressed = view.getId();
+        int i = 0;
+        for(int id:ButtIDs) {
+            if(id == pressed) {
+                txT = i;
+                break;
             }
+            i++;
+        }
+        if(comCont < numItems) {
+            comCont++;
+            listItems[comCont].enabled = true;
+            listItems[comCont].setSendType(txT, true);
+            listItems[comCont].checkBoxX.setChecked(false);
+            listItems[comCont].linearLayoutX.setVisibility(View.VISIBLE);
+            if(comCont == numItems)
+                enableButtons(false);
         }
     }
 
     public void delItem(View v) {
-        if(comCont > 1) {
-            listItems.remove(comCont - 1);
-            for(int i = 0; i < 7; i++)
-                Buttons[i].setEnabled(true);
+        if(comCont > 0) {
+            listItems[comCont] = tempListItems[comCont];
+            listItems[comCont].enabled = false;
+            listItems[comCont].linearLayoutX.setVisibility(View.GONE);
+            enableButtons(true);
+            save(comCont);
             comCont--;
         }
-//        if(comCont == 0)
-//            listItems.clear();
-        xtringAdapter.notifyDataSetChanged();
     }
 
-    public void addByte(View v) {
-        addItem(PrincipalActivity.SEND_BYTE);
+    public class CanSendPlusData {
+        public boolean can = false;
+        public byte[] data;
     }
 
-    public void addBin(View v) {
-        addItem(PrincipalActivity.SEND_BIN);
-    }
-
-    public void addHex(View v) {
-        addItem(PrincipalActivity.SEND_HEX);
-    }
-
-    public void addString(View v) {
-        addItem(PrincipalActivity.SEND_TXT);
-    }
-
-    public void addInt16(View v) {
-        addItem(PrincipalActivity.SEND_SHORT);
-    }
-
-    public void addInt32(View v) {
-        addItem(PrincipalActivity.SEND_INT);
-    }
-
-    public void addFloat(View v) {
-        addItem(PrincipalActivity.SEND_FLOAT);
-    }
-
-    boolean check() {
-        boolean res = true;
+    public int checkData() {
+        int dataCont = 0;
         try {
-        for(int i = 0; i < listItems.size(); i++) {
-            XtringItem item = listItems.get(i);
-            String Message = item.tx;
-            item.textViewX.requestFocus();
-            if (!Message.equals("")) {
-
-                    switch (item.sendType) {
-                        case (PrincipalActivity.SEND_TXT): {
-
-                            break;
+            for(int i = 1; i < numItems; i++) {
+                if(listItems[i].enabled) {
+                    String Message = listItems[i].tx;
+                    if (!Message.equals("")) {
+                        switch (listItems[i].sendType) {
+                            case (PrincipalActivity.SEND_TXT): {
+                                dataCont += Message.length();
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_BYTE): {
+                                int Messagen = Integer.parseInt(Message);
+                                dataCont++;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_BIN): {
+                                int Messagen = Integer.parseInt(Message, 2);
+                                dataCont++;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_HEX): {
+                                int Messagen = Integer.parseInt(Message, 16);
+                                dataCont++;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_SHORT): {
+                                int Messagen = Integer.parseInt(Message);
+                                dataCont += 2;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_INT): {
+                                int Messagen = Integer.parseInt(Message);
+                                dataCont += 4;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_FLOAT): {
+                                float Messagen = Float.parseFloat(Message);
+                                dataCont += 4;
+                                break;
+                            }
                         }
-                        case (PrincipalActivity.SEND_BYTE): {
-                            int Messagen = Integer.parseInt(Message);
-
-                            break;
-                        }
-                        case (PrincipalActivity.SEND_BIN): {
-                            int Messagen = Integer.parseInt(Message, 2);
-
-                            break;
-                        }
-                        case (PrincipalActivity.SEND_HEX): {
-                            int Messagen = Integer.parseInt(Message, 16);
-
-                            break;
-                        }
-                        case (PrincipalActivity.SEND_SHORT): {
-                            int Messagen = Integer.parseInt(Message);
-
-                            break;
-                        }
-                        case (PrincipalActivity.SEND_INT): {
-                            int Messagen = Integer.parseInt(Message);
-
-                            break;
-                        }
-                        case (PrincipalActivity.SEND_FLOAT): {
-                            float Messagen = Float.parseFloat(Message);
-
-                            break;
-                        }
+                    }else {
+                        listItems[i].openEditor();
+                        Toast.makeText(this, R.string.commDVal, Toast.LENGTH_SHORT).show();
+                        dataCont = 0;
+                        break;
                     }
                 }
             }
         } catch (NumberFormatException nEx) {
             nEx.printStackTrace();
             Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
-            res = false;
+            dataCont = 0;
         }
-        return res;
+        return dataCont;
+    }
+
+    public CanSendPlusData genBuff() {
+        int numDat = checkData();
+        CanSendPlusData resp = new CanSendPlusData();
+        resp.can = false;
+        if(numDat > 0) {
+            resp.can = true;
+            ByteBuffer byteArray = ByteBuffer.allocate(numDat);
+            try {
+                for (int i = 1; i < numItems; i++) {
+                    if (listItems[i].enabled) {
+                        String Message = listItems[i].tx;
+                        if (!Message.equals("")) {
+                            switch (listItems[i].sendType) {
+                                case (PrincipalActivity.SEND_TXT): {
+                                    byteArray.put(Message.getBytes());
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_BYTE): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    byteArray.put((byte) Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_BIN): {
+                                    int Messagen = Integer.parseInt(Message, 2);
+                                    byteArray.put((byte) Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_HEX): {
+                                    int Messagen = Integer.parseInt(Message, 16);
+                                    byteArray.put((byte) Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_SHORT): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    byteArray.putShort((short) Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_INT): {
+                                    int Messagen = Integer.parseInt(Message);
+                                    byteArray.putInt(Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_FLOAT): {
+                                    float Messagen = Float.parseFloat(Message);
+                                    byteArray.putFloat(Messagen);
+                                    break;
+                                }
+                            }
+                        } else {
+                            resp.can = false;
+                            listItems[i].openEditor();
+                            Toast.makeText(this, R.string.commDVal, Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
+                }
+                resp.data = byteArray.array();
+            } catch (NumberFormatException nEx) {
+                nEx.printStackTrace();
+                resp.can = false;
+                Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+            }
+        }
+        return resp;
     }
 
     public void enviarX(View v) {
-        if(check()) {
-
+        CanSendPlusData tempData = genBuff();
+        if(tempData.can) {
+            saveAll();
+            Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
+            resIntent.putExtra(NEWTX, tempData.data);
+            setResult(Activity.RESULT_OK, resIntent);
+            exitXtring();
         }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "miau" + position, Toast.LENGTH_SHORT).show();
-//        int vID = parent.getId();
-//        int index = 0;
-//        for(int i = 1; i < 33; i++) {
-//            if (vID == SpinnerIDs[i])
-//                index = i;
-//        }
-//        if(index != 0)
-//            setSendType(position, index);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case XtringAdapter.XTRING_EDITOR: {
+            case XTRING_EDITOR: {
                 if (resultCode == Activity.RESULT_OK) {
-                    int pos = data.getIntExtra(XtringAdapter.POS, 0);
-                    listItems.get(pos).tx = data.getStringExtra(XtringAdapter.NEWTX);
-                    xtringAdapter.notifyDataSetChanged();
+                    int pos = data.getIntExtra(POS, 0);
+                    listItems[pos].setvalTX(data.getStringExtra(NEWTX));
+                    save(pos);
                 }
                 break;
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        exitXtring();
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        float x1 = e1.getX();
+        if(x1 > width*0.85 && velocityX < 0)
+            exitXtring();
+        return true;
+    }
+
+//    public byte [] string2ByteArray(String value) {
+//        return value.getBytes();
+//    }
+//
+//    public byte [] byte2ByteArray(int value) {
+//        return ByteBuffer.allocate(1).put((byte) value).array();
+//    }
+//
+//    public byte [] short2ByteArray(int value) {
+//        return ByteBuffer.allocate(2).putShort((short) value).array();
+//    }
+//
+//    public byte [] int2ByteArray(int value) {
+//        return ByteBuffer.allocate(4).putInt(value).array();
+//    }
+//
+//    public byte [] float2ByteArray(float value) {
+//        return ByteBuffer.allocate(4).putFloat(value).array();
+//    }
 }

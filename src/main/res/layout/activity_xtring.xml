@@ -7,6 +7,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:id="@+id/layout_xtring"
     tools:context=".XtringActivity">
 
     <LinearLayout
@@ -18,33 +19,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXByte"
-            android:id="@+id/button1"
+            android:id="@+id/byteButton"
             android:layout_weight="1"
-            android:onClick="addByte" />
+            android:onClick="addItem" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXBinary"
-            android:id="@+id/button2"
+            android:id="@+id/binButton"
             android:layout_weight="1"
-            android:onClick="addBin"/>
+            android:onClick="addItem"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXHexadecimal"
-            android:id="@+id/button3"
+            android:id="@+id/hexButton"
             android:layout_weight="1"
-            android:onClick="addHex"/>
+            android:onClick="addItem"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXInt16"
-            android:id="@+id/button4"
+            android:id="@+id/shortButton"
             android:layout_weight="1"
-            android:onClick="addInt16"/>
+            android:onClick="addItem"/>
 
     </LinearLayout>
 
@@ -57,33 +58,266 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXString"
-            android:id="@+id/button5"
+            android:id="@+id/txtButton"
             android:layout_weight="1"
-            android:onClick="addString"/>
+            android:onClick="addItem"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXInt32"
-            android:id="@+id/button6"
+            android:id="@+id/intButton"
             android:layout_weight="1"
-            android:onClick="addInt32"/>
+            android:onClick="addItem"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ComXFloat"
-            android:id="@+id/button7"
+            android:id="@+id/floatButton"
             android:layout_weight="1"
-            android:onClick="addFloat"/>
+            android:onClick="addItem"/>
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listview"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:id="@+id/scrollView2" >
+
+        <LinearLayout
+            android:id="@+id/xtringList"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/XtringItem01"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem02"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem03"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem04"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem05"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem06"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem07"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem08"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem09"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem10"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem11"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem12"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem13"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem14"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem15"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem16"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem17"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem18"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem19"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem20"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem21"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem22"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem23"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem24"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem25"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem26"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem27"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem28"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem29"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem30"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem31"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/XtringItem32"
+                android:visibility = "gone"
+                layout="@layout/xtring_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:orientation="horizontal"

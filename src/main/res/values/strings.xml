@@ -48,7 +48,7 @@
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="defvalup" translatable="false">255</string>
     <string name="defvaldwn" translatable="false">0</string>
-    <string name="normalTheme" translatable="false">Normal</string>
+    <string name="normalTheme" translatable="false">Light</string>
     <string name="darkTheme" translatable="false">Dark</string>
     <string name="Appearance">Theme</string>
     <string name="ComXConstant">Constant</string>
@@ -62,7 +62,7 @@
     <string name="ComXInt32" translatable="false">Int32</string>
     <string name="ComXFloat" translatable="false">Float</string>
     <string name="cThemeToast">Restart Activity to apply changes</string>
-    <string name="updRCV">Update Reception</string>
+    <string name="updRCV">Package Reception</string>
     <string name="shortRCV">Int16 Reception</string>
     <string name="intRCV">Int32 Reception</string>
     <string name="longRCV">Int64 Reception</string>
@@ -86,45 +86,67 @@
     <string name="Extra_LVL" translatable="false">LEVEL</string>
     <string name="dataString">DataString</string>
     <string name="instruTitle">Instructions</string>
-    <string name="instructions">\n
-        > Click on connection info button to change it\n
-        > Click on Connect button to start/stop communication\n
-        > LongClick on Connect button to show/hide ActionBar\n
-        > Use the TX Spinner to select what kind of data you want to send\n
-        > Write on the TX input the information you want to send\n
-        > Use the app menu to access other options:\n
-        *   Select how to show and manage the incoming data\n
-        *   Select advanced numeric reception options (int16, int32, float)\n
-        *   Start/Stop FastSend Mode\n
-        *   Select appearance options: Normal or Dark theme\n
-        > Tablet users can select the reception options without entering to menu\n
-        > When connected, LongClick on \'Send\' button to start/stop FastSend Mode without entering to menu\n
-        > Operating \'FastSend Mode\': Save data in to buttons to send it with a single click\n
-        *   Select from TX Spinner the kind of data you want to save on a FastSend Button\n
-        *   Write data on the TX input\n
-        *   Start FastSend mode (if not running yet)\n
-        *   LongClick on one FastSend Button to save the TX data on the button\n
-        *   Simple Click on FastSend Button to automatically send the saved data\n
-        *   If TX input is empty, LongClick on a FastSend Button will erase saved data\n
-        *   FastSend Buttons will show type and data you just save\n
-        > Operating \'Update Reception\': New incoming data will replace the old one\n
-        *   Requires the sender device to send an end byte = 10\n
-        *   Select the \'Update Reception\' Reception Type\n
-        *   Write number of received data to accumulate before replacing with new one (empty means 1)\n
-        *   Enable/Disable byte reception if desired by using the CheckBox\n
-        > Operating \'Advanced Reception\' types: Receive and show big numbers (16 and 32 bit integers) and float numbers (32 bit)\n
-        *   Requires the sender device to send a start byte = 13\n
-        *   Then send the data bytes in order from MSB to LSB\n
-        *   And finally send an end byte = 10\n
-        > Update mode can be mixed with the advanced reception types:\n
-        *   First select \'Update Reception\'\n
-        *   Then select the advanced reception type to be interpreted and showed
-
+    <string name="instructionsBasic">
+        - Click on connection info button to change it.\n
+        - Click on Connect button to start/stop communication.\n
+        - Use the TX Spinner to select what kind of data you want to send.\n
+        - Write on the TX input the information you want to send.\n
+        - Use the app menu to access other options:\n
+        *   Select how to show and manage the incoming data \'RX\'.\n
+        *   Select advanced numeric reception options (int16, int32, float).\n
+        *   Start/Stop FastSend Mode.\n
+        *   Start Xtring Mode.\n
+        *   Select appearance options: Normal or Dark theme.\n
+        - Tablet users can select the reception options without entering to menu.
     </string>
-    <string name="insGP">\n
-        > Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
-        *   A scrollable 16 button FastSend Mode\n
-        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes
+    <string name="instructionsAjustesLayout">
+        - LongClick on Connect button to show/hide ActionBar.\n
+        - Slide the ActionBar Down/Up to respectively Show/Hide it.\n
+        - When connected, LongClick on \'Send\' button to start/stop FastSend Mode without entering to menu.\n
+        - Start/Stop FastSend Mode by Sliding respectively from/to the right side of the screen.\n
+        - Start Xtring mode by sliding from left side of the screen to the right.
+    </string>
+    <string name="instructionsFastSend">
+        Operating \'FastSend Mode\': Save data in to buttons to send it with a single click.\n
+        *   Select from TX Spinner the kind of data you want to save on a FastSend Button.\n
+        *   Write data on the TX input.\n
+        *   Start FastSend mode (if not running yet).\n
+        *   LongClick on one FastSend Button to save the TX data on the button.\n
+        *   Simple Click on FastSend Button to automatically send the saved data.\n
+        *   If TX input is empty, LongClick on a FastSend Button will erase saved data.\n
+        *   FastSend Buttons will show type and data you just save.
+    </string>
+    <string name="instructionsXtring">
+        Operating \'Xtring Mode\': Save an organized group of various types of data to send it as a package.\n
+        *   Press the data type button you want to add to the package.\n
+        *   Write data you want for that item into the just appeared TextInput.\n
+        *   If you want to change the data type, just Select from Spinner the kind of data you want to use.\n
+        *   You can delete the last package item by pressing the \'Delete Item\' Button.\n
+        *   If some item data is empty \'NO_DAT\' the package could not be sent and you will be prompted to write into the first dataless item.\n
+        *   Press the Send Button to start the package transmission and return to the Principal Screen.\n
+        *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left.\n
+        *   The package template and the actual values will be automatically saved on device memory.
+    </string>
+    <string name="instructionsAdvRcv">
+        Operating \'Advanced Reception\' types: Receive and show big numbers (16 and 32 bit integers) and float numbers (32 bit).\n
+        *   Requires the sender device to send a start byte = 13.\n
+        *   Then send the data bytes in order from MSB to LSB.\n
+        *   And finally send an end byte = 10.
+    </string>
+    <string name="instructionsPackRcv">
+        Operating \'Package Reception\': New incoming data will replace the old one.\n
+        *   Requires the connected device to send a package End byte = 10.\n
+        *   Select the \'Package Reception\' Reception Type.\n
+        *   Write number of received packages to accumulate before replacing with new ones (empty means 1).\n
+        *   Enable/Disable byte reception if desired by using the CheckBox.\n
+        - \'Package Reception\' mode can be mixed with the advanced reception types:\n
+        *   First select \'Package Reception\'.\n
+        *   Then select the advanced reception type to be interpreted and showed.
+    </string>
+    <string name="insGP">
+        Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
+        *   A scrollable 16 button FastSend Mode.\n
+        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes.
     </string>
     <string name="viewInstructions">View Instructions</string>
     <string name="NSIAS">Never show again at startup</string>
@@ -139,9 +161,23 @@
         <item>32#</item>
         <item>F#</item>
     </string-array>
-    <string name="title_activity_instructions">Instructions</string>
-    <string name="title_activity_commander_x" translatable="false">CommanderX</string>
+    <string-array name="sendtypes_array2">
+        <item>Text</item>
+        <item>Byte</item>
+        <item>Binary</item>
+        <item>Hexadecimal</item>
+        <item>Int 16-bits</item>
+        <item>int 32-bits</item>
+        <item>Float</item>
+    </string-array>
     <string name="title_activity_xtring">Xtring Mode</string>
     <string name="title_activity_xtring_editor">XtringEditor</string>
+    <string name="title_activity_instructions">Instructions</string>
+    <string name="Instructions_Basics">Basics</string>
+    <string name="Instructions_Layout">Layout Gestures</string>
+    <string name="Instructions_FastSend">FastSend Mode</string>
+    <string name="Instructions_Xtring">Xtring Mode</string>
+    <string name="Instructions_AdvRcv">Advanced Reception</string>
+    <string name="Instructions_PackRcv">Package Reception</string>
 
 </resources>

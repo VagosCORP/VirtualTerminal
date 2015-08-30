@@ -74,24 +74,16 @@
             android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/DarkTheme" >
+            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.MainActivity" />
         </activity>
-        <!-- <activity -->
-        <!-- android:name=".CommanderX" -->
-        <!-- android:windowSoftInputMode="adjustPan" -->
-        <!-- android:label="@string/title_activity_commander_x" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="com.vagoscorp.virtualterminal.PrincipalActivity" /> -->
-        <!-- </activity> -->
         <activity
             android:name=".XtringActivity"
             android:label="@string/title_activity_xtring"
-            android:parentActivityName=".PrincipalActivity"
-            android:screenOrientation="sensorPortrait" >
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.PrincipalActivity" />
@@ -100,8 +92,7 @@
             android:name=".XtringEditor"
             android:label="@string/title_activity_xtring_editor"
             android:theme="@style/Dialog"
-            android:windowSoftInputMode="stateVisible"
-            android:parentActivityName=".XtringActivity" >
+            android:windowSoftInputMode="stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vagoscorp.virtualterminal.XtringActivity" />

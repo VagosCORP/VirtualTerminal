@@ -20,7 +20,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/instruTitle"
-            android:id="@+id/textView5"
             android:layout_weight="1" />
 
         <TextView
@@ -41,16 +40,95 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_Basics"
+                android:id="@+id/buttonBasics"
+                android:onClick="instBasics" />
 
             <TextView
-                android:text="@string/instructions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="@string/instructionsBasic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewBasics"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_Layout"
+                android:id="@+id/buttonLayout"
+                android:onClick="instLayout" />
+
+            <TextView
+                android:text="@string/instructionsAjustesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewLayout"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_FastSend"
+                android:id="@+id/buttonFastSend"
+                android:onClick="instFastSend" />
+
+            <TextView
+                android:text="@string/instructionsFastSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewFastSend"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_Xtring"
+                android:id="@+id/buttonXtring"
+                android:onClick="instXtring" />
+
+            <TextView
+                android:text="@string/instructionsXtring"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewXtring"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_AdvRcv"
+                android:id="@+id/buttonAdvRcv"
+                android:onClick="instAdvRcv" />
+
+            <TextView
+                android:text="@string/instructionsAdvRcv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewAdvRcv"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Instructions_PackRcv"
+                android:id="@+id/buttonPackRcv"
+                android:onClick="instPackRcv" />
+
+            <TextView
+                android:text="@string/instructionsPackRcv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewPackRcv"
+                android:visibility="gone" />
 
             <TextView
                 android:text="@string/insGP"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/insGP" />
         </LinearLayout>

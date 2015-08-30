@@ -24,6 +24,14 @@ public class InstructionsActivity extends Activity {
 
     TextView InspVer;
     TextView insGP;
+
+    TextView textViewBasics;
+    TextView textViewLayout;
+    TextView textViewFastSend;
+    TextView textViewXtring;
+    TextView textViewAdvRcv;
+    TextView textViewPackRcv;
+
     LinearLayout slayout;
     CheckBox checkBox;
     Button getPRO;
@@ -48,6 +56,12 @@ public class InstructionsActivity extends Activity {
         getPRO = (Button)findViewById(R.id.getPRO);
         insGP = (TextView)findViewById(R.id.insGP);
         InspVer = (TextView)findViewById(R.id.InspVer);
+        textViewBasics = (TextView)findViewById(R.id.textViewBasics);
+        textViewLayout = (TextView)findViewById(R.id.textViewLayout);
+        textViewFastSend = (TextView)findViewById(R.id.textViewFastSend);
+        textViewXtring = (TextView)findViewById(R.id.textViewXtring);
+        textViewAdvRcv = (TextView)findViewById(R.id.textViewAdvRcv);
+        textViewPackRcv = (TextView)findViewById(R.id.textViewPackRcv);
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionCode = pInfo.versionCode;
@@ -76,6 +90,58 @@ public class InstructionsActivity extends Activity {
         });
         checkBox.setChecked(checked);
         setupActionBar();
+    }
+
+    void hideInst() {
+        textViewBasics.setVisibility(View.GONE);
+        textViewLayout.setVisibility(View.GONE);
+        textViewFastSend.setVisibility(View.GONE);
+        textViewXtring.setVisibility(View.GONE);
+        textViewAdvRcv.setVisibility(View.GONE);
+        textViewPackRcv.setVisibility(View.GONE);
+    }
+
+    public void instBasics(View view) {
+        boolean sas = textViewBasics.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewBasics.setVisibility(View.VISIBLE);
+    }
+
+    public void instLayout(View view) {
+        boolean sas = textViewLayout.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void instFastSend(View view) {
+        boolean sas = textViewFastSend.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewFastSend.setVisibility(View.VISIBLE);
+    }
+
+    public void instXtring(View view) {
+        boolean sas = textViewXtring.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewXtring.setVisibility(View.VISIBLE);
+    }
+
+    public void instAdvRcv(View view) {
+        boolean sas = textViewAdvRcv.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewAdvRcv.setVisibility(View.VISIBLE);
+    }
+
+    public void instPackRcv(View view) {
+        boolean sas = textViewPackRcv.getVisibility() != View.VISIBLE;
+        hideInst();
+        if(sas)
+            textViewPackRcv.setVisibility(View.VISIBLE);
+
     }
 
     public void closeIns(View view) {

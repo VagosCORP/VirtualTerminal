@@ -40,9 +40,9 @@
     <string name="Appearance">Apariencia</string>
     <string name="ComXConstant">Constante</string>
     <string name="ComXdeleteItem">Borrar Item</string>
-    <string name="ComXSendX">enviar</string>
+    <string name="ComXSendX">Enviar</string>
     <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
-    <string name="updRCV">Recepción Update</string>
+    <string name="updRCV">Recepción de Paquetes</string>
     <string name="updRate">#Act</string>
     <string name="shortRcvTyp">Int16 RX</string>
     <string name="longRcvTyp">Recepciín Int64</string>
@@ -52,57 +52,94 @@
     <string name="advTypRCV">Recepción Avanzada</string>
     <string name="dataString">Cadena de Datos</string>
     <string name="instruTitle">Instrucciones</string>
-    <string name="instructions">\n
-        > Pulse el botón de información de conexión para cambiar los datos de conexión\n
-        > Pulse el botón Conectar para iniciar/finalizar la conexión\n
-        > Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones\n
-        > Use la lista desplegable TX para seleccionar el tipo de información que desea enviar\n
-        > Escriba en la entrada de texto TX la información que desea enviar\n
-        > Use el menú de la App para acceder a otras opciones:\n
-        *   Seleccionar como mostrar y administrar los datos entrantes\n
-        *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float)\n
-        *   Iniciar/Finalizar el Modo EnvíoRápido\n
-        *   Seleccionar opción de apariencia: Tema Normal o Dark\n
-        > Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú\n
-        > Cuando se está conectado, Inicie/Finalice el modo EnvíoRápido manteniendo pulsado el botón \'Enviar\'\n
-        > Operando el \'Modo EnvíoRápido\': Almacene información en botones para enviarla más agilmente\n
-        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de EnvíoRápido\n
-        *   Escriba la información en la entrada de texto TX\n
-        *   Inicie el Modo EnvíoRápido (Si no lo ha iniciado aún)\n
-        *   Haga una pulsación larga en un botón de EnvíoRápido para salvar la información en él\n
-        *   Haga una pulsación en un botón de EnvíoRápido para enviar automáticamente la información almacenada\n
-        *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de EnvíoRápido borrará su información actual\n
-        *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada\n
-        > Operando el modo \'Recepción Update\': Los nuevos datos recibidos reemplazarán a los antiguos\n
-        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de finalización igual a 10\n
-        *   Seleccione el modo \'Recepción Update\'\n
-        *   Escriba el número de datos recibidos a acumular antes de sobrescribir con datos nuevos (vacío significa 1)\n
-        *   Habilita/Deshabilita la recepción de Bytes de ser necesaria mediante el CheckBox\n
-        > Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit)\n
-        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio igual a 13\n
-        *   Entonces envíe los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB)\n
-        *   Y finalmente envíe un Byte de finalización de valor 10\n
-        > El modo Update puede ser mezclado con los modos de recepción avanzada:\n
-        *   Primero escoja el modo \'Recepción Update\'\n
-        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado
-
-    </string>
-    <string name="insGP">\n
-        > Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
-        *   Un Modo EnvíoRápido de 16 botones desplazables\n
-        *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth
-    </string>
-    <string name="viewInstructions">Ver Instrucciones</string>
-    <string name="NSIAS">No mostrar de nuevo al inicio</string>
-    <string name="close">Cerrar instrucciones</string>
-    <string name="getPRO">Obtener funciones PRO</string>
-    <string name="title_activity_instructions">Instrucciones</string>
     <string name="doubleRCV">Recepción Double</string>
     <string name="floatRCV">Recepción Float</string>
     <string name="intRCV">Recepción Int32</string>
     <string name="longRCV">Recepción Int64</string>
     <string name="shortRCV">Recepción Int16</string>
+    <string name="instructionsBasic">
+        - Pulse el botón de información de conexión para cambiar los datos de conexión.\n
+        - Pulse el botón Conectar para iniciar/finalizar la conexión.\n
+        - Use la lista desplegable TX para seleccionar el tipo de información que desea enviar.\n
+        - Escriba en la entrada de texto TX la información que desea enviar.\n
+        - Use el menú de la App para acceder a otras opciones:\n
+        *   Seleccionar como mostrar y administrar los datos entrantes \'RX\'.\n
+        *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float).\n
+        *   Iniciar/Finalizar el Modo EnvíoRápido.\n
+        *   Iniciar el Modo Xtring.\n
+        *   Seleccionar opción de apariencia: Tema Normal o Dark.\n
+        - Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú.
+    </string>
+    <string name="instructionsAjustesLayout">
+        - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.\n
+        - Gesto Abajo/Arriba en la barra de acciones para mostrarla/ocultarla respectivamente.\n
+        - Cuando se está conectado, Inicie/Finalice el modo EnvíoRápido manteniendo pulsado el botón \'Enviar\'.\n
+        - Inicie/Finalice el modo EnvíoRápido deslizando el dedo respectivamente desde/hacia el lado derecho de la Pantalla.\n
+        - Inicie el modo Xtring deslizando el dedo desde el lado izquierdo de la Pantalla hacia la derecha.
+    </string>
+    <string name="instructionsFastSend">
+        Operando el \'Modo EnvíoRápido\': Almacene información en botones para enviarla más agilmente.\n
+        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de EnvíoRápido.\n
+        *   Escriba la información en la entrada de texto TX.\n
+        *   Inicie el Modo EnvíoRápido (Si no lo ha iniciado aún).\n
+        *   Haga una pulsación larga en un botón de EnvíoRápido para salvar la información en él.\n
+        *   Haga una pulsación en un botón de EnvíoRápido para enviar automáticamente la información almacenada.\n
+        *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de EnvíoRápido borrará su información actual.\n
+        *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada.
+    </string>
+    <string name="instructionsXtring">
+        Operando el \'Modo Xtring\': Almacene un grupo de datos organizados y de distintos tipos para enviarlos como un paquete.\n
+        *   Presione el botón del tipo de dato que desea añadir al paquete.\n
+        *   Escriba la información deseada para ese ítem en la entrada de texto que aparece.\n
+        *   si desea cambiar el tipo de dato del ítem ya creado, seleccione desde la lista desplegable el nuevo tipo de información que desea utilizar.\n
+        *   Puede Eliminar el último ítem del paquete presionando el Botón \'Borrar Item\'.\n
+        *   Si el texto de algún ítem está vacío \'NO_DAT\' el paquete no se podrá enviar y se le pedirá que rellene el primer ítem sin datos encontrado.\n
+        *   Pulse el botón enviar para iniciar la transmisión del paquete y regresar a la pantalla principal.\n
+        *   Finalice el modo Xtring(sin hacer envíos) deslizando el dedo desde el lado derecho de la Pantalla hacia la izquierda.\n
+        *   La plantilla de paquete y los valores actuales se guardarán automáticamente en la memoria del dispositivo.
+    </string>
+    <string name="instructionsAdvRcv">
+        Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit).\n
+        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio igual a 13.\n
+        *   Entonces envíe los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB).\n
+        *   Y finalmente envíe un Byte de finalización de valor 10.
+    </string>
+    <string name="instructionsPackRcv">
+        Operando el modo \'Recepción de Paquetes\': Los nuevos datos recibidos reemplazarán a los antiguos.\n
+        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de finalización de paquete igual a 10.\n
+        *   Seleccione el modo \'Recepción de Paquetes\'.\n
+        *   Escriba el número de paquetes recibidos a acumular antes de sobrescribir con datos nuevos (vacío significa 1).\n
+        *   Habilita/Deshabilita la recepción de Bytes de ser necesaria mediante el CheckBox.\n
+        - El modo \'Recepción de Paquetes\' puede ser mezclado con los modos de recepción avanzada:\n
+        *   Primero escoja el modo \'Recepción de Paquetes\'.\n
+        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado.
+    </string>
+    <string name="insGP">
+        Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
+        *   Un Modo EnvíoRápido de 16 botones desplazables.\n
+        *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.
+    </string>
+    <string name="viewInstructions">Ver Instrucciones</string>
+    <string name="NSIAS">No mostrar de nuevo al inicio</string>
+    <string name="close">Cerrar instrucciones</string>
+    <string name="getPRO">Obtener funciones PRO</string>
+    <string-array name="sendtypes_array2">
+        <item>Texto</item>
+        <item>Byte</item>
+        <item>Binario</item>
+        <item>Hexadecimal</item>
+        <item>Int 16-bits</item>
+        <item>int 32-bits</item>
+        <item>Float</item>
+    </string-array>
     <string name="title_activity_xtring">Modo Xtring</string>
     <string name="title_activity_xtring_editor">Editor Xtring</string>
+    <string name="title_activity_instructions">Instrucciones</string>
+    <string name="Instructions_Basics">Instrucciones Básicas</string>
+    <string name="Instructions_Layout">Gestos sobre la interfaz</string>
+    <string name="Instructions_FastSend">Modo EnvíoRápido</string>
+    <string name="Instructions_Xtring">Modo Xtring</string>
+    <string name="Instructions_AdvRcv">Recepción Avanzada</string>
+    <string name="Instructions_PackRcv">Recepción de Paquetes</string>
 
 </resources>

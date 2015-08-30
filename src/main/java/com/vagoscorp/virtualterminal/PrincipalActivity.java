@@ -16,8 +16,11 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
@@ -42,7 +45,7 @@ import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
-public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener {
+public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener,GestureDetector.OnGestureListener {
 
     Spinner spinner;
     TextView RX;// Received Data
@@ -85,6 +88,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public int serverport;// Port to Connect
     public boolean RN = false;
     public boolean CM = false;
+    public boolean darkTheme = true;
 	public int SC;
     public int sendTyp = SEND_TXT;
 
@@ -105,13 +109,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public String myName;
 	public String myAddress;
 
+    private final int defIndex = 0;
     private final int REQUEST_ENABLE_BT = 1;
 	private final int SEL_BT_DEVICE = 2;
-	private final int defIndex = 0;
     private final int REQUEST_ENABLE_WIFI = 15;
     private final int REQUEST_CHANGE_SERVER = 12;
     private final int SHOW_INSTRUCTIONS = 16;
+    private final int ENTER_XTRING = 17;
 
+    public static final String IS_PRO = "IS_PRO";
     public static final String SIoS = "SIoS";
     public static final String SI = "SIP";
     public static final String SP = "SPort";
@@ -175,11 +181,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     int versionCode = defversion;
     String versionName = "";
 
+    GestureDetector gesDetector;
+    float height = 0;
+    float width = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
-        boolean darkTheme = shapre.getBoolean(theme, true);
+        darkTheme = shapre.getBoolean(theme, true);
         checked = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
@@ -305,12 +315,23 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             SharedPreferences.Editor editor = shapre.edit();
             editor.putInt(VER, versionCode);
             editor.commit();
-            if(!checked)
-                showInstructions();
-        }
+            showInstructions();
+        }else if(!checked)
+            showInstructions();
         UpdN.setChecked(false);
+        gesDetector = new GestureDetector(this, this);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        height = metrics.heightPixels;
+        width = metrics.widthPixels;
         setupActionBar();
 	}
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        gesDetector.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
+    }
 
     private void updPNum(boolean bool) {
         RN = bool;
@@ -412,12 +433,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
 		}
 	}
-
-//    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-//    private void menuKP() {
-//        if(ViewConfiguration.get(this).hasPermanentMenuKey())
-//            hideActionBar();
-//    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void hideActionBar() {
@@ -655,7 +670,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 return true;
             }
             case R.id.XtringMode: {
-                startActivity(new Intent(this, XtringActivity.class));
+                enterXtringMode();
                 return true;
             }
             case R.id.themeDark: {
@@ -687,7 +702,16 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         return super.onOptionsItemSelected(item);
     }
 
-	private void initBTD(BluetoothDevice[] BonDev) {
+    private void enterXtringMode() {
+        Intent startXtring = new Intent(this, XtringActivity.class);
+        startXtring.putExtra(IS_PRO, pro);
+        startXtring.putExtra(theme, darkTheme);
+        startActivityForResult(startXtring, ENTER_XTRING);
+        overridePendingTransition(R.animator.slide_in_left,
+                R.animator.slide_out_right);
+    }
+
+    private void initBTD(BluetoothDevice[] BonDev) {
 		myName = BTAdapter.getName();
 		myAddress = BTAdapter.getAddress();
 		if (BonDev.length > 0) {
@@ -857,6 +881,19 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
             break;
         }
+        case ENTER_XTRING: {
+            if(resultCode == Activity.RESULT_OK) {
+                byte[] newTX = data.getByteArrayExtra(XtringActivity.NEWTX);
+                    if(TCOM) {
+                        for (byte dat : newTX)
+                            comunicBT.enviar_Int8(dat);
+                    }else {
+                        for (byte dat : newTX)
+                            comunic.enviar_Int8(dat);
+                    }
+            }
+            break;
+        }
 		}
 	}
 
@@ -956,14 +993,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 }
                 case(COMMT_INT16): {
                     if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                     break;
                 }
                 case(COMMT_INT32): {
                     if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                     break;
@@ -976,16 +1013,17 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     break;
                 }
                 default: {
-                    if (!commN)
-                        if(TCOM)
+                    if (!commN){
+                        if (TCOM)
                             comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
                         else
                             comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
-                    else
-                    if(TCOM)
-                        comunicBT.enviar(shapre.getInt(comm + n, defNcomm));
-                    else
-                        comunic.enviar(shapre.getInt(comm + n, defNcomm));
+                    }else {
+                        if (TCOM)
+                            comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                        else
+                            comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                    }
                 }
             }
 		}
@@ -1095,25 +1133,25 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     case (SEND_BYTE): {
                         int Messagen = Integer.parseInt(Message);
                         if(TCOM)
-                            comunicBT.enviar(Messagen);
+                            comunicBT.enviar_Int8(Messagen);
                         else
-                            comunic.enviar(Messagen);
+                            comunic.enviar_Int8(Messagen);
                         break;
                     }
                     case (SEND_BIN): {
                         int Messagen = Integer.parseInt(Message, 2);
                         if(TCOM)
-                            comunicBT.enviar(Messagen);
+                            comunicBT.enviar_Int8(Messagen);
                         else
-                            comunic.enviar(Messagen);
+                            comunic.enviar_Int8(Messagen);
                         break;
                     }
                     case (SEND_HEX): {
                         int Messagen = Integer.parseInt(Message, 16);
                         if(TCOM)
-                            comunicBT.enviar(Messagen);
+                            comunicBT.enviar_Int8(Messagen);
                         else
-                            comunic.enviar(Messagen);
+                            comunic.enviar_Int8(Messagen);
                         break;
                     }
                     case (SEND_SHORT): {
@@ -1265,4 +1303,53 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 		    Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
 	}
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        float x1 = e1.getX();
+        float y1 = e1.getY();
+        if(y1 < height*0.20) {
+            if(!abHidden) {
+                if (velocityY < 0)
+                    hideActionBar();
+            }else {
+                if(velocityY > 0)
+                    hideActionBar();
+            }
+        }else {
+            if (!CM) {
+                if (x1 > width * 0.85 && velocityX < 0)
+                    commanderMode();
+            } else {
+                if (x1 > width * 0.5 && x1 < width * 0.7 && velocityX > 0)
+                    commanderMode();
+            }
+            if (x1 < width * 0.15 && velocityX > 0)
+                enterXtringMode();
+        }
+        return true;
+    }
 }

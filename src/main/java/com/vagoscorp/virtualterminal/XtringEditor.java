@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class XtringEditor extends Activity {
 
+    TextView editorXdetails;
     EditText newTX;
 
     int sendType = 0;
@@ -19,12 +21,15 @@ public class XtringEditor extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        position = getIntent().getIntExtra(XtringAdapter.POS, 0);
-        sendType = getIntent().getIntExtra(XtringAdapter.SENDTYPE, 0);
-        txVal = getIntent().getStringExtra(XtringAdapter.NEWTX);
+        position = getIntent().getIntExtra(XtringActivity.POS, 0);
+        sendType = getIntent().getIntExtra(XtringActivity.SENDTYPE, 0);
+        txVal = getIntent().getStringExtra(XtringActivity.NEWTX);
         setContentView(R.layout.activity_xtring_editor);
+        editorXdetails = (TextView)findViewById(R.id.editorXdetails);
         newTX = (EditText)findViewById(R.id.newTX);
         setSendType();
+        String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
+        editorXdetails.setText("Item" + position + " ( " + sendT[sendType] + " )");
         newTX.setText(txVal);
         newTX.requestFocus();
     }
@@ -82,8 +87,8 @@ public class XtringEditor extends Activity {
         txVal = newTX.getText().toString();
         if(check(txVal)) {
             Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
-            resIntent.putExtra(XtringAdapter.POS, position);
-            resIntent.putExtra(XtringAdapter.NEWTX, txVal);
+            resIntent.putExtra(XtringActivity.POS, position);
+            resIntent.putExtra(XtringActivity.NEWTX, txVal);
             setResult(Activity.RESULT_OK, resIntent);
             finish();
         }
