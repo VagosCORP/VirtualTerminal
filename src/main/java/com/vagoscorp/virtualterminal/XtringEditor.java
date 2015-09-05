@@ -32,6 +32,7 @@ public class XtringEditor extends Activity {
         editorXdetails.setText("Item" + position + " ( " + sendT[sendType] + " )");
         newTX.setText(txVal);
         newTX.requestFocus();
+        newTX.selectAll();
     }
 
     boolean check(String message) {

@@ -12,6 +12,7 @@ public class XtringItem {
 
     public Activity context;
     public boolean enabled = false;
+    public boolean disabled = false;
     public int position = 0;
     public String tx = "";
     public boolean constant = false;
@@ -21,6 +22,7 @@ public class XtringItem {
     public Spinner spinnerX;
     public TextView textViewX;
     public CheckBox checkBoxX;
+    public CheckBox disableX;
 
     public XtringItem(Activity context, int posi) {
         this.context = context;
@@ -36,6 +38,15 @@ public class XtringItem {
             checkBoxX.setChecked(false);
             Toast.makeText(context, R.string.commDVal, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setDisabled(boolean DisableVal) {
+        disabled = DisableVal;
+        spinnerX.setEnabled(!DisableVal);
+        textViewX.setEnabled(!DisableVal);
+        checkBoxX.setEnabled(!DisableVal);
+        if(!DisableVal)
+            setConstant(constant);
     }
 
     public void setvalTX(String newTX) {

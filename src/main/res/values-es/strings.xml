@@ -39,6 +39,7 @@
     <string name="numFormExc">Formato Numérico Erróneo</string>
     <string name="Appearance">Apariencia</string>
     <string name="ComXConstant">Constante</string>
+    <string name="ComXDisable">Ignorar</string>
     <string name="ComXdeleteItem">Borrar Item</string>
     <string name="ComXSendX">Enviar</string>
     <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
@@ -91,12 +92,14 @@
         Operando el \'Modo Xtring\': Almacene un grupo de datos organizados y de distintos tipos para enviarlos como un paquete.\n
         *   Presione el botón del tipo de dato que desea añadir al paquete.\n
         *   Escriba la información deseada para ese ítem en la entrada de texto que aparece.\n
-        *   si desea cambiar el tipo de dato del ítem ya creado, seleccione desde la lista desplegable el nuevo tipo de información que desea utilizar.\n
+        *   Si desea cambiar el tipo de dato del ítem ya creado, seleccione desde la lista desplegable el nuevo tipo de información que desea utilizar.\n
+        *   Puede definir algunos items como constantes, para evitar su modificación.\n
         *   Puede Eliminar el último ítem del paquete presionando el Botón \'Borrar Item\'.\n
         *   Si el texto de algún ítem está vacío \'NO_DAT\' el paquete no se podrá enviar y se le pedirá que rellene el primer ítem sin datos encontrado.\n
         *   Pulse el botón enviar para iniciar la transmisión del paquete y regresar a la pantalla principal.\n
         *   Finalice el modo Xtring(sin hacer envíos) deslizando el dedo desde el lado derecho de la Pantalla hacia la izquierda.\n
-        *   La plantilla de paquete y los valores actuales se guardarán automáticamente en la memoria del dispositivo.
+        *   La plantilla de paquete y los valores actuales se guardarán automáticamente en la memoria del dispositivo.\n
+        *   Los usuarios Pro pueden seleccionar elementos a ignorar durante la operación de envío.
     </string>
     <string name="instructionsAdvRcv">
         Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit).\n
@@ -116,7 +119,8 @@
     </string>
     <string name="insGP">
         Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
-        *   Un Modo EnvíoRápido de 16 botones desplazables.\n
+        *   Modo EnvíoRápido de 16 botones desplazables.\n
+        *   Modo Xtring de hasta 32 objetos.\n
         *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.
     </string>
     <string name="viewInstructions">Ver Instrucciones</string>
@@ -138,7 +142,6 @@
     <string name="Instructions_Basics">Instrucciones Básicas</string>
     <string name="Instructions_Layout">Gestos sobre la interfaz</string>
     <string name="Instructions_FastSend">Modo EnvíoRápido</string>
-    <string name="Instructions_Xtring">Modo Xtring</string>
     <string name="Instructions_AdvRcv">Recepción Avanzada</string>
     <string name="Instructions_PackRcv">Recepción de Paquetes</string>
 

@@ -52,6 +52,7 @@
     <string name="darkTheme" translatable="false">Dark</string>
     <string name="Appearance">Theme</string>
     <string name="ComXConstant">Constant</string>
+    <string name="ComXDisable">Ignore</string>
     <string name="ComXdeleteItem">Delete Item</string>
     <string name="ComXSendX">Send</string>
     <string name="ComXByte" translatable="false">Byte</string>
@@ -121,11 +122,13 @@
         *   Press the data type button you want to add to the package.\n
         *   Write data you want for that item into the just appeared TextInput.\n
         *   If you want to change the data type, just Select from Spinner the kind of data you want to use.\n
+        *   You can define constant items to avoid replacing precious information\n
         *   You can delete the last package item by pressing the \'Delete Item\' Button.\n
         *   If some item data is empty \'NO_DAT\' the package could not be sent and you will be prompted to write into the first dataless item.\n
         *   Press the Send Button to start the package transmission and return to the Principal Screen.\n
         *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left.\n
-        *   The package template and the actual values will be automatically saved on device memory.
+        *   The package template and the actual values will be automatically saved on device memory.\n
+        *   Pro users can select items to ignore during the send operation.
     </string>
     <string name="instructionsAdvRcv">
         Operating \'Advanced Reception\' types: Receive and show big numbers (16 and 32 bit integers) and float numbers (32 bit).\n
@@ -145,7 +148,8 @@
     </string>
     <string name="insGP">
         Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
-        *   A scrollable 16 button FastSend Mode.\n
+        *   Scrollable 16 button FastSend Mode.\n
+        *   Scrollable Xtring Mode with up to 32 items.\n
         *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes.
     </string>
     <string name="viewInstructions">View Instructions</string>
@@ -176,7 +180,6 @@
     <string name="Instructions_Basics">Basics</string>
     <string name="Instructions_Layout">Layout Gestures</string>
     <string name="Instructions_FastSend">FastSend Mode</string>
-    <string name="Instructions_Xtring">Xtring Mode</string>
     <string name="Instructions_AdvRcv">Advanced Reception</string>
     <string name="Instructions_PackRcv">Package Reception</string>
 

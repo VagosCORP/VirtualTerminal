@@ -42,6 +42,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public static final String valTXX = "valTXX";
     public static final String constantX = "constantX";
     public static final String enabledX = "enabledX";
+    public static final String disabledX = "disabledX";
 
     int[] ListIDs = {0, R.id.XtringItem01,R.id.XtringItem02,R.id.XtringItem03,R.id.XtringItem04,R.id.XtringItem05,
             R.id.XtringItem06,R.id.XtringItem07,R.id.XtringItem08,R.id.XtringItem09,R.id.XtringItem10,R.id.XtringItem11,
@@ -90,10 +91,12 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             final XtringItem item = new XtringItem(this, i);
             item.linearLayoutX = (LinearLayout)findViewById(ListIDs[i]);
             item.enabled = false;
+            item.disabled = false;
             item.itemIndeX = (TextView)item.linearLayoutX.findViewById(R.id.itemIndeX);
             item.spinnerX = (Spinner)item.linearLayoutX.findViewById(R.id.spinnerX);
             item.textViewX = (TextView)item.linearLayoutX.findViewById(R.id.textViewX);
             item.checkBoxX = (CheckBox)item.linearLayoutX.findViewById(R.id.checkBoxX);
+            item.disableX = (CheckBox)item.linearLayoutX.findViewById(R.id.disableX);
             item.itemIndeX.setText("" + i);
             item.spinnerX.setAdapter(adapter);
             item.spinnerX.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -119,6 +122,14 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     item.setConstant(isChecked);
                 }
             });
+            item.disableX.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    item.setDisabled(isChecked);
+                }
+            });
+            if(isPro)
+                item.disableX.setVisibility(View.VISIBLE);
             listItems[i] = item;
             tempListItems[i] = item;
             restore(i);
@@ -142,6 +153,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             SharedPreferences shapre = getPreferences(MODE_PRIVATE);
             boolean enX = shapre.getBoolean(enabledX + n, false);
             if (enX) {
+                boolean disX = shapre.getBoolean(disabledX + n, false);
                 int commType = shapre.getInt(sendTypeX + n, PrincipalActivity.SEND_TXT);
                 String valTX = shapre.getString(valTXX + n, "");
                 boolean constX = shapre.getBoolean(constantX + n, false);
@@ -150,6 +162,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                 listItems[n].setvalTX(valTX);
                 listItems[n].checkBoxX.setChecked(constX);
                 listItems[n].enabled = enX;
+                listItems[n].disableX.setChecked(disX);
                 listItems[n].linearLayoutX.setVisibility(View.VISIBLE);
                 comCont++;
             }
@@ -166,6 +179,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             editor.putString(valTXX + n, listItems[n].tx);
             editor.putBoolean(constantX + n, listItems[n].constant);
             editor.putBoolean(enabledX + n, listItems[n].enabled);
+            editor.putBoolean(disabledX + n, listItems[n].disabled);
         }
         editor.commit();
     }
@@ -178,6 +192,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             editor.putString(valTXX + n, listItems[n].tx);
             editor.putBoolean(constantX + n, listItems[n].constant);
             editor.putBoolean(enabledX + n, listItems[n].enabled);
+            editor.putBoolean(disabledX + n, listItems[n].disabled);
             editor.commit();
         }
     }
@@ -239,7 +254,6 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             comCont++;
             listItems[comCont].enabled = true;
             listItems[comCont].setSendType(txT, true);
-            listItems[comCont].checkBoxX.setChecked(false);
             listItems[comCont].linearLayoutX.setVisibility(View.VISIBLE);
             if(comCont == numItems)
                 enableButtons(false);
@@ -250,6 +264,10 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         if(comCont > 0) {
             listItems[comCont] = tempListItems[comCont];
             listItems[comCont].enabled = false;
+            listItems[comCont].setConstant(false);
+            listItems[comCont].setDisabled(false);
+            listItems[comCont].checkBoxX.setChecked(false);
+            listItems[comCont].disableX.setChecked(false);
             listItems[comCont].linearLayoutX.setVisibility(View.GONE);
             enableButtons(true);
             save(comCont);
@@ -266,7 +284,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         int dataCont = 0;
         try {
             for(int i = 1; i < numItems; i++) {
-                if(listItems[i].enabled) {
+                if(listItems[i].enabled && !listItems[i].disabled) {
                     String Message = listItems[i].tx;
                     if (!Message.equals("")) {
                         switch (listItems[i].sendType) {
@@ -330,7 +348,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             ByteBuffer byteArray = ByteBuffer.allocate(numDat);
             try {
                 for (int i = 1; i < numItems; i++) {
-                    if (listItems[i].enabled) {
+                    if (listItems[i].enabled && !listItems[i].disabled) {
                         String Message = listItems[i].tx;
                         if (!Message.equals("")) {
                             switch (listItems[i].sendType) {

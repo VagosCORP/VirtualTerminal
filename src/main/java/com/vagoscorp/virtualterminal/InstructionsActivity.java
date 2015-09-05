@@ -47,11 +47,14 @@ public class InstructionsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pro = getIntent().getBooleanExtra(getString(R.string.Extra_LVL), false);
+        boolean darkTheme = getIntent().getBooleanExtra(PrincipalActivity.theme, true);
+        if(darkTheme)
+            this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_instructions);
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
         slayout = (LinearLayout)findViewById(R.id.slayout);
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             slayout.setBackgroundColor(Color.parseColor("#ff303030"));
         getPRO = (Button)findViewById(R.id.getPRO);
         insGP = (TextView)findViewById(R.id.insGP);

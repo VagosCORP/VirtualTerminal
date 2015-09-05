@@ -540,7 +540,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //        both = false;
 ////        upd = false;
 //        sepLab.setText(R.string.intRX);
-//        UpdN.setEnabled(false);
+//        UpdN.setDisabled(false);
 ////            layNAct.setVisibility(View.GONE);
 //        byteRCV.setVisibility(View.VISIBLE);
 //        scro.setVisibility(View.GONE);
@@ -810,6 +810,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     void showInstructions() {
         Intent enableIntent = new Intent(this, InstructionsActivity.class);
         enableIntent.putExtra(getString(R.string.Extra_LVL), pro);
+        enableIntent.putExtra(theme, darkTheme);
         startActivityForResult(enableIntent, SHOW_INSTRUCTIONS);
     }
 
