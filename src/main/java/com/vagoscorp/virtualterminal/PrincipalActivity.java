@@ -65,6 +65,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     LinearLayout layNAct;
     EditText editNAct;
     CheckBox UpdN;
+    CheckBox aCRpLF;
 
     Button comm1;
     Button comm2;
@@ -94,6 +95,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
 
     public BluetoothAdapter BTAdapter;
+//    private BluetoothGatt mBluetoothGatt;
+//    private BluetoothGattCharacteristic mDataMDLP, mControlMLDP;
 	public BluetoothDevice[] BondedDevices;
 	public BluetoothDevice mDevice;
 	public int mDeviceIndex;
@@ -155,6 +158,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public static final int COMMT_FLOAT = 14;
     public static final int COMMT_DUAL = 21;
     public static final int COMMT_UPD = 22;
+
+//    private static final String MLDP_PRIVATE_SERVICE = "00035b03-58e6-07dd-021a-08123a000300"; //Private service for Microchip MLDP
+//    private static final String MLDP_DATA_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a000301"; //Characteristic for MLDP Data, properties - notify, write
+//    private static final String MLDP_CONTROL_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a0003ff"; //Characteristic for MLDP Control, properties - read, write
+//    private static final String CHARACTERISTIC_NOTIFICATION_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";	//Special UUID for descriptor needed to enable notifications
+
 //    public boolean lowLvl = true;
     boolean both = false;
     boolean upd = false;
@@ -228,7 +237,16 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         layNAct = (LinearLayout)findViewById(R.id.layNAct);
         editNAct = (EditText)findViewById(R.id.editNAct);
         UpdN = (CheckBox)findViewById(R.id.UpdN);
-		TX = (EditText)findViewById(R.id.TX);
+        aCRpLF = (CheckBox)findViewById(R.id.aCRpLF);
+        TX = (EditText)findViewById(R.id.TX);
+//        TX.setOnLongClickListener(new OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                mDataMDLP.setValue("=>R" + TX.getText() + "\r\n");                     //Set value of MLDP characteristic to send die roll information
+//                writeCharacteristic(mDataMDLP);
+//                return true;
+//            }
+//        });
         byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
 		Conect = (Button) findViewById(R.id.Conect);
 		Chan_Ser = (Button) findViewById(R.id.chan_ser);
@@ -565,10 +583,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         if(sendTyp != sendType) {
             sendTyp = sendType;
             TX.setText("");
+            aCRpLF.setEnabled(false);
             switch (sendType) {
                 case (SEND_TXT): {
                     TX.setHint(R.string.VagosCORP);
                     TX.setInputType(InputType.TYPE_CLASS_TEXT);
+                    aCRpLF.setEnabled(true);
                     break;
                 }
                 case (SEND_BYTE): {
@@ -1084,6 +1104,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
 	public void conect(View view) {
         if(TCOM) {
+//            mBluetoothGatt = mDevice.connectGatt(this, false, mGattCallback);
+//				mBluetoothGatt.disconnect();
             if (comunicBT.estado == comunicBT.NULL) {
                 if (SC == MainActivity.CLIENT) {
                     comunicBT = new ComunicBT(this, mDevice);
@@ -1125,10 +1147,19 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             try {
                 switch (sendTyp) {
                     case (SEND_TXT): {
-                        if(TCOM)
+                        if(TCOM) {
                             comunicBT.enviar(Message);
-                        else
+                            if(aCRpLF.isChecked()) {
+                                comunicBT.enviar_Int8(13);
+                                comunicBT.enviar_Int8(10);
+                            }
+                        }else {
                             comunic.enviar(Message);
+                            if(aCRpLF.isChecked()) {
+                                comunic.enviar_Int8(13);
+                                comunic.enviar_Int8(10);
+                            }
+                        }
                         break;
                     }
                     case (SEND_BYTE): {
@@ -1183,6 +1214,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             } catch (NumberFormatException nEx) {
                 nEx.printStackTrace();
                 Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+            }
+        }else if(sendTyp == SEND_TXT && aCRpLF.isChecked()) {
+            if (TCOM) {
+                comunicBT.enviar_Int8(13);
+                comunicBT.enviar_Int8(10);
+            } else {
+                comunic.enviar_Int8(13);
+                comunic.enviar_Int8(10);
             }
         }
 	}
@@ -1306,29 +1345,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
     @Override
-    public boolean onDown(MotionEvent e) {
-        return true;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return true;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return true;
-    }
-
-    @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float x1 = e1.getX();
         float y1 = e1.getY();
@@ -1353,4 +1369,174 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         }
         return true;
     }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return true;
+    }
+
+    /*// ----------------------------------------------------------------------------------------------------------------
+    // Implements callback methods for GATT events that the app cares about.  For example: connection change and services discovered.
+    // When onConnectionStateChange() is called with newState = STATE_CONNECTED then it calls mBluetoothGatt.discoverServices()
+    // resulting in another callback to onServicesDiscovered()
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) { //Change in connection state
+            if (newState == BluetoothProfile.STATE_CONNECTED) {                         //See if we are connected
+                Log.i("Achu", "Connected to GATT server.");
+//				mConnected = true;                                                      //Record the new connection state
+//				updateConnectionState(R.string.connected);                              //Update the display to say "Connected"
+//				invalidateOptionsMenu();                                                //Force the Options menu to be regenerated to show the disconnect option
+				mBluetoothGatt.discoverServices();                                      // Attempt to discover services after successful connection.
+            }
+            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {                 //See if we are not connected
+                Log.i("Achu", "Disconnected from GATT server.");
+//				mConnected = false;                                                     //Record the new connection state
+//				updateConnectionState(R.string.disconnected);                           //Update the display to say "Disconnected"
+//				invalidateOptionsMenu();                                                //Force the Options menu to be regenerated to show the connect option
+            }
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {              //Service discovery complete
+            if (status == BluetoothGatt.GATT_SUCCESS && mBluetoothGatt != null) {       //See if the service discovery was successful
+				findMldpGattService(mBluetoothGatt.getServices());                      //Get the list of services and call method to look for MLDP service
+            }
+            else {                                                                      //Service discovery was not successful
+                Log.w("Achu", "onServicesDiscovered received: " + status);
+            }
+        }
+
+        //For information only. This application uses Indication to receive updated characteristic data, not Read
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) { //A request to Read has completed
+            if (status == BluetoothGatt.GATT_SUCCESS) {                                 //See if the read was successful
+				String dataValue = characteristic.getStringValue(0);                        //Get the value of the characteristic
+                RX.append(dataValue);
+            // processIncomingPacket(dataValue);                                           //Process the data that was received
+            }
+        }
+
+        //For information only. This application sends small packets infrequently and does not need to know what the previous write completed
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) { //A request to Write has completed
+//			if (status == BluetoothGatt.GATT_SUCCESS) {                                 //See if the write was successful
+////				writeComplete = true;                                                   //Record that the write has completed
+//			}
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) { //Indication or notification was received
+			String dataValue = characteristic.getStringValue(0);                        //Get the value of the characteristic
+//			processIncomingPacket(dataValue);                                           //Process the data that was received
+            RX.append(dataValue);
+        }
+    };
+
+    // ----------------------------------------------------------------------------------------------------------------
+    // Write to a given characteristic. The completion of the write is reported asynchronously through the
+    // BluetoothGattCallback onCharacteristicWrire callback method.
+    private void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (BTAdapter == null || mBluetoothGatt == null) {                      //Check that we have access to a Bluetooth radio
+            Log.w("Achu", "BluetoothAdapter not initialized");
+            return;
+        }
+        int test = characteristic.getProperties();                                      //Get the properties of the characteristic
+        if ((test & BluetoothGattCharacteristic.PROPERTY_WRITE) == 0 && (test & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) { //Check that the property is writable
+            return;
+        }
+
+        if (mBluetoothGatt.writeCharacteristic(characteristic)) {                       //Request the BluetoothGatt to do the Write
+            Log.d("Achu", "writeCharacteristic successful");                               //The request was accepted, this does not mean the write completed
+        }
+        else {
+            Log.d("Achu", "writeCharacteristic failed");                                   //Write request was not accepted by the BluetoothGatt
+        }
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+    // Request a read of a given BluetoothGattCharacteristic. The Read result is reported asynchronously through the
+    // BluetoothGattCallback onCharacteristicRead callback method.
+    // For information only. This application uses Indication to receive updated characteristic data, not Read
+
+    private void readCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (BTAdapter == null || mBluetoothGatt == null) {                      //Check that we have access to a Bluetooth radio
+            Log.w("Achu", "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.readCharacteristic(characteristic);                              //Request the BluetoothGatt to Read the characteristic
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+    // Iterate through the supported GATT Services/Characteristics to see if the MLDP srevice is supported
+    private void findMldpGattService(List<BluetoothGattService> gattServices) {
+        if (gattServices == null) {                                                     //Verify that list of GATT services is valid
+            Log.d("Achu", "findMldpGattService found no Services");
+            return;
+        }
+        String uuid;                                                                    //String to compare received UUID with desired known UUIDs
+        mDataMDLP = null;                                                               //Searching for a characteristic, start with null value
+
+        for (BluetoothGattService gattService : gattServices) {                         //Test each service in the list of services
+            uuid = gattService.getUuid().toString();                                    //Get the string version of the service's UUID
+            if (uuid.equals(MLDP_PRIVATE_SERVICE)) {                                    //See if it matches the UUID of the MLDP service
+                List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics(); //If so then get the service's list of characteristics
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) { //Test each characteristic in the list of characteristics
+                    uuid = gattCharacteristic.getUuid().toString();                     //Get the string version of the characteristic's UUID
+                    if (uuid.equals(MLDP_DATA_PRIVATE_CHAR)) {                          //See if it matches the UUID of the MLDP data characteristic
+                        mDataMDLP = gattCharacteristic;                                 //If so then save the reference to the characteristic
+                        Log.d("Achu", "Found MLDP data characteristics");
+                    }
+                    else if (uuid.equals(MLDP_CONTROL_PRIVATE_CHAR)) {                  //See if UUID matches the UUID of the MLDP control characteristic
+                        mControlMLDP = gattCharacteristic;                              //If so then save the reference to the characteristic
+                        Log.d("Achu", "Found MLDP control characteristics");
+                    }
+                    final int characteristicProperties = gattCharacteristic.getProperties(); //Get the properties of the characteristic
+                    if ((characteristicProperties & (BluetoothGattCharacteristic.PROPERTY_NOTIFY)) > 0) { //See if the characteristic has the Notify property
+                        mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true); //If so then enable notification in the BluetoothGatt
+                        BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptor(UUID.fromString(CHARACTERISTIC_NOTIFICATION_CONFIG)); //Get the descripter that enables notification on the server
+                        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE); //Set the value of the descriptor to enable notification
+                        mBluetoothGatt.writeDescriptor(descriptor);                     //Write the descriptor
+                    }
+                    if ((characteristicProperties & (BluetoothGattCharacteristic.PROPERTY_INDICATE)) > 0) { //See if the characteristic has the Indicate property
+                        mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true); //If so then enable notification (and indication) in the BluetoothGatt
+                        BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptor(UUID.fromString(CHARACTERISTIC_NOTIFICATION_CONFIG)); //Get the descripter that enables indication on the server
+                        descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE); //Set the value of the descriptor to enable indication
+                        mBluetoothGatt.writeDescriptor(descriptor);                     //Write the descriptor
+                    }
+                    if ((characteristicProperties & (BluetoothGattCharacteristic.PROPERTY_WRITE)) > 0) { //See if the characteristic has the Write (acknowledged) property
+                        gattCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT); //If so then set the write type (write with acknowledge) in the BluetoothGatt
+                    }
+                    if ((characteristicProperties & (BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)) > 0) { //See if the characteristic has the Write (unacknowledged) property
+                        gattCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE); //If so then set the write type (write with no acknowledge) in the BluetoothGatt
+                    }
+                }
+                break;                                                                  //Found the MLDP service and are not looking for any other services
+            }
+        }
+        if (mDataMDLP == null) {                                                        //See if the MLDP data characteristic was not found
+            Toast.makeText(this, "mldp_not_supported", Toast.LENGTH_SHORT).show(); //If so then show an error message
+                    Log.d("Achu", "findMldpGattService found no MLDP service");
+            finish();                                                                   //and end the activity
+        }         //Do it after 200ms delay to give the RN4020 time to configure the characteristic
+    }*/
+
 }

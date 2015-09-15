@@ -58,11 +58,14 @@
     <string name="intRCV">Recepción Int32</string>
     <string name="longRCV">Recepción Int64</string>
     <string name="shortRCV">Recepción Int16</string>
+    <string name="appendCRpLF">Anexar CR+LF</string>
     <string name="instructionsBasic">
         - Pulse el botón de información de conexión para cambiar los datos de conexión.\n
         - Pulse el botón Conectar para iniciar/finalizar la conexión.\n
         - Use la lista desplegable TX para seleccionar el tipo de información que desea enviar.\n
         - Escriba en la entrada de texto TX la información que desea enviar.\n
+        - En modo texto, puede habilitar el anexado de CR+LF durante el envío.\n
+        - Si esta habilitado, el anexo CR+LF será enviado aún si TX esta vacio.\n
         - Use el menú de la App para acceder a otras opciones:\n
         *   Seleccionar como mostrar y administrar los datos entrantes \'RX\'.\n
         *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float).\n

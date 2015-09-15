@@ -57,6 +57,12 @@
             <requestFocus />
         </EditText>
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/appendCRpLF"
+            android:id="@+id/aCRpLF" />
+
         <Button
             android:id="@+id/Send"
             android:layout_width="wrap_content"

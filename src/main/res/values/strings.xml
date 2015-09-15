@@ -87,11 +87,14 @@
     <string name="Extra_LVL" translatable="false">LEVEL</string>
     <string name="dataString">DataString</string>
     <string name="instruTitle">Instructions</string>
+    <string name="appendCRpLF">Append CR+LF</string>
     <string name="instructionsBasic">
         - Click on connection info button to change it.\n
         - Click on Connect button to start/stop communication.\n
         - Use the TX Spinner to select what kind of data you want to send.\n
         - Write on the TX input the information you want to send.\n
+        - On Text Mode, user can enable to append CR+LF during send operation.\n
+        - If enabled, \'append CR+LF\' bytes will be sent even if TX input is void.\n
         - Use the app menu to access other options:\n
         *   Select how to show and manage the incoming data \'RX\'.\n
         *   Select advanced numeric reception options (int16, int32, float).\n
