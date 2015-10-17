@@ -6,6 +6,7 @@
     <string name="Button_Conect">Connect</string>
     <string name="Button_Conecting">Connecting…</string>
     <string name="Button_DisConect">Disconnect</string>
+    <string name="DS" translatable="false">\n</string>
     <string name="BSend">Send</string>
     <string name="Text_RX" translatable="false">RX</string>
     <string name="VagosCORP" translatable="false">Vagos CORP</string>
@@ -87,7 +88,7 @@
     <string name="Extra_LVL" translatable="false">LEVEL</string>
     <string name="dataString">DataString</string>
     <string name="instruTitle">Instructions</string>
-    <string name="appendCRpLF">Append CR+LF</string>
+    <string name="appendCRpLF">Append\nCR+LF</string>
     <string name="instructionsBasic">
         - Click on connection info button to change it.\n
         - Click on Connect button to start/stop communication.\n

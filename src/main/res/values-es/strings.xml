@@ -58,7 +58,7 @@
     <string name="intRCV">Recepción Int32</string>
     <string name="longRCV">Recepción Int64</string>
     <string name="shortRCV">Recepción Int16</string>
-    <string name="appendCRpLF">Anexar CR+LF</string>
+    <string name="appendCRpLF">Anexar\nCR+LF</string>
     <string name="instructionsBasic">
         - Pulse el botón de información de conexión para cambiar los datos de conexión.\n
         - Pulse el botón Conectar para iniciar/finalizar la conexión.\n

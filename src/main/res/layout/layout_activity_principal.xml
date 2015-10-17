@@ -25,17 +25,19 @@
 
         <Button
             android:id="@+id/chan_ser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:onClick="Chan_Ser"
-            android:text="@string/Ser_Dat" />
+            android:text="@string/Ser_Dat"
+            android:singleLine="false"
+            android:layout_weight="1" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/dataString"
+            android:text="@string/DS"
             android:id="@+id/dataString"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <CheckBox
             android:layout_width="wrap_content"

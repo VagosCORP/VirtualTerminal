@@ -605,7 +605,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 }
                 case (SEND_HEX): {
                     TX.setHint(R.string.Text_TXh);
-                    TX.setInputType(InputType.TYPE_CLASS_TEXT);
+                    TX.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     break;
                 }
                 case (SEND_SHORT): {
@@ -734,10 +734,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     private void initBTD(BluetoothDevice[] BonDev) {
 		myName = BTAdapter.getName();
 		myAddress = BTAdapter.getAddress();
-		if (BonDev.length > 0) {
-			if (BonDev.length < index)
+		if(BonDev.length > 0) {
+			if(BonDev.length < index)
 				index = 0;
-			mDevice = BondedDevices[index];
+			mDevice = BonDev[index];
             Conect.setEnabled(true);
             Chan_Ser.setEnabled(true);
             Chan_Ser/*SD*/.setText(mDevice.getName() + "\n" + mDevice.getAddress());
@@ -745,7 +745,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 Chan_Ser/*SD*/.setText(myName + "\n" + myAddress);
                 Chan_Ser.setEnabled(false);
             }
-		} else {
+		}else {
             Chan_Ser/*SD*/.setText(R.string.NoPD);
             Chan_Ser.setEnabled(false);
             Conect.setEnabled(false);
