@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +51,7 @@ public class MainActivity extends Activity {
     String baseVer = "1\n1\n0\n0\n0";
     String config = "config";
     String ext = ".vtconfig";
+	String proNPack = "com.vagoscorp.virtualterminalprokey";
     String proPack = "com.vagoscorp.virtualterminal.prokey";
     String sPath = "/Android/data/com.vagoscorp.vcvt";
 
@@ -174,18 +176,28 @@ public class MainActivity extends Activity {
         processFile(read());
         PackageManager manager = getPackageManager();
         Intent intent = manager.getLaunchIntentForPackage(proPack);
-        if(intent != null && !pro) {
-            checkSD();
-            if(SDread) {
-                startActivity(intent);
-                finish();
-            }else {
-                serverLabel.setVisibility(View.VISIBLE);
-                serverBT.setVisibility(View.VISIBLE);
-                serverW.setVisibility(View.VISIBLE);
-                pro = true;
-            }
-        }
+		Intent intentN = manager.getLaunchIntentForPackage(proNPack);
+		if(intentN == null) {
+			if(intent != null && !pro) {
+				checkSD();
+				if(SDread) {
+					startActivity(intent);
+					finish();
+				}else {
+					serverLabel.setVisibility(View.VISIBLE);
+					serverBT.setVisibility(View.VISIBLE);
+					serverW.setVisibility(View.VISIBLE);
+					pro = true;
+				}
+			}
+		}else {
+			Toast.makeText(this, R.string.UNProPack, Toast.LENGTH_SHORT).show();
+			serverLabel.setVisibility(View.GONE);
+			serverBT.setVisibility(View.GONE);
+			serverW.setVisibility(View.GONE);
+			pro = false;
+			write(baseVer);
+		}
     }
 	
 	void processFile(String file) {

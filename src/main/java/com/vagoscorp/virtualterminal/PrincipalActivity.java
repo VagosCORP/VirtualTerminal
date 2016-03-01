@@ -735,7 +735,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 		myName = BTAdapter.getName();
 		myAddress = BTAdapter.getAddress();
 		if(BonDev.length > 0) {
-			if(BonDev.length < index)
+			if(BonDev.length <= index)
 				index = 0;
 			mDevice = BonDev[index];
             Conect.setEnabled(true);
