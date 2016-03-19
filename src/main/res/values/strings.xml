@@ -186,6 +186,6 @@
     <string name="Instructions_FastSend">FastSend Mode</string>
     <string name="Instructions_AdvRcv">Advanced Reception</string>
     <string name="Instructions_PackRcv">Package Reception</string>
-    <string name="UNProPack">ProKey Beta expired, thanks for participating</string>
+    <string name="UNProPack">ProKey BetaTest finished, thank you for participating</string>
 
 </resources>

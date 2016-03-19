@@ -7,19 +7,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class MainActivity extends Activity {
 
@@ -34,34 +26,26 @@ public class MainActivity extends Activity {
 	public static final int CLIENT = 1;
 	public static final int SERVER = 2;
 	public static final String VER = "VER";
-	int defversion = 20150000;
-	boolean SDread = false;
-	boolean SDwrite = false;
-	File path;
-	File[] fileList;
-	String[] fileNames;
-	int nfil = 0;
+	public static final String PRO = "PRO";
+	int isPRO = 2015;
+	int defver = 20150000;
 	boolean pro = false;
-    boolean mkdirsDone = false;
-    int readBuffDone = 0;
 
     public BluetoothAdapter BTAdapter;
 
     Intent Init;
-    String baseVer = "1\n1\n0\n0\n0";
-    String config = "config";
-    String ext = ".vtconfig";
 	String proNPack = "com.vagoscorp.virtualterminalprokey";
     String proPack = "com.vagoscorp.virtualterminal.prokey";
-    String sPath = "/Android/data/com.vagoscorp.vcvt";
 
-    int versionCode = defversion;
+    int versionCode = defver;
     String versionName = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		Intent launcherIntent = getIntent();
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+		SharedPreferences.Editor shapreEditor = shapre.edit();
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		verLab = (TextView)findViewById(R.id.verLab);
@@ -72,14 +56,11 @@ public class MainActivity extends Activity {
 		CW = (Button)findViewById(R.id.Sel_W);
 		SB = (Button)findViewById(R.id.Sel_SBT);
 		SW = (Button)findViewById(R.id.Sel_SW);
-		path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + sPath);
-        mkdirsDone = path.mkdirs();
         Init = new Intent(this, PrincipalActivity.class);
         if(BTAdapter == null) {
             CB.setEnabled(false);
             SB.setEnabled(false);
         }
-		getNames();
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionCode = pInfo.versionCode;
@@ -87,25 +68,42 @@ public class MainActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        verLab.setText("v" + versionName + " b" + versionCode);
-        int ver = shapre.getInt(VER, defversion);
+		String versioning = "v" + versionName + " b" + versionCode;
+		verLab.setText(versioning);
+		isPRO = launcherIntent.getIntExtra(PRO, isPRO);
+		pro = shapre.getBoolean(PRO, false);
+		int ver = shapre.getInt(VER, defver);
         if(ver != versionCode) {
-            SharedPreferences.Editor editor = shapre.edit();
-            editor.putInt(VER, versionCode);
-            editor.commit();
-            write(baseVer);
+			bePRO(false);
+			shapreEditor.putInt(VER, versionCode);
         }
-
+		if(pro || isPRO > 2015)
+			bePRO(true);
+		shapreEditor.putBoolean(PRO, pro);
+		shapreEditor.commit();
+		checkPro();
 	}
-	
-	@Override
-	protected void onResume() {
-		if(nfil == 0) {
-			write(baseVer);
-			getNames();
+
+	void bePRO(boolean isPRO) {
+		int valPRO = View.GONE;
+		if(isPRO)
+			valPRO = View.VISIBLE;
+		serverLabel.setVisibility(valPRO);
+		serverBT.setVisibility(valPRO);
+		serverW.setVisibility(valPRO);
+		pro = isPRO;
+	}
+
+	void checkPro() {
+		PackageManager manager = getPackageManager();
+		Intent intent = manager.getLaunchIntentForPackage(proPack);
+		Intent intentN = manager.getLaunchIntentForPackage(proNPack);
+		if(intentN != null)
+			Toast.makeText(this, R.string.UNProPack, Toast.LENGTH_SHORT).show();
+		if(!pro && intent != null) {
+			startActivity(intent);
+			finish();
 		}
-        checkPro();
-		super.onResume();
 	}
 
 	public void InitBT(View view) {
@@ -138,138 +136,5 @@ public class MainActivity extends Activity {
 		Init.putExtra(getString(R.string.Extra_TYP), SERVER);
 		Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
-	}
-	
-	void checkSD() {
-		String state = Environment.getExternalStorageState();
-        switch (state) {
-            case Environment.MEDIA_MOUNTED:
-                SDread = true;
-                SDwrite = true;
-                break;
-            case Environment.MEDIA_MOUNTED_READ_ONLY:
-                SDread = true;
-                SDwrite = false;
-                break;
-            default:
-                SDread = false;
-                SDwrite = false;
-                break;
-        }
-	}
-
-//    void checkPro() {
-//        Intent intent;
-//        PackageManager manager = getPackageManager();
-//        intent = manager.getLaunchIntentForPackage(proPack);
-//        if(intent != null) {
-//            serverLabel.setVisibility(View.VISIBLE);
-//            serverBT.setVisibility(View.VISIBLE);
-//            serverW.setVisibility(View.VISIBLE);
-//            pro = true;
-//        }else {
-//            processFile(read());
-//        }
-//    }
-
-    void checkPro() {
-        processFile(read());
-        PackageManager manager = getPackageManager();
-        Intent intent = manager.getLaunchIntentForPackage(proPack);
-		Intent intentN = manager.getLaunchIntentForPackage(proNPack);
-		if(intentN == null) {
-			if(intent != null && !pro) {
-				checkSD();
-				if(SDread) {
-					startActivity(intent);
-					finish();
-				}else {
-					serverLabel.setVisibility(View.VISIBLE);
-					serverBT.setVisibility(View.VISIBLE);
-					serverW.setVisibility(View.VISIBLE);
-					pro = true;
-				}
-			}
-		}else {
-			Toast.makeText(this, R.string.UNProPack, Toast.LENGTH_SHORT).show();
-			serverLabel.setVisibility(View.GONE);
-			serverBT.setVisibility(View.GONE);
-			serverW.setVisibility(View.GONE);
-			pro = false;
-			write(baseVer);
-		}
-    }
-	
-	void processFile(String file) {
-		String[] enab;
-		enab = file.split("\n");
-		if(enab.length != 5) {
-			write(baseVer);
-			getNames();
-		}else {
-			if(enab[2].equals("1")) {
-                serverLabel.setVisibility(View.VISIBLE);
-                serverBT.setVisibility(View.VISIBLE);
-			}
-			if(enab[3].equals("1")) {
-                serverLabel.setVisibility(View.VISIBLE);
-                serverW.setVisibility(View.VISIBLE);
-			}
-            pro = enab[4].equals("1");
-		}
-	}
-
-	void write(/*String name, */String data) {
-		checkSD();
-		if(SDread && SDwrite) {
-			byte[] buff = data.getBytes();
-			File file = new File(path, config + ext);
-			OutputStream os;
-			try {
-				os = new FileOutputStream(file);
-				os.write(buff);
-				os.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	String read(/*String name*/) {
-		checkSD();
-		String val = "";
-		if(SDread) {
-			byte[] buff;
-			File file = new File(path, config + ext);
-			InputStream is;
-			try {
-				is = new FileInputStream(file);
-				buff = new byte[is.available()];
-                readBuffDone = is.read(buff);
-				is.close();
-				val = new String(buff);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return val;
-	}
-
-	void getNames() {
-		checkSD();
-		if(SDread && SDwrite) {
-			fileList = path.listFiles();
-			int i = 0;
-			if(fileList != null)
-				nfil = fileList.length;
-			else
-				nfil = 0;
-			if(nfil > 0) {
-				fileNames = new String[nfil];
-				for(File file:fileList) {
-					fileNames[i] = file.getName().split(ext)[0];
-				}
-			}
-		}
 	}
 }

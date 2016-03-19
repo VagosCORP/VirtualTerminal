@@ -147,6 +147,6 @@
     <string name="Instructions_FastSend">Modo EnvíoRápido</string>
     <string name="Instructions_AdvRcv">Recepción Avanzada</string>
     <string name="Instructions_PackRcv">Recepción de Paquetes</string>
-    <string name="UNProPack">ProKey Beta Caducado, gracias por participar</string>
+    <string name="UNProPack">ProKey BetaTest terminado, gracias por participar</string>
 
 </resources>
