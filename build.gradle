@@ -9,15 +9,15 @@ android {
             storePassword 'Kagutsuchi2.4'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
-        targetSdkVersion 23
-        versionName '1.2.04'
+        targetSdkVersion 25
+        versionName '1.2.05'
         signingConfig signingConfigs.Sebasu
-        versionCode 20160302
+        versionCode 20170102
     }
     buildTypes {
         release {

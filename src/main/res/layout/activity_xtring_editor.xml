@@ -23,14 +23,101 @@
         <EditText
             android:id="@+id/newTX"
             android:text="@string/VagosCORP"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
+            android:visibility="gone"
             android:inputType="text">
 
             <requestFocus />
 
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXtext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/VagosCORP"
+            android:visibility="visible"
+            android:inputType="textNoSuggestions">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXnum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXbin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXb"
+            android:visibility="gone"
+            android:digits="01"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXhex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXh"
+            android:visibility="gone"
+            android:inputType="textNoSuggestions"
+            android:digits="0123456789abcdefABCDEF">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXint16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXint32"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXfloat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXf"
+            android:visibility="gone"
+            android:inputType="numberDecimal|numberSigned">
+
+            <requestFocus />
         </EditText>
 
         <Button

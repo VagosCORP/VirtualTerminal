@@ -15,7 +15,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -51,7 +50,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     TextView RX;// Received Data
     TextView RXn;// Received Data
     TextView sepLab;// Received Data
-	EditText TX;// Data to Send
+//	EditText TX;// Data to Send
+    EditText[] TXs = new EditText[7];// Data to Send
 	Button Conect;
 	Button Chan_Ser;
 	Button Send;
@@ -238,7 +238,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         editNAct = (EditText)findViewById(R.id.editNAct);
         UpdN = (CheckBox)findViewById(R.id.UpdN);
         aCRpLF = (CheckBox)findViewById(R.id.aCRpLF);
-        TX = (EditText)findViewById(R.id.TX);
+        TXs[SEND_TXT] = (EditText)findViewById(R.id.TXtext);
+        TXs[SEND_BYTE] = (EditText)findViewById(R.id.TXnum);
+        TXs[SEND_BIN] = (EditText)findViewById(R.id.TXbin);
+        TXs[SEND_HEX] = (EditText)findViewById(R.id.TXhex);
+        TXs[SEND_SHORT] = (EditText)findViewById(R.id.TXint16);
+        TXs[SEND_INT] = (EditText)findViewById(R.id.TXint32);
+        TXs[SEND_FLOAT] = (EditText)findViewById(R.id.TXfloat);
+//        TX = (EditText)findViewById(TX);
 //        TX.setOnLongClickListener(new OnLongClickListener() {
 //            @Override
 //            public boolean onLongClick(View v) {
@@ -369,56 +376,56 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         if(n != 0) {
             SharedPreferences shapre = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = shapre.edit();
-            if(TX.length() > 0) {
-                String Message = TX.getText().toString();
+            if(TXs[sendTyp].length() > 0) {
+                String message = TXs[sendTyp].getText().toString();
                 try {
                     switch (sendTyp) {
                         case (SEND_TXT): {
-                            editor.putString(comm + n, Message);
-                            editor.putString(commN + n, Message);
+                            editor.putString(comm + n, message);
+                            editor.putString(commN + n, message);
                             commType = COMMT_STRING;
                             N = false;
                             break;
                         }
                         case (SEND_BYTE): {
-                            int Messagen = Integer.parseInt(Message);
+                            int Messagen = Integer.parseInt(message);
                             editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + message);
                             commType = COMMT_INT8;
                             break;
                         }
                         case (SEND_BIN): {
-                            int Messagen = Integer.parseInt(Message, 2);
+                            int Messagen = Integer.parseInt(message, 2);
                             editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
                             commType = COMMT_INT8;
                             break;
                         }
                         case (SEND_HEX): {
-                            int Messagen = Integer.parseInt(Message, 16);
+                            int Messagen = Integer.parseInt(message, 16);
                             editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
                             commType = COMMT_INT8;
                             break;
                         }
                         case (SEND_SHORT): {
-                            int Messagen = Integer.parseInt(Message);
+                            int Messagen = Integer.parseInt(message);
                             editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + message);
                             commType = COMMT_INT16;
                             break;
                         }
                         case (SEND_INT): {
-                            int Messagen = Integer.parseInt(Message);
+                            int Messagen = Integer.parseInt(message);
                             editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + message);
                             commType = COMMT_INT32;
                             break;
                         }
                         case (SEND_FLOAT): {
-                            float Messagen = Float.parseFloat(Message);
+                            float Messagen = Float.parseFloat(message);
                             editor.putFloat(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + Message);
+                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + message);
                             commType = COMMT_FLOAT;
                             break;
                         }
@@ -582,48 +589,52 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public void setSendType(int sendType) {
         if(sendTyp != sendType) {
             sendTyp = sendType;
-            TX.setText("");
+//            TX.setText("");
             aCRpLF.setEnabled(false);
+            for(int i = 0; i < 7; i++)
+                TXs[i].setVisibility(View.GONE);
+            TXs[sendType].setVisibility(View.VISIBLE);
+            TXs[sendType].requestFocus();
             switch (sendType) {
                 case (SEND_TXT): {
-                    TX.setHint(R.string.VagosCORP);
-                    TX.setInputType(InputType.TYPE_CLASS_TEXT);
+//                    TX.setHint(R.string.VagosCORP);
+//                    TX.setInputType(InputType.TYPE_CLASS_TEXT);
                     aCRpLF.setEnabled(true);
                     break;
                 }
                 case (SEND_BYTE): {
-                    TX.setHint(R.string.Text_TXn);
-                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                    TX.setHint(R.string.Text_TXn);
+//                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
                     break;
                 }
                 case (SEND_BIN): {
-                    TX.setHint(R.string.Text_TXb);
-                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                    TX.setHint(R.string.Text_TXb);
+//                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
                     break;
                 }
                 case (SEND_HEX): {
-                    TX.setHint(R.string.Text_TXh);
-                    TX.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+//                    TX.setHint(R.string.Text_TXh);
+//                    TX.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     break;
                 }
                 case (SEND_SHORT): {
-                    TX.setHint(R.string.Text_TXn);
-                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                    TX.setHint(R.string.Text_TXn);
+//                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
                     break;
                 }
                 case (SEND_INT): {
-                    TX.setHint(R.string.Text_TXn);
-                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+//                    TX.setHint(R.string.Text_TXn);
+//                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
                     break;
                 }
                 case (SEND_FLOAT): {
-                    TX.setHint(R.string.Text_TXf);
-                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
-                            InputType.TYPE_NUMBER_FLAG_SIGNED);
+//                    TX.setHint(R.string.Text_TXf);
+//                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
+//                            InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
 //                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                     break;
@@ -1142,19 +1153,19 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void enviar(View view) {
-        if (TX.length() > 0) {
-            String Message = TX.getText().toString();
+        if (TXs[sendTyp].length() > 0) {
+            String message = TXs[sendTyp].getText().toString();
             try {
                 switch (sendTyp) {
                     case (SEND_TXT): {
                         if(TCOM) {
-                            comunicBT.enviar(Message);
+                            comunicBT.enviar(message);
                             if(aCRpLF.isChecked()) {
                                 comunicBT.enviar_Int8(13);
                                 comunicBT.enviar_Int8(10);
                             }
                         }else {
-                            comunic.enviar(Message);
+                            comunic.enviar(message);
                             if(aCRpLF.isChecked()) {
                                 comunic.enviar_Int8(13);
                                 comunic.enviar_Int8(10);
@@ -1163,7 +1174,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_BYTE): {
-                        int Messagen = Integer.parseInt(Message);
+                        int Messagen = Integer.parseInt(message);
                         if(TCOM)
                             comunicBT.enviar_Int8(Messagen);
                         else
@@ -1171,7 +1182,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_BIN): {
-                        int Messagen = Integer.parseInt(Message, 2);
+                        int Messagen = Integer.parseInt(message, 2);
                         if(TCOM)
                             comunicBT.enviar_Int8(Messagen);
                         else
@@ -1179,7 +1190,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_HEX): {
-                        int Messagen = Integer.parseInt(Message, 16);
+                        int Messagen = Integer.parseInt(message, 16);
                         if(TCOM)
                             comunicBT.enviar_Int8(Messagen);
                         else
@@ -1187,7 +1198,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_SHORT): {
-                        int Messagen = Integer.parseInt(Message);
+                        int Messagen = Integer.parseInt(message);
                         if(TCOM)
                             comunicBT.enviar_Int16(Messagen);
                         else
@@ -1195,7 +1206,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_INT): {
-                        int Messagen = Integer.parseInt(Message);
+                        int Messagen = Integer.parseInt(message);
                         if(TCOM)
                             comunicBT.enviar_Int32(Messagen);
                         else
@@ -1203,7 +1214,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         break;
                     }
                     case (SEND_FLOAT): {
-                        float Messagen = Float.parseFloat(Message);
+                        float Messagen = Float.parseFloat(message);
                         if(TCOM)
                             comunicBT.enviar_Float(Messagen);
                         else
@@ -1227,7 +1238,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void BTX(View view) {
-		TX.setText("");
+//        for(int i = 0; i< 7; i++)
+//            TXs[i].setText("");
+        TXs[sendTyp].setText("");
 	}
 
 	public void BRX(View view) {

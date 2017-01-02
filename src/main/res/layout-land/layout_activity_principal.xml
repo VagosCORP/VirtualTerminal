@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PrincipalW" >
+    tools:context=".PrincipalActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 android:text="@string/BRCV"
                 android:id="@+id/UpdN"
                 android:checked="false"
-                android:singleLine="true" />
+                android:maxLines="1"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -91,7 +91,94 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
+            android:visibility="gone"
             android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXtext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/VagosCORP"
+            android:visibility="visible"
+            android:inputType="textNoSuggestions">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXnum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXbin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXb"
+            android:visibility="gone"
+            android:digits="01"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXhex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXh"
+            android:visibility="gone"
+            android:inputType="textNoSuggestions"
+            android:digits="0123456789abcdefABCDEF">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXint16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXint32"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/TXfloat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXf"
+            android:visibility="gone"
+            android:inputType="numberDecimal|numberSigned">
 
             <requestFocus />
         </EditText>
