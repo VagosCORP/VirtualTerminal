@@ -223,8 +223,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 return;
             }
         }else {
-            WFM = (WifiManager) getSystemService(WIFI_SERVICE);
-            CTM = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+            WFM = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+            CTM = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         }
         spinner = (Spinner)findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -602,43 +602,43 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     aCRpLF.setEnabled(true);
                     break;
                 }
-                case (SEND_BYTE): {
+//                case (SEND_BYTE): {
 //                    TX.setHint(R.string.Text_TXn);
 //                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    break;
-                }
-                case (SEND_BIN): {
+//                    break;
+//                }
+//                case (SEND_BIN): {
 //                    TX.setHint(R.string.Text_TXb);
 //                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    break;
-                }
-                case (SEND_HEX): {
+//                    break;
+//                }
+//                case (SEND_HEX): {
 //                    TX.setHint(R.string.Text_TXh);
 //                    TX.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                    break;
-                }
-                case (SEND_SHORT): {
+//                    break;
+//                }
+//                case (SEND_SHORT): {
 //                    TX.setHint(R.string.Text_TXn);
 //                    TX.setInputType(InputType.TYPE_CLASS_NUMBER);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT);
-                    break;
-                }
-                case (SEND_INT): {
+//                    break;
+//                }
+//                case (SEND_INT): {
 //                    TX.setHint(R.string.Text_TXn);
 //                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                    break;
-                }
-                case (SEND_FLOAT): {
+//                    break;
+//                }
+//                case (SEND_FLOAT): {
 //                    TX.setHint(R.string.Text_TXf);
 //                    TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL |
 //                            InputType.TYPE_NUMBER_FLAG_SIGNED);
 //                TX.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_CLASS_TEXT |
 //                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                    break;
-                }
+//                    break;
+//                }
             }
         }
     }
@@ -849,83 +849,80 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-		case REQUEST_ENABLE_BT: {
-			if (resultCode != Activity.RESULT_OK) {
-				Toast.makeText(this, R.string.EnBT, Toast.LENGTH_SHORT).show();
-				finish();
-			} else {
-				BondedDevices = BTAdapter.getBondedDevices().toArray(
-						new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
-				initBTD(BondedDevices);
-			}
-			break;
-		}
-		case SEL_BT_DEVICE: {
-			if (resultCode == Activity.RESULT_OK) {
-				index = data.getIntExtra(SDev, defIndex);
-				SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-				SharedPreferences.Editor editor = shapre.edit();
-				editor.putInt(indev, index);
-				editor.commit();
-				mDevice = BondedDevices[index];
-                Chan_Ser/*SD*/.setText(mDevice.getName() + "\n" + mDevice.getAddress());
-			}
-			break;
-		}
-        case REQUEST_ENABLE_WIFI: {
-            if(!WFM.isWifiEnabled()/*resultCode != Activity.RESULT_OK*/) {
-                Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
-//                finish();
-            }else {
-                NetworkInfo nWI = CTM.getActiveNetworkInfo();
-                if(!(nWI != null && nWI.getType() == ConnectivityManager.TYPE_WIFI &&
-                        nWI.getState() == NetworkInfo.State.CONNECTED)){
-                    Toast.makeText(this, R.string.EWF, Toast.LENGTH_SHORT).show();
-//                    finish();
+            case REQUEST_ENABLE_BT: {
+                if (resultCode != Activity.RESULT_OK) {
+                    Toast.makeText(this, R.string.EnBT, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    BondedDevices = BTAdapter.getBondedDevices().toArray(
+                            new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
+                    initBTD(BondedDevices);
                 }
+                break;
             }
-//            NWiFi = true;
-            break;
-        }
-        case REQUEST_CHANGE_SERVER: {
-            if (resultCode == Activity.RESULT_OK) {
-                serverip = data.getStringExtra(NSI);
-                serverport = data.getIntExtra(NSP, defPort);
-                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = shapre.edit();
-                editor.putString(SI, serverip);
-                editor.putInt(SP, serverport);
-                editor.commit();
-                if(SC == MainActivity.CLIENT)
-                    Chan_Ser/*SD*/.setText(serverip + ":" + serverport);
-                else if(SC == MainActivity.SERVER)
-                    Chan_Ser/*SD*/.setText(myIP + ":" + serverport);
+            case SEL_BT_DEVICE: {
+                if (resultCode == Activity.RESULT_OK) {
+                    index = data.getIntExtra(SDev, defIndex);
+                    SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shapre.edit();
+                    editor.putInt(indev, index);
+                    editor.commit();
+                    mDevice = BondedDevices[index];
+                    Chan_Ser/*SD*/.setText(mDevice.getName() + "\n" + mDevice.getAddress());
+                }
+                break;
             }
-            break;
-        }
-        case SHOW_INSTRUCTIONS: {
-            if(resultCode == Activity.RESULT_OK) {
-                checked = data.getBooleanExtra(SIoS, false);
-                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = shapre.edit();
-                editor.putBoolean(PrincipalActivity.SIoS, checked);
-                editor.commit();
-            }
-            break;
-        }
-        case ENTER_XTRING: {
-            if(resultCode == Activity.RESULT_OK) {
-                byte[] newTX = data.getByteArrayExtra(XtringActivity.NEWTX);
-                    if(TCOM) {
-                        for (byte dat : newTX)
-                            comunicBT.enviar_Int8(dat);
-                    }else {
-                        for (byte dat : newTX)
-                            comunic.enviar_Int8(dat);
+            case REQUEST_ENABLE_WIFI: {
+                if(!WFM.isWifiEnabled()/*resultCode != Activity.RESULT_OK*/) {
+                    Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
+    //                finish();
+                }else {
+                    NetworkInfo nWI = CTM.getActiveNetworkInfo();
+                    if(!(nWI != null && nWI.getType() == ConnectivityManager.TYPE_WIFI &&
+                            nWI.getState() == NetworkInfo.State.CONNECTED)){
+                        Toast.makeText(this, R.string.EWF, Toast.LENGTH_SHORT).show();
+    //                    finish();
                     }
+                }
+    //            NWiFi = true;
+                break;
             }
-            break;
-        }
+            case REQUEST_CHANGE_SERVER: {
+                if (resultCode == Activity.RESULT_OK) {
+                    serverip = data.getStringExtra(NSI);
+                    serverport = data.getIntExtra(NSP, defPort);
+                    SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shapre.edit();
+                    editor.putString(SI, serverip);
+                    editor.putInt(SP, serverport);
+                    editor.commit();
+                    if(SC == MainActivity.CLIENT)
+                        Chan_Ser/*SD*/.setText(serverip + ":" + serverport);
+                    else if(SC == MainActivity.SERVER)
+                        Chan_Ser/*SD*/.setText(myIP + ":" + serverport);
+                }
+                break;
+            }
+            case SHOW_INSTRUCTIONS: {
+                if(resultCode == Activity.RESULT_OK) {
+                    checked = data.getBooleanExtra(SIoS, false);
+                    SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shapre.edit();
+                    editor.putBoolean(PrincipalActivity.SIoS, checked);
+                    editor.commit();
+                }
+                break;
+            }
+            case ENTER_XTRING: {
+                if(resultCode == Activity.RESULT_OK) {
+                    byte[] newTX = data.getByteArrayExtra(XtringActivity.NEWTX);
+                    if(TCOM)
+                        comunicBT.enviar_ByteArray(newTX);
+                    else
+                        comunic.enviar_ByteArray(newTX);
+                }
+                break;
+            }
 		}
 	}
 
