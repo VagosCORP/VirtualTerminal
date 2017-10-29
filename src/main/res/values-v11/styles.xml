@@ -17,6 +17,7 @@
         <!-- API 11 theme customizations can go here. -->
     </style>
     <style name="DarkTheme" parent="android:Theme.Holo">
+        <!--<item name="android:background">#ff303030</item>-->
         <!--     <style name="Dialog" parent="Theme.AppCompat.Dialog"> -->
         <!-- API 11 theme customizations can go here. -->
     </style>
