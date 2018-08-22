@@ -24,8 +24,8 @@ public class Set_Server extends Activity {
 		Port = Data.getIntExtra(PrincipalActivity.SP, PrincipalActivity.defPort);
 		snip = Data.getBooleanExtra(PrincipalActivity.SnIP, false);
 		setContentView(R.layout.set_server);
-		Server_IP = (EditText) findViewById(R.id.Server_IP);
-		Server_Port = (EditText) findViewById(R.id.Server_Port);
+		Server_IP = findViewById(R.id.Server_IP);
+		Server_Port = findViewById(R.id.Server_Port);
 	}
 
 	@Override

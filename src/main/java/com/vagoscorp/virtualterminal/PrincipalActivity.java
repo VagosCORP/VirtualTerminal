@@ -204,7 +204,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_activity_principal);
-        layout_principal = (LinearLayout)findViewById(R.id.layout_principal);
+        layout_principal = findViewById(R.id.layout_principal);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_principal.setBackgroundColor(Color.parseColor("#ff303030"));
         Intent tip = getIntent();
@@ -226,25 +226,25 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             WFM = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
             CTM = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         }
-        spinner = (Spinner)findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
+        spinner = findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-		RX = (TextView)findViewById(R.id.RX);
-        RXn = (TextView)findViewById(R.id.RXn);
-        sepLab = (TextView)findViewById(R.id.sepLab);
-        layNAct = (LinearLayout)findViewById(R.id.layNAct);
-        editNAct = (EditText)findViewById(R.id.editNAct);
-        UpdN = (CheckBox)findViewById(R.id.UpdN);
-        aCRpLF = (CheckBox)findViewById(R.id.aCRpLF);
-        TXs[SEND_TXT] = (EditText)findViewById(R.id.TXtext);
-        TXs[SEND_BYTE] = (EditText)findViewById(R.id.TXnum);
-        TXs[SEND_BIN] = (EditText)findViewById(R.id.TXbin);
-        TXs[SEND_HEX] = (EditText)findViewById(R.id.TXhex);
-        TXs[SEND_SHORT] = (EditText)findViewById(R.id.TXint16);
-        TXs[SEND_INT] = (EditText)findViewById(R.id.TXint32);
-        TXs[SEND_FLOAT] = (EditText)findViewById(R.id.TXfloat);
+		RX = findViewById(R.id.RX);
+        RXn = findViewById(R.id.RXn);
+        sepLab = findViewById(R.id.sepLab);
+        layNAct = findViewById(R.id.layNAct);
+        editNAct = findViewById(R.id.editNAct);
+        UpdN = findViewById(R.id.UpdN);
+        aCRpLF = findViewById(R.id.aCRpLF);
+        TXs[SEND_TXT] = findViewById(R.id.TXtext);
+        TXs[SEND_BYTE] = findViewById(R.id.TXnum);
+        TXs[SEND_BIN] = findViewById(R.id.TXbin);
+        TXs[SEND_HEX] = findViewById(R.id.TXhex);
+        TXs[SEND_SHORT] = findViewById(R.id.TXint16);
+        TXs[SEND_INT] = findViewById(R.id.TXint32);
+        TXs[SEND_FLOAT] = findViewById(R.id.TXfloat);
 //        TX = (EditText)findViewById(TX);
 //        TX.setOnLongClickListener(new OnLongClickListener() {
 //            @Override
@@ -254,15 +254,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //                return true;
 //            }
 //        });
-        byteRCV = (LinearLayout)findViewById(R.id.byteRCV);
-		Conect = (Button) findViewById(R.id.Conect);
-		Chan_Ser = (Button) findViewById(R.id.chan_ser);
-		Send = (Button) findViewById(R.id.Send);
-        scro = (ScrollView)findViewById(R.id.scro);
-        scron = (ScrollView)findViewById(R.id.scron);
-        commander = (LinearLayout)findViewById(R.id.commander);
-        commBase = (LinearLayout)findViewById(R.id.commBase);
-//        commScroll = (ScrollView)findViewById(R.id.commScroll);
+        byteRCV = findViewById(R.id.byteRCV);
+		Conect =  findViewById(R.id.Conect);
+		Chan_Ser = findViewById(R.id.chan_ser);
+		Send = findViewById(R.id.Send);
+        scro = findViewById(R.id.scro);
+        scron = findViewById(R.id.scron);
+        commander = findViewById(R.id.commander);
+        commBase = findViewById(R.id.commBase);
+//        commScroll = findViewById(R.id.commScroll);
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -294,22 +294,22 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
             }
         });
-        comm1  = (Button)findViewById(R.id.comm1);
-        comm2  = (Button)findViewById(R.id.comm2);
-        comm3  = (Button)findViewById(R.id.comm3);
-        comm4  = (Button)findViewById(R.id.comm4);
-        comm5  = (Button)findViewById(R.id.comm5);
-        comm6  = (Button)findViewById(R.id.comm6);
-        comm7  = (Button)findViewById(R.id.comm7);
-        comm8  = (Button)findViewById(R.id.comm8);
-        comm9  = (Button)findViewById(R.id.comm9);
-        comm10 = (Button)findViewById(R.id.comm10);
-        comm11 = (Button)findViewById(R.id.comm11);
-        comm12 = (Button)findViewById(R.id.comm12);
-        comm13 = (Button)findViewById(R.id.comm13);
-        comm14 = (Button)findViewById(R.id.comm14);
-        comm15 = (Button)findViewById(R.id.comm15);
-        comm16 = (Button)findViewById(R.id.comm16);
+        comm1  = findViewById(R.id.comm1);
+        comm2  = findViewById(R.id.comm2);
+        comm3  = findViewById(R.id.comm3);
+        comm4  = findViewById(R.id.comm4);
+        comm5  = findViewById(R.id.comm5);
+        comm6  = findViewById(R.id.comm6);
+        comm7  = findViewById(R.id.comm7);
+        comm8  = findViewById(R.id.comm8);
+        comm9  = findViewById(R.id.comm9);
+        comm10 = findViewById(R.id.comm10);
+        comm11 = findViewById(R.id.comm11);
+        comm12 = findViewById(R.id.comm12);
+        comm13 = findViewById(R.id.comm13);
+        comm14 = findViewById(R.id.comm14);
+        comm15 = findViewById(R.id.comm15);
+        comm16 = findViewById(R.id.comm16);
         comm1.setOnLongClickListener(this);
         comm2.setOnLongClickListener(this);
         comm3.setOnLongClickListener(this);

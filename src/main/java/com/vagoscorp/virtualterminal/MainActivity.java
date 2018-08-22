@@ -48,14 +48,14 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor shapreEditor = shapre.edit();
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
-		verLab = (TextView)findViewById(R.id.verLab);
-        serverLabel = (TextView)findViewById(R.id.serverLabel);
-        serverBT = (LinearLayout)findViewById(R.id.serverBT);
-        serverW = (LinearLayout)findViewById(R.id.serverW);
-		CB = (Button)findViewById(R.id.Sel_BT);
-		CW = (Button)findViewById(R.id.Sel_W);
-		SB = (Button)findViewById(R.id.Sel_SBT);
-		SW = (Button)findViewById(R.id.Sel_SW);
+		verLab = findViewById(R.id.verLab);
+        serverLabel = findViewById(R.id.serverLabel);
+        serverBT = findViewById(R.id.serverBT);
+        serverW = findViewById(R.id.serverW);
+		CB = findViewById(R.id.Sel_BT);
+		CW = findViewById(R.id.Sel_W);
+		SB = findViewById(R.id.Sel_SBT);
+		SW = findViewById(R.id.Sel_SW);
         Init = new Intent(this, PrincipalActivity.class);
         if(BTAdapter == null) {
             CB.setEnabled(false);
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-		String versioning = "v" + versionName + " b" + versionCode;
+		String versioning = "v" + versionName;
 		verLab.setText(versioning);
 		isPRO = launcherIntent.getIntExtra(PRO, isPRO);
 		pro = shapre.getBoolean(PRO, false);
@@ -82,6 +82,11 @@ public class MainActivity extends Activity {
 		shapreEditor.putBoolean(PRO, pro);
 		shapreEditor.commit();
 		checkPro();
+	}
+
+	public void viewBuild(View view) {
+		String versioning = "v" + versionName + " b" + versionCode;
+		verLab.setText(versioning);
 	}
 
 	void bePRO(boolean isPRO) {

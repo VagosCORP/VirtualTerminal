@@ -22,7 +22,7 @@ public class Device_List extends Activity {
 		Intent SD = getIntent();
 		LDev = SD.getStringArrayExtra(PrincipalActivity.LD);
 		setContentView(R.layout.device_list);
-		LD = (ListView) findViewById(R.id.LD);
+		LD = findViewById(R.id.LD);
 		Adapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, LDev);
 		IS = new OnItemClickListener() {

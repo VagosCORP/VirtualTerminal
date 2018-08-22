@@ -9,14 +9,14 @@ android {
             storePassword 'Kagutsuchi2.4'
         }
     }
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
-        targetSdkVersion 26
-        versionName '1.2.07'
+        targetSdkVersion 28
+        versionName '1.2.08'
         signingConfig signingConfigs.Sebasu
-        versionCode 20171029
+        versionCode 20180822
     }
     buildTypes {
         release {
@@ -35,6 +35,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':communication')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':communication')
 }

@@ -17,11 +17,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.nio.ByteBuffer;
@@ -81,22 +78,22 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             this.setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xtring);
-        layout_xtring = (LinearLayout)findViewById(R.id.layout_xtring);
+        layout_xtring = findViewById(R.id.layout_xtring);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
         for(int i = 0; i < 7; i++)
-            Buttons[i] = (Button)findViewById(ButtIDs[i]);
-        xtringList = (LinearLayout)findViewById(R.id.xtringList);
+            Buttons[i] = findViewById(ButtIDs[i]);
+        xtringList = findViewById(R.id.xtringList);
         for(int i = 1; i <= numItems; i++) {
             final XtringItem item = new XtringItem(this, i);
-            item.linearLayoutX = (LinearLayout)findViewById(ListIDs[i]);
+            item.linearLayoutX = findViewById(ListIDs[i]);
             item.enabled = false;
             item.disabled = false;
-            item.itemIndeX = (TextView)item.linearLayoutX.findViewById(R.id.itemIndeX);
-            item.spinnerX = (Spinner)item.linearLayoutX.findViewById(R.id.spinnerX);
-            item.textViewX = (TextView)item.linearLayoutX.findViewById(R.id.textViewX);
-            item.checkBoxX = (CheckBox)item.linearLayoutX.findViewById(R.id.checkBoxX);
-            item.disableX = (CheckBox)item.linearLayoutX.findViewById(R.id.disableX);
+            item.itemIndeX = item.linearLayoutX.findViewById(R.id.itemIndeX);
+            item.spinnerX = item.linearLayoutX.findViewById(R.id.spinnerX);
+            item.textViewX = item.linearLayoutX.findViewById(R.id.textViewX);
+            item.checkBoxX = item.linearLayoutX.findViewById(R.id.checkBoxX);
+            item.disableX = item.linearLayoutX.findViewById(R.id.disableX);
             item.itemIndeX.setText("" + i);
             item.spinnerX.setAdapter(adapter);
             item.spinnerX.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

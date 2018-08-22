@@ -53,18 +53,18 @@ public class InstructionsActivity extends Activity {
         setContentView(R.layout.activity_instructions);
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
-        slayout = (LinearLayout)findViewById(R.id.slayout);
+        slayout = findViewById(R.id.slayout);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             slayout.setBackgroundColor(Color.parseColor("#ff303030"));
-        getPRO = (Button)findViewById(R.id.getPRO);
-        insGP = (TextView)findViewById(R.id.insGP);
-        InspVer = (TextView)findViewById(R.id.InspVer);
-        textViewBasics = (TextView)findViewById(R.id.textViewBasics);
-        textViewLayout = (TextView)findViewById(R.id.textViewLayout);
-        textViewFastSend = (TextView)findViewById(R.id.textViewFastSend);
-        textViewXtring = (TextView)findViewById(R.id.textViewXtring);
-        textViewAdvRcv = (TextView)findViewById(R.id.textViewAdvRcv);
-        textViewPackRcv = (TextView)findViewById(R.id.textViewPackRcv);
+        getPRO = findViewById(R.id.getPRO);
+        insGP = findViewById(R.id.insGP);
+        InspVer = findViewById(R.id.InspVer);
+        textViewBasics = findViewById(R.id.textViewBasics);
+        textViewLayout = findViewById(R.id.textViewLayout);
+        textViewFastSend = findViewById(R.id.textViewFastSend);
+        textViewXtring = findViewById(R.id.textViewXtring);
+        textViewAdvRcv = findViewById(R.id.textViewAdvRcv);
+        textViewPackRcv = findViewById(R.id.textViewPackRcv);
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionCode = pInfo.versionCode;
