@@ -28,7 +28,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     LinearLayout layout_xtring;
     LinearLayout xtringList;
     ActionBar actionBar;
-    public static int numItems = 8;
+    public static int numItems = 10;
 
     public static final int XTRING_EDITOR = 199;
 
@@ -46,7 +46,12 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             R.id.XtringItem12,R.id.XtringItem13,R.id.XtringItem14,R.id.XtringItem15,R.id.XtringItem16,R.id.XtringItem17,
             R.id.XtringItem18,R.id.XtringItem19,R.id.XtringItem20,R.id.XtringItem21,R.id.XtringItem22,R.id.XtringItem23,
             R.id.XtringItem24,R.id.XtringItem25,R.id.XtringItem26,R.id.XtringItem27,R.id.XtringItem28,R.id.XtringItem29,
-            R.id.XtringItem30,R.id.XtringItem31,R.id.XtringItem32};
+            R.id.XtringItem30,R.id.XtringItem31,R.id.XtringItem32,R.id.XtringItem33,R.id.XtringItem34,R.id.XtringItem35,
+            R.id.XtringItem36,R.id.XtringItem37,R.id.XtringItem38,R.id.XtringItem39,R.id.XtringItem40,R.id.XtringItem41,
+            R.id.XtringItem42,R.id.XtringItem43,R.id.XtringItem44,R.id.XtringItem45,R.id.XtringItem46,R.id.XtringItem47,
+            R.id.XtringItem48,R.id.XtringItem49,R.id.XtringItem50,R.id.XtringItem51,R.id.XtringItem52,R.id.XtringItem53,
+            R.id.XtringItem54,R.id.XtringItem55,R.id.XtringItem56,R.id.XtringItem57,R.id.XtringItem58,R.id.XtringItem59,
+            R.id.XtringItem60,R.id.XtringItem61,R.id.XtringItem62,R.id.XtringItem63,R.id.XtringItem64};
     XtringItem[] listItems;
     XtringItem[] tempListItems;
     GestureDetector gesDetector;
@@ -54,8 +59,9 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     float width = 0;
 
     int comCont = 0;
-    int[] ButtIDs = {R.id.txtButton,R.id.byteButton,R.id.binButton,R.id.hexButton,R.id.shortButton,R.id.intButton,R.id.floatButton};
-    Button[] Buttons = new Button[7];
+    int[] ButtIDs = {R.id.txtButton,R.id.byteButton,R.id.binButton,R.id.hexButton,R.id.shortButton,
+            R.id.intButton,R.id.longButton,R.id.floatButton,R.id.doubleButton};
+    Button[] Buttons = new Button[9];
 
     @Override
     protected void onStop() {
@@ -68,7 +74,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         boolean isPro = getIntent().getBooleanExtra(PrincipalActivity.IS_PRO, false);
         boolean darkTheme = getIntent().getBooleanExtra(PrincipalActivity.theme, true);
         if(isPro)
-            numItems = 32;
+            numItems = 64;
         listItems = new XtringItem[numItems + 1];
         tempListItems = new XtringItem[numItems + 1];
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -81,7 +87,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         layout_xtring = findViewById(R.id.layout_xtring);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 9; i++)
             Buttons[i] = findViewById(ButtIDs[i]);
         xtringList = findViewById(R.id.xtringList);
         for(int i = 1; i <= numItems; i++) {
@@ -94,7 +100,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             item.textViewX = item.linearLayoutX.findViewById(R.id.textViewX);
             item.checkBoxX = item.linearLayoutX.findViewById(R.id.checkBoxX);
             item.disableX = item.linearLayoutX.findViewById(R.id.disableX);
-            item.itemIndeX.setText("" + i);
+            String tempS = "" + i;
+            item.itemIndeX.setText(tempS);
             item.spinnerX.setAdapter(adapter);
             item.spinnerX.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -232,7 +239,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     void enableButtons(boolean en) {
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 9; i++)
             Buttons[i].setEnabled(en);
     }
 
@@ -280,7 +287,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public int checkData() {
         int dataCont = 0;
         try {
-            for(int i = 1; i < numItems; i++) {
+            for(int i = 1; i <= numItems; i++) {
                 if(listItems[i].enabled && !listItems[i].disabled) {
                     String Message = listItems[i].tx;
                     if (!Message.equals("")) {
@@ -314,9 +321,19 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                                 dataCont += 4;
                                 break;
                             }
+                            case (PrincipalActivity.SEND_LONG): {
+                                int Messagen = Integer.parseInt(Message);
+                                dataCont += 8;
+                                break;
+                            }
                             case (PrincipalActivity.SEND_FLOAT): {
                                 float Messagen = Float.parseFloat(Message);
                                 dataCont += 4;
+                                break;
+                            }
+                            case (PrincipalActivity.SEND_DOUBLE): {
+                                float Messagen = Float.parseFloat(Message);
+                                dataCont += 8;
                                 break;
                             }
                         }
@@ -378,9 +395,19 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                                     byteArray.putInt(Messagen);
                                     break;
                                 }
+                                case (PrincipalActivity.SEND_LONG): {
+                                    long Messagen = Long.parseLong(Message);
+                                    byteArray.putLong(Messagen);
+                                    break;
+                                }
                                 case (PrincipalActivity.SEND_FLOAT): {
                                     float Messagen = Float.parseFloat(Message);
                                     byteArray.putFloat(Messagen);
+                                    break;
+                                }
+                                case (PrincipalActivity.SEND_DOUBLE): {
+                                    double Messagen = Double.parseDouble(Message);
+                                    byteArray.putDouble(Messagen);
                                     break;
                                 }
                             }

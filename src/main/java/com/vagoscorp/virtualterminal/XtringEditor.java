@@ -12,7 +12,7 @@ public class XtringEditor extends Activity {
 
     TextView editorXdetails;
 //    EditText newTX;
-    EditText[] newTXs = new EditText[7];
+    EditText[] newTXs = new EditText[9];
 
     int sendType = 0;
     int position = 0;
@@ -33,10 +33,13 @@ public class XtringEditor extends Activity {
         newTXs[3] = findViewById(R.id.newTXhex);
         newTXs[4] = findViewById(R.id.newTXint16);
         newTXs[5] = findViewById(R.id.newTXint32);
-        newTXs[6] = findViewById(R.id.newTXfloat);
+        newTXs[6] = findViewById(R.id.newTXint64);
+        newTXs[7] = findViewById(R.id.newTXfloat);
+        newTXs[8] = findViewById(R.id.newTXdouble);
         setSendType();
         String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
-        editorXdetails.setText("Item" + position + " ( " + sendT[sendType] + " )");
+        String tempS = "Item" + position + " ( " + sendT[sendType] + " )";
+        editorXdetails.setText(tempS);
         newTXs[sendType].setText(txVal);
         newTXs[sendType].selectAll();
         newTXs[sendType].requestFocus();
@@ -76,8 +79,18 @@ public class XtringEditor extends Activity {
 
                         break;
                     }
+                    case (PrincipalActivity.SEND_LONG): {
+                        long Messagen = Long.parseLong(message);
+
+                        break;
+                    }
                     case (PrincipalActivity.SEND_FLOAT): {
                         float Messagen = Float.parseFloat(message);
+
+                        break;
+                    }
+                    case (PrincipalActivity.SEND_DOUBLE): {
+                        double Messagen = Double.parseDouble(message);
 
                         break;
                     }
@@ -103,10 +116,10 @@ public class XtringEditor extends Activity {
     }
 
     public void setSendType() {
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 9; i++)
             newTXs[i].setVisibility(View.GONE);
         newTXs[sendType].setVisibility(View.VISIBLE);
-        switch (sendType) {
+        /*switch (sendType) {
             case(PrincipalActivity.SEND_TXT): {
 //                newTX.setHint(R.string.VagosCORP);
 //                newTX.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -149,7 +162,7 @@ public class XtringEditor extends Activity {
 //                        InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                 break;
             }
-        }
+        }*/
     }
 
 }

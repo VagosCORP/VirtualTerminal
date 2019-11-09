@@ -72,7 +72,8 @@ public class InstructionsActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        InspVer.setText("v" + versionName + " b" + versionCode);
+        String tempString = "v" + versionName + " b" + versionCode;
+        InspVer.setText(tempString);
         if(pro) {
             getPRO.setVisibility(View.GONE);
             insGP.setVisibility(View.GONE);

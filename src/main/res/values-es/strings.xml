@@ -1,64 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="action_settings">Configuración</string>
-    <string name="Button_Conect">Conectar</string>
-    <string name="Button_Conecting">Conectando…</string>
-    <string name="Button_DisConect">Desconectar</string>
-    <string name="BSend">Enviar</string>
-    <string name="NB">Su Dispositivo no cuenta con Bluetooth</string>
-    <string name="SincDev">Dispositivos Sincronizados</string>
-    <string name="EncDev">Dispositivos Encontrados</string>
-    <string name="device_list">Seleccione un Dispositivo</string>
-    <string name="BRX">Borrar RX</string>
-    <string name="BTX">Borrar TX</string>
-    <string name="hello_world">Hola mundo!</string>
-    <string name="Ser_Dat">Datos de Servidor</string>
-    <string name="NoPD">Ningún Dispositivo Sincronizado</string>
-    <string name="set_server">Datos de Conexión</string>
-    <string name="OK">Aceptar</string>
-    <string name="Button_Sel">Iniciar</string>
-    <string name="Sel_W">Cliente WiFi</string>
-    <string name="Sel_BT">Cliente Bluetooth</string>
-    <string name="Sel_Ws">Servidor WiFi</string>
-    <string name="Sel_BTs">Servidor Bluetooth</string>
-    <string name="Clientes">Clientes Inalámbricos</string>
-    <string name="Servidores">Servidores Inalámbricos</string>
-    <string name="EnBT">Activación de Bluetooth Denegada por el Usuario</string>
-    <string name="EnWF">WiFi Deshabilitado</string>
-    <string name="EWF">Espere a que la conexión WiFi sea establecida</string>
-    <string name="BT_Device">Dispositivo Bluetooth</string>
-    <string name="Cancel_Conn">Finalizar Conexión</string>
-    <string name="RCVtype">Tipo de Reception</string>
-    <string name="bothRCV">Recepción Dual</string>
-    <string name="numRCV">Recepción de Bytes</string>
-    <string name="textRCV">Recepción de Texto</string>
-    <string name="commMode">Modo EnvíoRápido</string>
-    <string name="typSend">Tipo de envío</string>
-    <string name="textTyp">Envío de Texto</string>
-    <string name="numFormExc">Formato Numérico Erróneo</string>
-    <string name="Appearance">Apariencia</string>
-    <string name="ComXConstant">Constante</string>
-    <string name="ComXDisable">Ignorar</string>
-    <string name="ComXdeleteItem">Borrar Item</string>
-    <string name="ComXSendX">Enviar</string>
-    <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
-    <string name="updRCV">Recepción de Paquetes</string>
-    <string name="updRate">#Act</string>
-    <string name="shortRcvTyp">Int16 RX</string>
-    <string name="longRcvTyp">Recepciín Int64</string>
-    <string name="intRcvTyp">Int32 RX</string>
-    <string name="floatRcvTyp">Float RX</string>
-    <string name="doubleRcvTyp">Recepcion Double</string>
-    <string name="advTypRCV">Recepción Avanzada</string>
-    <string name="dataString">Cadena de Datos</string>
-    <string name="instruTitle">Instrucciones</string>
-    <string name="doubleRCV">Recepción Double</string>
-    <string name="floatRCV">Recepción Float</string>
-    <string name="intRCV">Recepción Int32</string>
-    <string name="longRCV">Recepción Int64</string>
-    <string name="shortRCV">Recepción Int16</string>
-    <string name="appendCRpLF">Anexar\nCR+LF</string>
     <string name="instructionsBasic">
         - Pulse el botón de información de conexión para cambiar los datos de conexión.\n
         - Pulse el botón Conectar para iniciar/finalizar la conexión.\n
@@ -73,6 +15,7 @@
         *   Iniciar el Modo Xtring.\n
         *   Seleccionar opción de apariencia: Tema Normal o Dark.\n
         - Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú.
+        - En modo Servidor WiFi, el puerto de red debe ser mayor o igual a 1100 para evitar puertos usados por el sistema.
     </string>
     <string name="instructionsAjustesLayout">
         - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.\n
@@ -105,10 +48,10 @@
         *   Los usuarios Pro pueden seleccionar elementos a ignorar durante la operación de envío.
     </string>
     <string name="instructionsAdvRcv">
-        Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16 y 32 bit) y números flotantes (32 bit).\n
-        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio igual a 13.\n
-        *   Entonces envíe los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB).\n
-        *   Y finalmente envíe un Byte de finalización de valor 10.
+        Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16, 32 y 64 bits) y números flotantes (32 y 64 bits).\n
+        *   Requiere que el dispositivo al cuál se conecte, envíe un Byte de inicio con valor = 13.\n
+        *   Luego envíe los bytes de datos en orden de Byte más significativo (MSB) a menos significativo (LSB).\n
+        *   Finalmente envíe un Byte de finalización con valor = 10.
     </string>
     <string name="instructionsPackRcv">
         Operando el modo \'Recepción de Paquetes\': Los nuevos datos recibidos reemplazarán a los antiguos.\n
@@ -118,18 +61,14 @@
         *   Habilita/Deshabilita la recepción de Bytes de ser necesaria mediante el CheckBox.\n
         - El modo \'Recepción de Paquetes\' puede ser mezclado con los modos de recepción avanzada:\n
         *   Primero escoja el modo \'Recepción de Paquetes\'.\n
-        *   Entonces escoja el tipo de recepción avanzada que será interpretado y mostrado.
+        *   Luego escoja el tipo de recepción avanzada que será interpretado y mostrado.
     </string>
     <string name="insGP">
         Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
-        *   Modo EnvíoRápido de 16 botones desplazables.\n
-        *   Modo Xtring de hasta 32 objetos.\n
-        *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.
+        *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.\n
+        *   Modo EnvíoRápido de 32 botones desplazables.\n
+        *   Modo Xtring de hasta 64 objetos.
     </string>
-    <string name="viewInstructions">Ver Instrucciones</string>
-    <string name="NSIAS">No mostrar de nuevo al inicio</string>
-    <string name="close">Cerrar instrucciones</string>
-    <string name="getPRO">Obtener funciones PRO</string>
     <string-array name="sendtypes_array2">
         <item>Texto</item>
         <item>Byte</item>
@@ -137,16 +76,112 @@
         <item>Hexadecimal</item>
         <item>Int 16-bits</item>
         <item>int 32-bits</item>
+        <item>int 64-bits</item>
         <item>Float</item>
+        <item>Double</item>
     </string-array>
-    <string name="title_activity_xtring">Modo Xtring</string>
-    <string name="title_activity_xtring_editor">Editor Xtring</string>
-    <string name="title_activity_instructions">Instrucciones</string>
+
+
+    <string name="hello_world">Hola mundo!</string>
+    <string name="action_settings">Configuración</string>
+
+    <string name="instruTitle">Instrucciones</string>
+    <string name="close">Cerrar instrucciones</string>
+    <string name="dataString">Cadena de Datos</string>
+    <string name="updRate">#Act</string>
+
+    <string name="viewInstructions">Ver Instrucciones</string>
+    <string name="NSIAS">No mostrar de nuevo al inicio</string>
     <string name="Instructions_Basics">Instrucciones Básicas</string>
     <string name="Instructions_Layout">Gestos sobre la interfaz</string>
     <string name="Instructions_FastSend">Modo EnvíoRápido</string>
     <string name="Instructions_AdvRcv">Recepción Avanzada</string>
     <string name="Instructions_PackRcv">Recepción de Paquetes</string>
+    <string name="appendCRpLF">Anexar CR+LF</string>
+    <string name="Appearance">Apariencia</string>
+
+
+    <string name="title_activity_xtring">Modo Xtring</string>
+    <string name="title_activity_xtring_editor">Editor Xtring</string>
+    <string name="title_activity_instructions">Instrucciones</string>
+    <string name="getPRO">Obtener funciones PRO</string>
     <string name="UNProPack">ProKey BetaTest terminado, gracias por participar</string>
+    <string name="commMode">Modo EnvíoRápido</string>
+    <string name="typSend">Tipo de envío</string>
+    <string name="RCVtype">Tipo de Reception</string>
+
+
+
+
+
+    <string name="OK">Aceptar</string>
+    <string name="Button_Conect">Conectar</string>
+    <string name="Button_Conecting">Conectando…</string>
+    <string name="Button_DisConect">Desconectar</string>
+    <string name="BSend">Enviar</string>
+    <string name="NB">Su Dispositivo no cuenta con Bluetooth</string>
+    <string name="SincDev">Dispositivos Sincronizados</string>
+    <string name="EncDev">Dispositivos Encontrados</string>
+    <string name="device_list">Seleccione un Dispositivo</string>
+    <string name="BRX">Borrar RX</string>
+    <string name="BTX">Borrar TX</string>
+    <string name="Ser_Dat">Datos de Servidor</string>
+    <string name="NoPD">Ningún Dispositivo Sincronizado</string>
+    <string name="set_server">Datos de Conexión</string>
+    <string name="Button_Sel">Iniciar</string>
+    <string name="Sel_W">Cliente WiFi</string>
+    <string name="Sel_BT">Cliente Bluetooth</string>
+    <string name="Sel_Ws">Servidor WiFi</string>
+    <string name="Sel_BTs">Servidor Bluetooth</string>
+    <string name="Clientes">Clientes Inalámbricos</string>
+    <string name="Servidores">Servidores Inalámbricos</string>
+    <string name="EnBT">Activación de Bluetooth Denegada por el Usuario</string>
+    <string name="EnWF">WiFi Deshabilitado</string>
+    <string name="EWF">Espere a que la conexión WiFi sea establecida</string>
+    <string name="BT_Device">Dispositivo Bluetooth</string>
+    <string name="Cancel_Conn">Finalizar Conexión</string>
+
+
+
+    <string name="numFormExc">Formato Numérico Erróneo</string>
+    <string name="cThemeToast">Reinicie la aplicación para aplicar los cambios</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="ComXdeleteItem">Borrar Item</string>
+    <string name="ComXSendX">Enviar</string>
+
+    <string name="ComXConstant">Constante</string>
+    <string name="ComXDisable">Ignorar</string>
+
+
+
+
+    <string name="textRCV">Recepción de Texto</string>
+    <string name="numRCV">Recepción de Bytes</string>
+    <string name="shortRCV">Recepción Int16</string>
+    <string name="intRCV">Recepción Int32</string>
+    <string name="longRCV">Recepción Int64</string>
+    <string name="floatRCV">Recepción Float</string>
+    <string name="doubleRCV">Recepción Double</string>
+    <string name="bothRCV">Recepción Dual</string>
+    <string name="updRCV">Recepción de Paquetes</string>
+    <string name="advTypRCV">Recepción Avanzada</string>
+    <string name="IO_Exception_Client">No se pudo conectar a la IP y Puerdo deseado tras 7seg</string>
+    <string name="IO_Exception_Server">No se pudo abrir el puerto deseado, por favor intente con otro</string>
+    <string name="shortServerPort">El puerto de servidor debe ser mayor a 1100</string>
+
 
 </resources>

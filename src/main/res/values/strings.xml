@@ -1,94 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">Virtual Terminal</string>
-    <string name="action_settings">Settings</string>
-    <string name="Button_Conect">Connect</string>
-    <string name="Button_Conecting">Connecting…</string>
-    <string name="Button_DisConect">Disconnect</string>
-    <string name="DS" translatable="false">\n</string>
-    <string name="BSend">Send</string>
-    <string name="Text_RX" translatable="false">RX</string>
-    <string name="VagosCORP" translatable="false">Vagos CORP</string>
-    <string name="Text_TXn" translatable="false">0123456789</string>
-    <string name="Text_TXb" translatable="false">01</string>
-    <string name="Text_TXh" translatable="false">0123456789ABCDEF</string>
-    <string name="Text_TXf" translatable="false">123456789.123456789</string>
-    <string name="NB">Your Device don\'t have Bluetooth</string>
-    <string name="SincDev">Paired Devices</string>
-    <string name="EncDev">Found Devices</string>
-    <string name="device_list">Select a Device</string>
-    <string name="BRX">Erase RX</string>
-    <string name="BTX">Erase TX</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="Ser_Dat">Server Data</string>
-    <string name="NoPD">No Paired Devices</string>
-    <string name="Server_IP" translatable="false">10.0.0.6</string>
-    <string name="Server_Port" translatable="false">2000</string>
-    <string name="OK">Accept</string>
-    <string name="Button_Sel">Start</string>
-    <string name="Sel_W">WiFi Client</string>
-    <string name="Sel_BT">Bluetooth Client</string>
-    <string name="Sel_Ws">WiFi Server</string>
-    <string name="Sel_BTs">Bluetooth Server</string>
-    <string name="set_server">Connection Data</string>
-    <string name="Clientes">Wireless Clients</string>
-    <string name="Servidores">Wireless Servers</string>
-    <string name="EnBT">Bluetooth Activation Denied by User</string>
-    <string name="EnWF">WiFi Disabled</string>
-    <string name="EWF">Wait until WiFi Connection is Established</string>
-    <string name="BT_Device">Bluetooth device</string>
-    <string name="Cancel_Conn">Finish Connection</string>
-    <string name="RCVtype">Reception Type</string>
-    <string name="bothRCV">Dual Reception</string>
-    <string name="numRCV">Bytes Reception</string>
-    <string name="textRCV">Text Reception</string>
-    <string name="commMode">FastSend Mode</string>
-    <string name="commDVal" translatable="false">NO_DAT</string>
-    <string name="typSend">Send Type</string>
-    <string name="numFormExc">Numeric Format Exception</string>
-    <string name="defvalup" translatable="false">255</string>
-    <string name="defvaldwn" translatable="false">0</string>
-    <string name="normalTheme" translatable="false">Light</string>
-    <string name="darkTheme" translatable="false">Dark</string>
-    <string name="Appearance">Theme</string>
-    <string name="ComXConstant">Constant</string>
-    <string name="ComXDisable">Ignore</string>
-    <string name="ComXdeleteItem">Delete Item</string>
-    <string name="ComXSendX">Send</string>
-    <string name="ComXByte" translatable="false">Byte</string>
-    <string name="ComXString" translatable="false">String</string>
-    <string name="ComXBinary" translatable="false">Bin</string>
-    <string name="ComXHexadecimal" translatable="false">Hex</string>
-    <string name="ComXInt16" translatable="false">Int16</string>
-    <string name="ComXInt32" translatable="false">Int32</string>
-    <string name="ComXFloat" translatable="false">Float</string>
-    <string name="cThemeToast">Restart Activity to apply changes</string>
-    <string name="updRCV">Package Reception</string>
-    <string name="shortRCV">Int16 Reception</string>
-    <string name="intRCV">Int32 Reception</string>
-    <string name="longRCV">Int64 Reception</string>
-    <string name="floatRCV">Float Reception</string>
-    <string name="doubleRCV">Double Reception</string>
-    <string name="updRate">#Upd</string>
-    <string name="BRCV" translatable="false">Bytes</string>
-    <string name="shortRcvTyp">Int16 RX</string>
-    <string name="intRcvTyp">Int32 RX</string>
-    <string name="longRcvTyp">Int64 RX</string>
-    <string name="floatRcvTyp">Float RX</string>
-    <string name="doubleRcvTyp">Double RX</string>
-    <string name="textTyp">Text Send</string>
-    <string name="advTypRCV">Advanced Reception</string>
-    <string name="byteRX" translatable="false">Byte RX</string>
-    <string name="shortRX" translatable="false">Int16 RX</string>
-    <string name="intRX" translatable="false">Int32 RX</string>
-    <string name="floatRX" translatable="false">Float RX</string>
-    <string name="Extra_TCOM" translatable="false">TCOM</string>
-    <string name="Extra_TYP" translatable="false">TYPE</string>
-    <string name="Extra_LVL" translatable="false">LEVEL</string>
-    <string name="dataString">DataString</string>
-    <string name="instruTitle">Instructions</string>
-    <string name="appendCRpLF">Append\nCR+LF</string>
     <string name="instructionsBasic">
         - Click on connection info button to change it.\n
         - Click on Connect button to start/stop communication.\n
@@ -103,6 +15,7 @@
         *   Start Xtring Mode.\n
         *   Select appearance options: Normal or Dark theme.\n
         - Tablet users can select the reception options without entering to menu.
+        - In WiFi Server mode, net port must be greater or equal to 1100 to avoid ports used by the system.
     </string>
     <string name="instructionsAjustesLayout">
         - LongClick on Connect button to show/hide ActionBar.\n
@@ -135,7 +48,7 @@
         *   Pro users can select items to ignore during the send operation.
     </string>
     <string name="instructionsAdvRcv">
-        Operating \'Advanced Reception\' types: Receive and show big numbers (16 and 32 bit integers) and float numbers (32 bit).\n
+        Operating \'Advanced Reception\' types: Receive and show big numbers (16, 32 and 64 bit integers) and float numbers (32 and 64 bit).\n
         *   Requires the sender device to send a start byte = 13.\n
         *   Then send the data bytes in order from MSB to LSB.\n
         *   And finally send an end byte = 10.
@@ -152,14 +65,10 @@
     </string>
     <string name="insGP">
         Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
-        *   Scrollable 16 button FastSend Mode.\n
-        *   Scrollable Xtring Mode with up to 32 items.\n
-        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes.
+        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes.\n
+        *   Scrollable 32 button FastSend Mode.\n
+        *   Scrollable Xtring Mode with up to 64 items
     </string>
-    <string name="viewInstructions">View Instructions</string>
-    <string name="NSIAS">Never show again at startup</string>
-    <string name="close">Close instructions</string>
-    <string name="getPRO">Get PRO features</string>
     <string-array name="sendtypes_array" translatable="false">
         <item>T</item>
         <item>#</item>
@@ -167,7 +76,9 @@
         <item>0x</item>
         <item>16#</item>
         <item>32#</item>
+        <item>64#</item>
         <item>F#</item>
+        <item>Dbl#</item>
     </string-array>
     <string-array name="sendtypes_array2">
         <item>Text</item>
@@ -176,16 +87,112 @@
         <item>Hexadecimal</item>
         <item>Int 16-bits</item>
         <item>int 32-bits</item>
+        <item>int 64-bits</item>
         <item>Float</item>
+        <item>Double</item>
     </string-array>
-    <string name="title_activity_xtring">Xtring Mode</string>
-    <string name="title_activity_xtring_editor">XtringEditor</string>
-    <string name="title_activity_instructions">Instructions</string>
+
+    <string name="app_name" translatable="false">Virtual Terminal</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="VagosCORP" translatable="false">Vagos CORP</string>
+    <string name="instruTitle">Instructions</string>
+    <string name="close">Close instructions</string>
+    <string name="dataString">DataString</string>
+    <string name="updRate">#Upd</string>
+    <string name="BRCV" translatable="false">Bytes</string>
+    <string name="viewInstructions">View Instructions</string>
+    <string name="NSIAS">Never show again at startup</string>
     <string name="Instructions_Basics">Basics</string>
     <string name="Instructions_Layout">Layout Gestures</string>
     <string name="Instructions_FastSend">FastSend Mode</string>
     <string name="Instructions_AdvRcv">Advanced Reception</string>
     <string name="Instructions_PackRcv">Package Reception</string>
+    <string name="appendCRpLF">Append CR+LF</string>
+    <string name="Appearance">Theme</string>
+    <string name="normalTheme" translatable="false">Light</string>
+    <string name="darkTheme" translatable="false">Dark</string>
+    <string name="title_activity_xtring">Xtring Mode</string>
+    <string name="title_activity_xtring_editor">XtringEditor</string>
+    <string name="title_activity_instructions">Instructions</string>
+    <string name="getPRO">Get PRO features</string>
     <string name="UNProPack">ProKey BetaTest finished, thank you for participating</string>
+    <string name="commMode">FastSend Mode</string>
+    <string name="typSend">Send Type</string>
+    <string name="RCVtype">Reception Type</string>
+    <string name="DS" translatable="false">\n</string>
+    <string name="defvalup" translatable="false">255</string>
+    <string name="defvaldwn" translatable="false">0</string>
+    <string name="Server_IP" translatable="false">10.0.0.6</string>
+    <string name="Server_Port" translatable="false">2000</string>
+    <string name="OK">Accept</string>
+    <string name="Button_Conect">Connect</string>
+    <string name="Button_Conecting">Connecting…</string>
+    <string name="Button_DisConect">Disconnect</string>
+    <string name="BSend">Send</string>
+    <string name="NB">Your Device do not have Bluetooth</string>
+    <string name="SincDev">Paired Devices</string>
+    <string name="EncDev">Found Devices</string>
+    <string name="device_list">Select a Device</string>
+    <string name="BRX">Erase RX</string>
+    <string name="BTX">Erase TX</string>
+    <string name="Ser_Dat">Server Data</string>
+    <string name="NoPD">No Paired Devices</string>
+    <string name="set_server">Connection Data</string>
+    <string name="Button_Sel">Start</string>
+    <string name="Sel_W">WiFi Client</string>
+    <string name="Sel_BT">Bluetooth Client</string>
+    <string name="Sel_Ws">WiFi Server</string>
+    <string name="Sel_BTs">Bluetooth Server</string>
+    <string name="Clientes">Wireless Clients</string>
+    <string name="Servidores">Wireless Servers</string>
+    <string name="EnBT">Bluetooth Activation Denied by User</string>
+    <string name="EnWF">WiFi Disabled</string>
+    <string name="EWF">Wait until WiFi Connection is Established</string>
+    <string name="BT_Device">Bluetooth device</string>
+    <string name="Cancel_Conn">Finish Connection</string>
+    <string name="Extra_TCOM" translatable="false">TCOM</string>
+    <string name="Extra_TYP" translatable="false">TYPE</string>
+    <string name="Extra_LVL" translatable="false">LEVEL</string>
+    <string name="numFormExc">Numeric Format Exception</string>
+    <string name="cThemeToast">Restart Activity to apply changes</string>
+    <string name="Text_RX" translatable="false">RX</string>
+    <string name="byteRX" translatable="false">Byte RX</string>
+    <string name="shortRX" translatable="false">Int16 RX</string>
+    <string name="intRX" translatable="false">Int32 RX</string>
+    <string name="longRX" translatable="false">Int64 RX</string>
+    <string name="floatRX" translatable="false">Float RX</string>
+    <string name="doubleRX" translatable="false">Double RX</string>
+    <string name="ComXByte" translatable="false">Byte</string>
+    <string name="ComXBinary" translatable="false">Bin</string>
+    <string name="ComXHexadecimal" translatable="false">Hex</string>
+    <string name="ComXInt16" translatable="false">Int16</string>
+    <string name="ComXString" translatable="false">String</string>
+    <string name="ComXInt32" translatable="false">Int32</string>
+    <string name="ComXInt64" translatable="false">Int64</string>
+    <string name="ComXFloat" translatable="false">Float</string>
+    <string name="ComXDouble" translatable="false">Double</string>
+    <string name="ComXdeleteItem">Delete Item</string>
+    <string name="ComXSendX">Send</string>
+    <string name="commDVal" translatable="false">NO_DAT</string>
+    <string name="ComXConstant">Constant</string>
+    <string name="ComXDisable">Ignore</string>
+    <string name="Text_TXn" translatable="false">123456789</string>
+    <string name="Text_TXb" translatable="false">01</string>
+    <string name="Text_TXh" translatable="false">0123456789ABCDEF</string>
+    <string name="Text_TXf" translatable="false">123456789.123456</string>
+    <string name="textRCV">Text Reception</string>
+    <string name="numRCV">Bytes Reception</string>
+    <string name="shortRCV">Int16 Reception</string>
+    <string name="intRCV">Int32 Reception</string>
+    <string name="longRCV">Int64 Reception</string>
+    <string name="floatRCV">Float Reception</string>
+    <string name="doubleRCV">Double Reception</string>
+    <string name="bothRCV">Dual Reception</string>
+    <string name="updRCV">Package Reception</string>
+    <string name="advTypRCV">Advanced Reception</string>
+    <string name="IO_Exception_Client">Failed to Connect to desired IP and Port after 7sec</string>
+    <string name="IO_Exception_Server">Can\'t open desired port, please try another</string>
+    <string name="shortServerPort">Server Port value must be over 1100</string>
 
 </resources>

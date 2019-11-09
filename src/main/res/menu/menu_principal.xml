@@ -28,8 +28,14 @@
                 android:id="@+id/intRcv"
                 android:title="@string/intRCV"/>
             <item
+                android:id="@+id/longRcv"
+                android:title="@string/longRCV"/>
+            <item
                 android:id="@+id/floatRcv"
                 android:title="@string/floatRCV"/>
+            <item
+                android:id="@+id/doubleRcv"
+                android:title="@string/doubleRCV"/>
         </menu>
     </item>
 

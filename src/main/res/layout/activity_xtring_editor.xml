@@ -109,7 +109,31 @@
         </EditText>
 
         <EditText
+            android:id="@+id/newTXint64"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXn"
+            android:visibility="gone"
+            android:inputType="number">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
             android:id="@+id/newTXfloat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/Text_TXf"
+            android:visibility="gone"
+            android:inputType="numberDecimal|numberSigned">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/newTXdouble"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
