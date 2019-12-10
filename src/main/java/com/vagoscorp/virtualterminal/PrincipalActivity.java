@@ -1395,18 +1395,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             try {
                 switch (sendTyp) {
                     case (SEND_TXT): {
+                        String eom = "\r\n";
+                        if(!aCRpLF.isChecked())
+                            eom = "";
                         if(TCOM) {
-                            comunicBT.enviar(message);
-                            if(aCRpLF.isChecked()) {
-                                comunicBT.enviar_Int8(13);
-                                comunicBT.enviar_Int8(10);
-                            }
+                            comunicBT.enviar(message + eom);//???
                         }else {
-                            comunic.enviar(message);
-                            if(aCRpLF.isChecked()) {
-                                comunic.enviar_Int8(13);
-                                comunic.enviar_Int8(10);
-                            }
+                            comunic.enviar(message + eom);//???
                         }
                         break;
                     }
