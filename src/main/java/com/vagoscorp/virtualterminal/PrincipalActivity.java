@@ -473,7 +473,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             SharedPreferences shapre = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = shapre.edit();
             if(TXs[sendTyp].length() > 0) {
-                String message = TXs[sendTyp].getText().toString();
+                String eom = "\r\n";
+                if(!aCRpLF.isChecked())
+                    eom = "";
+                String message = TXs[sendTyp].getText().toString() + eom;
                 try {
                     switch (sendTyp) {
                         case (SEND_TXT): {
