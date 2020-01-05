@@ -1069,6 +1069,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         comunicBT.enviar_ByteArray(newTX);
                     else
                         comunic.enviar_ByteArray(newTX);
+                    boolean XReturn = data.getBooleanExtra(XtringActivity.XRETURN,false);
+                    if(XReturn)
+                        enterXtringMode();
                 }
                 break;
             }

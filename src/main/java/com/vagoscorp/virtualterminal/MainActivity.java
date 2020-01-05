@@ -19,13 +19,13 @@ public class MainActivity extends Activity {
 	Button CW;
 	Button SB;
 	Button SW;
-    TextView serverLabel;
+	TextView proLabel;
 	TextView verLab;
     LinearLayout serverBT;
     LinearLayout serverW;
 	public static final int CLIENT = 1;
 	public static final int SERVER = 2;
-	public static final String VER = "VER";
+	//public static final String VER = "VER";
 	public static final String PRO = "PRO";
 	int isPRO = 2015;
 	int defver = 20150000;
@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		verLab = findViewById(R.id.verLab);
-        serverLabel = findViewById(R.id.serverLabel);
+		proLabel = findViewById(R.id.proLabel);
         serverBT = findViewById(R.id.serverBT);
         serverW = findViewById(R.id.serverW);
 		CB = findViewById(R.id.Sel_BT);
@@ -72,43 +72,39 @@ public class MainActivity extends Activity {
 		verLab.setText(versioning);
 		isPRO = launcherIntent.getIntExtra(PRO, isPRO);
 		pro = shapre.getBoolean(PRO, false);
-		int ver = shapre.getInt(VER, defver);
+		/*int ver = shapre.getInt(VER, defver);
         if(ver != versionCode) {
-			bePRO(false);
+			pro = false;
 			shapreEditor.putInt(VER, versionCode);
-        }
-		if(pro || isPRO > 2015)
-			bePRO(true);
+        }*/
+		pro = checkPro();
 		shapreEditor.putBoolean(PRO, pro);
 		shapreEditor.commit();
-		checkPro();
+		if(pro) {
+			proLabel.setVisibility(View.GONE);
+			serverBT.setVisibility(View.VISIBLE);
+			serverW.setVisibility(View.VISIBLE);
+		}
+	}
+
+	boolean checkPro() {
+		PackageManager manager = getPackageManager();
+		Intent intent = manager.getLaunchIntentForPackage(proPack);
+		Intent intentN = manager.getLaunchIntentForPackage(proNPack);
+		boolean itsPro = false;
+		if(intentN != null)
+			Toast.makeText(this, R.string.UNProPack, Toast.LENGTH_SHORT).show();
+		if(intent != null && !pro && isPRO <= 2015) {
+			startActivity(intent);
+			finish();
+		}else if(intent != null)
+			itsPro = true;
+		return itsPro;
 	}
 
 	public void viewBuild(View view) {
 		String versioning = "v" + versionName + " b" + versionCode;
 		verLab.setText(versioning);
-	}
-
-	void bePRO(boolean isPRO) {
-		int valPRO = View.GONE;
-		if(isPRO)
-			valPRO = View.VISIBLE;
-		serverLabel.setVisibility(valPRO);
-		serverBT.setVisibility(valPRO);
-		serverW.setVisibility(valPRO);
-		pro = isPRO;
-	}
-
-	void checkPro() {
-		PackageManager manager = getPackageManager();
-		Intent intent = manager.getLaunchIntentForPackage(proPack);
-		Intent intentN = manager.getLaunchIntentForPackage(proNPack);
-		if(intentN != null)
-			Toast.makeText(this, R.string.UNProPack, Toast.LENGTH_SHORT).show();
-		if(!pro && intent != null) {
-			startActivity(intent);
-			finish();
-		}
 	}
 
 	public void InitBT(View view) {

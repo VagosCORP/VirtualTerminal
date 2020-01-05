@@ -438,19 +438,19 @@
                         android:onClick="commClick"
                         android:text="@string/commDVal" />
 
+                    <Button
+                        android:id="@+id/comm8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
                     <LinearLayout
                         android:id="@+id/commander"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
-
-                        <Button
-                            android:id="@+id/comm8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
 
                         <Button
                             android:id="@+id/comm9"

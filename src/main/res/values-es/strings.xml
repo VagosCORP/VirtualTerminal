@@ -94,19 +94,19 @@
     <string name="NSIAS">No mostrar de nuevo al inicio</string>
     <string name="Instructions_Basics">Instrucciones Básicas</string>
     <string name="Instructions_Layout">Gestos sobre la interfaz</string>
-    <string name="Instructions_FastSend">Modo EnvíoRápido</string>
+    <string name="Instructions_FastSend">Interface EnvíoRápido</string>
     <string name="Instructions_AdvRcv">Recepción Avanzada</string>
     <string name="Instructions_PackRcv">Recepción de Paquetes</string>
     <string name="appendCRpLF">Anexar CR+LF</string>
     <string name="Appearance">Apariencia</string>
 
 
-    <string name="title_activity_xtring">Modo Xtring</string>
+    <string name="title_activity_xtring">Interfaz Xtring</string>
     <string name="title_activity_xtring_editor">Editor Xtring</string>
     <string name="title_activity_instructions">Instrucciones</string>
     <string name="getPRO">Obtener funciones PRO</string>
     <string name="UNProPack">ProKey BetaTest terminado, gracias por participar</string>
-    <string name="commMode">Modo EnvíoRápido</string>
+    <string name="commMode">Interfaz de EnvíoRápido</string>
     <string name="typSend">Tipo de envío</string>
     <string name="RCVtype">Tipo de Reception</string>
 
@@ -182,6 +182,8 @@
     <string name="IO_Exception_Client">No se pudo conectar a la IP y Puerdo deseado tras 7seg</string>
     <string name="IO_Exception_Server">No se pudo abrir el puerto deseado, por favor intente con otro</string>
     <string name="shortServerPort">El puerto de servidor debe ser mayor a 1100</string>
+    <string name="xReturn">Retornar tras envío</string>
+    <string name="disabled">Deshabilitados</string>
 
 
 </resources>

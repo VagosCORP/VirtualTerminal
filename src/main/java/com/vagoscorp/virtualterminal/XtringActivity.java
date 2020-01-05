@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public static final int XTRING_EDITOR = 199;
 
     public static final String NEWTX = "NEWTX";
+    public static final String XRETURN = "XRETURN";
     public static final String POS = "POS";
     public static final String SENDTYPE = "SENDTYPE";
     public static final String sendTypeX = "sendTypeX";
@@ -62,6 +64,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     int[] ButtIDs = {R.id.txtButton,R.id.byteButton,R.id.binButton,R.id.hexButton,R.id.shortButton,
             R.id.intButton,R.id.longButton,R.id.floatButton,R.id.doubleButton};
     Button[] Buttons = new Button[9];
+    CheckBox XReturn;
+    boolean xReturn = false;
 
     @Override
     protected void onStop() {
@@ -90,6 +94,16 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         for(int i = 0; i < 9; i++)
             Buttons[i] = findViewById(ButtIDs[i]);
         xtringList = findViewById(R.id.xtringList);
+        XReturn = findViewById(R.id.xReturn);
+        if(isPro)
+            XReturn.setVisibility(View.VISIBLE);
+        XReturn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                xReturn = isChecked;
+            }
+        });
+        restore(0);
         for(int i = 1; i <= numItems; i++) {
             final XtringItem item = new XtringItem(this, i);
             item.linearLayoutX = findViewById(ListIDs[i]);
@@ -153,8 +167,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     public void restore(int n) {
+        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         if(n > 0) {
-            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
             boolean enX = shapre.getBoolean(enabledX + n, false);
             if (enX) {
                 boolean disX = shapre.getBoolean(disabledX + n, false);
@@ -172,12 +186,16 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             }
             if(comCont == numItems)
                 enableButtons(false);
+        }else if(n == 0) {
+            xReturn = shapre.getBoolean(XRETURN, false);
+            XReturn.setChecked(xReturn);
         }
     }
 
     public void saveAll() {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = shapre.edit();
+        editor.putBoolean(XRETURN, xReturn);
         for(int n = 1; n <= numItems; n++) {
             editor.putInt(sendTypeX + n, listItems[n].sendType);
             editor.putString(valTXX + n, listItems[n].tx);
@@ -435,6 +453,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             saveAll();
             Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
             resIntent.putExtra(NEWTX, tempData.data);
+            resIntent.putExtra(XRETURN, xReturn);
             setResult(Activity.RESULT_OK, resIntent);
             exitXtring();
         }

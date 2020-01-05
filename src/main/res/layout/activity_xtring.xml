@@ -573,6 +573,13 @@
         android:layout_height="wrap_content"
         android:gravity="end">
 
+        <CheckBox
+            android:id="@+id/xReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/xReturn" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -586,6 +593,7 @@
             android:text="@string/ComXSendX"
             android:id="@+id/SendX"
             android:onClick="enviarX" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -7,25 +7,25 @@
         - Use the TX Spinner to select what kind of data you want to send.\n
         - Write on the TX input the information you want to send.\n
         - On Text Mode, user can enable to append CR+LF during send operation.\n
-        - If enabled, \'append CR+LF\' bytes will be sent even if TX input is void.\n
+        - If enabled, \'append CR+LF\' bytes will be sent even if TX input is empty.\n
         - Use the app menu to access other options:\n
         *   Select how to show and manage the incoming data \'RX\'.\n
-        *   Select advanced numeric reception options (int16, int32, float).\n
-        *   Start/Stop FastSend Mode.\n
-        *   Start Xtring Mode.\n
-        *   Select appearance options: Normal or Dark theme.\n
+        *   Select advanced numeric reception options (int16, int32, float, double).\n
+        *   Start/Stop FastSend Interface.\n
+        *   Start Xtring Interface.\n
+        *   Select appearance options: Light or Dark theme.\n
         - Tablet users can select the reception options without entering to menu.
         - In WiFi Server mode, net port must be greater or equal to 1100 to avoid ports used by the system.
     </string>
     <string name="instructionsAjustesLayout">
         - LongClick on Connect button to show/hide ActionBar.\n
         - Slide the ActionBar Down/Up to respectively Show/Hide it.\n
-        - When connected, LongClick on \'Send\' button to start/stop FastSend Mode without entering to menu.\n
-        - Start/Stop FastSend Mode by Sliding respectively from/to the right side of the screen.\n
+        - When connected, LongClick on \'Send\' button to Show/Hide FastSend Interface without entering to menu.\n
+        - Also can Show/Hide FastSend Interface by Sliding respectively from/to the right side of the screen.\n
         - Start Xtring mode by sliding from left side of the screen to the right.
     </string>
     <string name="instructionsFastSend">
-        Operating \'FastSend Mode\': Save data in to buttons to send it with a single click.\n
+        Operating \'FastSend Interface\': Save data in to buttons to send it with a single click.\n
         *   Select from TX Spinner the kind of data you want to save on a FastSend Button.\n
         *   Write data on the TX input.\n
         *   Start FastSend mode (if not running yet).\n
@@ -33,22 +33,25 @@
         *   Simple Click on FastSend Button to automatically send the saved data.\n
         *   If TX input is empty, LongClick on a FastSend Button will erase saved data.\n
         *   FastSend Buttons will show type and data you just save.
+        *   Pro users have up to 32 FastSend Buttons instead of 8.
     </string>
     <string name="instructionsXtring">
-        Operating \'Xtring Mode\': Save an organized group of various types of data to send it as a package.\n
+        Operating \'Xtring Interface\': Save an organized group of various types of data to send it as a package.\n
         *   Press the data type button you want to add to the package.\n
         *   Write data you want for that item into the just appeared TextInput.\n
         *   If you want to change the data type, just Select from Spinner the kind of data you want to use.\n
         *   You can define constant items to avoid replacing precious information\n
         *   You can delete the last package item by pressing the \'Delete Item\' Button.\n
-        *   If some item data is empty \'NO_DAT\' the package could not be sent and you will be prompted to write into the first dataless item.\n
+        *   If some item data is empty \'NO_DAT\' the package could not be sent and you will be prompted to write into the first empty item.\n
         *   Press the Send Button to start the package transmission and return to the Principal Screen.\n
         *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left.\n
         *   The package template and the actual values will be automatically saved on device memory.\n
+        *   Pro users have up to 64 Xtring Items instead of 10.
         *   Pro users can select items to ignore during the send operation.
+        *   Pro users can return automatically to the Xtring screen after sending the package.
     </string>
     <string name="instructionsAdvRcv">
-        Operating \'Advanced Reception\' types: Receive and show big numbers (16, 32 and 64 bit integers) and float numbers (32 and 64 bit).\n
+        Operating \'Advanced Reception\' types: Receive and show big numbers (16, 32 and 64 bit integers) and float, double numbers (32 and 64 bit).\n
         *   Requires the sender device to send a start byte = 13.\n
         *   Then send the data bytes in order from MSB to LSB.\n
         *   And finally send an end byte = 10.
@@ -65,9 +68,9 @@
     </string>
     <string name="insGP">
         Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
-        *   The possibility to use Virtual Terminal as Server in WiFi and Bluetooth working modes.\n
-        *   Scrollable 32 button FastSend Mode.\n
-        *   Scrollable Xtring Mode with up to 64 items
+        *   Server working mode for WiFi and Bluetooth, letting you debug other communication apps or exchange data with clients connected to your device.\n
+        *   Enhanced 32 button FastSend Interface.\n
+        *   Enhanced Xtring Interface with up to 64 items and new options.
     </string>
     <string-array name="sendtypes_array" translatable="false">
         <item>T</item>
@@ -105,19 +108,19 @@
     <string name="NSIAS">Never show again at startup</string>
     <string name="Instructions_Basics">Basics</string>
     <string name="Instructions_Layout">Layout Gestures</string>
-    <string name="Instructions_FastSend">FastSend Mode</string>
+    <string name="Instructions_FastSend">FastSend Interface</string>
     <string name="Instructions_AdvRcv">Advanced Reception</string>
     <string name="Instructions_PackRcv">Package Reception</string>
     <string name="appendCRpLF">Append CR+LF</string>
     <string name="Appearance">Theme</string>
     <string name="normalTheme" translatable="false">Light</string>
     <string name="darkTheme" translatable="false">Dark</string>
-    <string name="title_activity_xtring">Xtring Mode</string>
+    <string name="title_activity_xtring">Xtring Interface</string>
     <string name="title_activity_xtring_editor">XtringEditor</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="getPRO">Get PRO features</string>
     <string name="UNProPack">ProKey BetaTest finished, thank you for participating</string>
-    <string name="commMode">FastSend Mode</string>
+    <string name="commMode">FastSend Interface</string>
     <string name="typSend">Send Type</string>
     <string name="RCVtype">Reception Type</string>
     <string name="DS" translatable="false">\n</string>
@@ -194,5 +197,7 @@
     <string name="IO_Exception_Client">Failed to Connect to desired IP and Port after 7sec</string>
     <string name="IO_Exception_Server">Can\'t open desired port, please try another</string>
     <string name="shortServerPort">Server Port value must be over 1100</string>
+    <string name="xReturn">Return after Send</string>
+    <string name="disabled">Disabled</string>
 
 </resources>

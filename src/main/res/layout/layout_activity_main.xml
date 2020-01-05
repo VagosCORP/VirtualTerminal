@@ -71,12 +71,26 @@
             android:text="@string/Button_Sel" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/serverLabel"
+    <LinearLayout
+        android:id="@+id/serverLabelx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Servidores"
-        android:visibility="gone" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/serverLabel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/Servidores" />
+
+        <TextView
+            android:id="@+id/proLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disabled" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/serverBT"
