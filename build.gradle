@@ -16,7 +16,7 @@ android {
         targetSdkVersion 29
         versionName '1.2.22'
         signingConfig signingConfigs.Sebasu
-        versionCode 20200131
+        versionCode 20200228
     }
     buildTypes {
         release {
