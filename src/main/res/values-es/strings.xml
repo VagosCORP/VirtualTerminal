@@ -184,6 +184,7 @@
     <string name="shortServerPort">El puerto de servidor debe ser mayor a 1100</string>
     <string name="xReturn">Retornar tras envío</string>
     <string name="disabled">Deshabilitados</string>
+    <string name="textCopied">Texto Copiado!</string>
 
 
 </resources>

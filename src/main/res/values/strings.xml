@@ -199,5 +199,6 @@
     <string name="shortServerPort">Server Port value must be over 1100</string>
     <string name="xReturn">Return after Send</string>
     <string name="disabled">Disabled</string>
+    <string name="textCopied">Text Copied!</string>
 
 </resources>

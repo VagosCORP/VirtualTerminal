@@ -1,6 +1,5 @@
 package com.vagoscorp.virtualterminal;
 
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -404,7 +403,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         if(ver != versionCode) {
             SharedPreferences.Editor editor = shapre.edit();
             editor.putInt(VER, versionCode);
-            editor.commit();
+            editor.apply();
             showInstructions();
         }else if(!checked)
             showInstructions();
@@ -446,6 +445,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
         },1,10);
         setupActionBar();
+        //registerForContextMenu(RX);
+        //registerForContextMenu(RXn);
 	}
 
     @Override
@@ -558,25 +559,38 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
             editor.putBoolean(commT + n, N);
             editor.putInt(commET + n, commType);
-            editor.commit();
+            editor.apply();
             UcommUI();
         }
         return true;
     }
-	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
 	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            actionBar = getActionBar();
-			if(actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                if(abHidden && pro)
-                    actionBar.hide();
-            }
-		}
+        actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if(abHidden && pro)
+                actionBar.hide();
+        }
 	}
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /*@Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        //user has long pressed your TextView
+        //menu.add(0, v.getId(), 0, "Copied");
+        Toast.makeText(this, getText(R.string.textCopied), Toast.LENGTH_SHORT).show();
+
+        //cast the received View to TextView so that you can get its text
+        TextView yourTextView = (TextView) v;
+
+        //place your TextView's text in clipboard
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            //clipboard.setText(yourTextView.getText());
+            clipboard.setPrimaryClip(ClipData.newPlainText(getText(R.string.textCopied), yourTextView.getText()));
+        }
+    }*/
+
     private void hideActionBar() {
         if(actionBar != null && pro) {
             SharedPreferences shapre = getPreferences(MODE_PRIVATE);
@@ -589,7 +603,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 abHidden = false;
             }
             editor.putBoolean(abH, abHidden);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -850,7 +864,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
                 editor.putBoolean(theme, true);
-                editor.commit();
+                editor.apply();
                 Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -858,7 +872,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = shapre.edit();
                 editor.putBoolean(theme, false);
-                editor.commit();
+                editor.apply();
                 Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -1010,7 +1024,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = shapre.edit();
                     editor.putInt(indev, index);
-                    editor.commit();
+                    editor.apply();
                     mDevice = BondedDevices[index];
                     String tempString = mDevice.getName() + "\n" + mDevice.getAddress();
                     Chan_Ser/*SD*/.setText(tempString);
@@ -1040,7 +1054,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     SharedPreferences.Editor editor = shapre.edit();
                     editor.putString(SI, serverip);
                     editor.putInt(SP, serverport);
-                    editor.commit();
+                    editor.apply();
                     String tempString = "";
                     if (SC == MainActivity.CLIENT) {
                         tempString = serverip + ":" + serverport;
@@ -1058,7 +1072,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     SharedPreferences shapre = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = shapre.edit();
                     editor.putBoolean(PrincipalActivity.SIoS, checked);
-                    editor.commit();
+                    editor.apply();
                 }
                 break;
             }
