@@ -181,10 +181,10 @@
     <string name="advTypRCV">Recepción Avanzada</string>
     <string name="IO_Exception_Client">No se pudo conectar a la IP y Puerdo deseado tras 7seg</string>
     <string name="IO_Exception_Server">No se pudo abrir el puerto deseado, por favor intente con otro</string>
-    <string name="shortServerPort">El puerto de servidor debe ser mayor a 1100</string>
+    <string name="shortServerPort">Un Puerto de servidor inferior a 1100 podría estar reservado por el sistema</string>
     <string name="xReturn">Retornar tras envío</string>
     <string name="disabled">Deshabilitados</string>
     <string name="textCopied">Texto Copiado!</string>
-
+    <string name="EndianSelect">Selección de Endian</string>
 
 </resources>

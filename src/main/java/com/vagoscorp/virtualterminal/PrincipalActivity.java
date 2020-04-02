@@ -1,5 +1,6 @@
 package com.vagoscorp.virtualterminal;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -66,38 +67,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     CheckBox UpdN;
     CheckBox aCRpLF;
 
-    Button comm1;
-    Button comm2;
-    Button comm3;
-    Button comm4;
-    Button comm5;
-    Button comm6;
-    Button comm7;
-    Button comm8;
-    Button comm9;
-    Button comm10;
-    Button comm11;
-    Button comm12;
-    Button comm13;
-    Button comm14;
-    Button comm15;
-    Button comm16;
-    Button comm17;
-    Button comm18;
-    Button comm19;
-    Button comm20;
-    Button comm21;
-    Button comm22;
-    Button comm23;
-    Button comm24;
-    Button comm25;
-    Button comm26;
-    Button comm27;
-    Button comm28;
-    Button comm29;
-    Button comm30;
-    Button comm31;
-    Button comm32;
+    Button[] commX;
+    int[] commIDs = {R.id.comm1,R.id.comm2,R.id.comm3,R.id.comm4,R.id.comm5,R.id.comm6,R.id.comm7,
+            R.id.comm8,R.id.comm9,R.id.comm10,R.id.comm11,R.id.comm12,R.id.comm13,R.id.comm14,
+            R.id.comm15,R.id.comm16,R.id.comm17,R.id.comm18,R.id.comm19,R.id.comm20,R.id.comm21,
+            R.id.comm22,R.id.comm23,R.id.comm24,R.id.comm25,R.id.comm26,R.id.comm27,R.id.comm28,
+            R.id.comm29,R.id.comm30,R.id.comm31,R.id.comm32};
 
     ActionBar actionBar;
 
@@ -224,7 +199,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     Timer timy = new Timer();
     int mCount = 0;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         abHidden = shapre.getBoolean(abH, false);
@@ -289,6 +264,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         byteRCV = findViewById(R.id.byteRCV);
 		Conect =  findViewById(R.id.Conect);
 		Chan_Ser = findViewById(R.id.chan_ser);
+        buttSetAllCaps(Chan_Ser);
 		Send = findViewById(R.id.Send);
         scro = findViewById(R.id.scro);
         scron = findViewById(R.id.scron);
@@ -326,70 +302,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
             }
         });
-        comm1  = findViewById(R.id.comm1);
-        comm2  = findViewById(R.id.comm2);
-        comm3  = findViewById(R.id.comm3);
-        comm4  = findViewById(R.id.comm4);
-        comm5  = findViewById(R.id.comm5);
-        comm6  = findViewById(R.id.comm6);
-        comm7  = findViewById(R.id.comm7);
-        comm8  = findViewById(R.id.comm8);
-        comm9  = findViewById(R.id.comm9);
-        comm10 = findViewById(R.id.comm10);
-        comm11 = findViewById(R.id.comm11);
-        comm12 = findViewById(R.id.comm12);
-        comm13 = findViewById(R.id.comm13);
-        comm14 = findViewById(R.id.comm14);
-        comm15 = findViewById(R.id.comm15);
-        comm16 = findViewById(R.id.comm16);
-        comm17 = findViewById(R.id.comm17);
-        comm18 = findViewById(R.id.comm18);
-        comm19 = findViewById(R.id.comm19);
-        comm20 = findViewById(R.id.comm20);
-        comm21 = findViewById(R.id.comm21);
-        comm22 = findViewById(R.id.comm22);
-        comm23 = findViewById(R.id.comm23);
-        comm24 = findViewById(R.id.comm24);
-        comm25 = findViewById(R.id.comm25);
-        comm26 = findViewById(R.id.comm26);
-        comm27 = findViewById(R.id.comm27);
-        comm28 = findViewById(R.id.comm28);
-        comm29 = findViewById(R.id.comm29);
-        comm30 = findViewById(R.id.comm30);
-        comm31 = findViewById(R.id.comm31);
-        comm32 = findViewById(R.id.comm32);
-        comm1.setOnLongClickListener(this);
-        comm2.setOnLongClickListener(this);
-        comm3.setOnLongClickListener(this);
-        comm4.setOnLongClickListener(this);
-        comm5.setOnLongClickListener(this);
-        comm6.setOnLongClickListener(this);
-        comm7.setOnLongClickListener(this);
-        comm8.setOnLongClickListener(this);
-        comm9.setOnLongClickListener(this);
-        comm10.setOnLongClickListener(this);
-        comm11.setOnLongClickListener(this);
-        comm12.setOnLongClickListener(this);
-        comm13.setOnLongClickListener(this);
-        comm14.setOnLongClickListener(this);
-        comm15.setOnLongClickListener(this);
-        comm16.setOnLongClickListener(this);
-        comm17.setOnLongClickListener(this);
-        comm18.setOnLongClickListener(this);
-        comm19.setOnLongClickListener(this);
-        comm20.setOnLongClickListener(this);
-        comm21.setOnLongClickListener(this);
-        comm22.setOnLongClickListener(this);
-        comm23.setOnLongClickListener(this);
-        comm24.setOnLongClickListener(this);
-        comm25.setOnLongClickListener(this);
-        comm26.setOnLongClickListener(this);
-        comm27.setOnLongClickListener(this);
-        comm28.setOnLongClickListener(this);
-        comm29.setOnLongClickListener(this);
-        comm30.setOnLongClickListener(this);
-        comm31.setOnLongClickListener(this);
-        comm32.setOnLongClickListener(this);
+        commX = new Button[32];
+        for(int i = 0; i < 32; i++) {
+            commX[i] = findViewById(commIDs[i]);
+            commX[i].setOnLongClickListener(this);
+            buttSetAllCaps(commX[i]);
+        }
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
         try {
@@ -448,6 +366,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         //registerForContextMenu(RX);
         //registerForContextMenu(RXn);
 	}
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public void buttSetAllCaps(Button b) {
+        b.setAllCaps(false);
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event){
@@ -804,8 +727,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //            item.setTitle(R.string.commMode);
 //            commScroll.setVisibility(View.GONE);
             commBase.setVisibility(View.GONE);
-            if (pro)
-                commander.setVisibility(View.GONE);
+            commander.setVisibility(View.GONE);
         }
     }
 
@@ -881,12 +803,24 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //                Toast.makeText(this, R.string.noPro, Toast.LENGTH_LONG).show();
                 return true;
             }
-//            case R.id.endCOM: {
-//                comunic.Detener_Actividad();
-//                return true;
-//            }
+            case R.id.bigEndian: {
+                changeEndian(true);
+                return true;
+            }
+            case R.id.littleEndian: {
+                changeEndian(false);
+                return true;
+            }
+            /*case R.id.endCOM: {
+                comunic.Detener_Actividad();
+                return true;
+            }*/
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changeEndian(boolean big) {
+
     }
 
     private void enterXtringMode() {
@@ -1060,6 +994,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         tempString = serverip + ":" + serverport;
                         Chan_Ser/*SD*/.setText(tempString);
                     }else if(SC == MainActivity.SERVER) {
+                        if(serverport < 1100)
+                            Toast.makeText(this, R.string.shortServerPort, Toast.LENGTH_SHORT).show();
                         tempString = myIP + ":" + serverport;
                         Chan_Ser/*SD*/.setText(tempString);
                     }
@@ -1102,137 +1038,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 	
 	int nComm(View view) {
-		int num = 0;
-		switch (view.getId()) {
-		case R.id.comm1:{
-			num = 1;
-			break;
-		}
-		case R.id.comm2:{
-			num = 2;
-			break;
-		}
-		case R.id.comm3:{
-			num = 3;
-			break;
-		}
-		case R.id.comm4:{
-			num = 4;
-			break;
-		}
-		case R.id.comm5:{
-			num = 5;
-			break;
-		}
-		case R.id.comm6:{
-			num = 6;
-			break;
-		}
-		case R.id.comm7:{
-			num = 7;
-			break;
-		}
-		case R.id.comm8:{
-			num = 8;
-			break;
-		}
-		case R.id.comm9:{
-			num = 9;
-			break;
-		}
-		case R.id.comm10:{
-			num = 10;
-			break;
-		}
-		case R.id.comm11:{
-			num = 11;
-			break;
-						}
-		case R.id.comm12:{
-			num = 12;
-			break;
-		}
-        case R.id.comm13:{
-            num = 13;
-            break;
+        int num = 0;
+		for(int i = 0; i < 32; i++) {
+		    if(view.getId() == commIDs[i]) {
+                num = i + 1;
+                break;
+            }
         }
-        case R.id.comm14:{
-            num = 14;
-            break;
-        }
-        case R.id.comm15:{
-            num = 15;
-            break;
-        }
-        case R.id.comm16:{
-            num = 16;
-            break;
-        }
-        case R.id.comm17:{
-            num = 17;
-            break;
-        }
-        case R.id.comm18:{
-            num = 18;
-            break;
-        }
-        case R.id.comm19:{
-            num = 19;
-            break;
-        }
-        case R.id.comm20:{
-            num = 20;
-            break;
-        }
-        case R.id.comm21:{
-            num = 21;
-            break;
-        }
-        case R.id.comm22:{
-            num = 22;
-            break;
-        }
-        case R.id.comm23:{
-            num = 23;
-            break;
-        }
-        case R.id.comm24:{
-            num = 24;
-            break;
-        }
-        case R.id.comm25:{
-            num = 25;
-            break;
-        }
-        case R.id.comm26:{
-            num = 26;
-            break;
-        }
-        case R.id.comm27:{
-            num = 27;
-            break;
-        }
-        case R.id.comm28:{
-            num = 28;
-            break;
-        }
-        case R.id.comm29:{
-            num = 29;
-            break;
-        }
-        case R.id.comm30:{
-            num = 30;
-            break;
-        }
-        case R.id.comm31:{
-            num = 31;
-            break;
-        }
-        case R.id.comm32:{
-            num = 32;
-            break;
-        }
-		}
 		return num;
 	}
 	
@@ -1243,49 +1055,38 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             int commType = shapre.getInt(commET + n, COMMT_STRING);
             boolean commN = shapre.getBoolean(commT + n, defBcomm);
             switch(commType) {
-                case(COMMT_INT8): {
+                case(COMMT_INT8):
                     if(TCOM)
                         comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                     break;
-                }
-                case(COMMT_INT16): {
+                case(COMMT_INT16):
                     if(TCOM)
                         comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                     break;
-                }
-                case(COMMT_INT32): {
+                case(COMMT_INT32):
                     if(TCOM)
                         comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                     else
                         comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                     break;
-                }
-                case(COMMT_INT64): {
+                case(COMMT_INT64): // Fallthrough
+                case(COMMT_DOUBLE):
                     if(TCOM)
                         comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
                     else
                         comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
                     break;
-                }
-                case(COMMT_FLOAT): {
+                case(COMMT_FLOAT):
                     if(TCOM)
                         comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
                     else
                         comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
                     break;
-                }
-                case(COMMT_DOUBLE): {
-                    if(TCOM)
-                        comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                    break;
-                }
-                default: {
+                default:
                     if (!commN){
                         if (TCOM)
                             comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
@@ -1297,45 +1098,16 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         else
                             comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                     }
-                }
             }
 		}
 	}
 	
 	void UcommUI() {
 		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-		comm1.setText(shapre.getString(commN + 1, getResources().getString(R.string.commDVal)));
-		comm2.setText(shapre.getString(commN + 2, getResources().getString(R.string.commDVal)));
-		comm3.setText(shapre.getString(commN + 3, getResources().getString(R.string.commDVal)));
-		comm4.setText(shapre.getString(commN + 4, getResources().getString(R.string.commDVal)));
-		comm5.setText(shapre.getString(commN + 5, getResources().getString(R.string.commDVal)));
-		comm6.setText(shapre.getString(commN + 6, getResources().getString(R.string.commDVal)));
-		comm7.setText(shapre.getString(commN + 7, getResources().getString(R.string.commDVal)));
-		comm8.setText(shapre.getString(commN + 8, getResources().getString(R.string.commDVal)));
-		comm9.setText(shapre.getString(commN + 9, getResources().getString(R.string.commDVal)));
-		comm10.setText(shapre.getString(commN + 10, getResources().getString(R.string.commDVal)));
-		comm11.setText(shapre.getString(commN + 11, getResources().getString(R.string.commDVal)));
-		comm12.setText(shapre.getString(commN + 12, getResources().getString(R.string.commDVal)));
-        comm13.setText(shapre.getString(commN + 13, getResources().getString(R.string.commDVal)));
-        comm14.setText(shapre.getString(commN + 14, getResources().getString(R.string.commDVal)));
-        comm15.setText(shapre.getString(commN + 15, getResources().getString(R.string.commDVal)));
-        comm16.setText(shapre.getString(commN + 16, getResources().getString(R.string.commDVal)));
-        comm17.setText(shapre.getString(commN + 17, getResources().getString(R.string.commDVal)));
-        comm18.setText(shapre.getString(commN + 18, getResources().getString(R.string.commDVal)));
-        comm19.setText(shapre.getString(commN + 19, getResources().getString(R.string.commDVal)));
-        comm20.setText(shapre.getString(commN + 20, getResources().getString(R.string.commDVal)));
-        comm21.setText(shapre.getString(commN + 21, getResources().getString(R.string.commDVal)));
-        comm22.setText(shapre.getString(commN + 22, getResources().getString(R.string.commDVal)));
-        comm23.setText(shapre.getString(commN + 23, getResources().getString(R.string.commDVal)));
-        comm24.setText(shapre.getString(commN + 24, getResources().getString(R.string.commDVal)));
-        comm25.setText(shapre.getString(commN + 25, getResources().getString(R.string.commDVal)));
-        comm26.setText(shapre.getString(commN + 26, getResources().getString(R.string.commDVal)));
-        comm27.setText(shapre.getString(commN + 27, getResources().getString(R.string.commDVal)));
-        comm28.setText(shapre.getString(commN + 28, getResources().getString(R.string.commDVal)));
-        comm29.setText(shapre.getString(commN + 29, getResources().getString(R.string.commDVal)));
-        comm30.setText(shapre.getString(commN + 30, getResources().getString(R.string.commDVal)));
-        comm31.setText(shapre.getString(commN + 31, getResources().getString(R.string.commDVal)));
-        comm32.setText(shapre.getString(commN + 32, getResources().getString(R.string.commDVal)));
+		for(int i = 0; i < 32; i++) {
+		    int num = i + 1;
+            commX[i].setText(shapre.getString(commN + num, getResources().getString(R.string.commDVal)));
+        }
 	}
 
 	public void Chan_Ser(View view) {

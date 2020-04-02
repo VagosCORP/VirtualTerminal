@@ -177,7 +177,7 @@
     <string name="ComXDouble" translatable="false">Double</string>
     <string name="ComXdeleteItem">Delete Item</string>
     <string name="ComXSendX">Send</string>
-    <string name="commDVal" translatable="false">NO_DAT</string>
+    <string name="commDVal" translatable="false">NoDat</string>
     <string name="ComXConstant">Constant</string>
     <string name="ComXDisable">Ignore</string>
     <string name="Text_TXn" translatable="false">123456789</string>
@@ -196,9 +196,12 @@
     <string name="advTypRCV">Advanced Reception</string>
     <string name="IO_Exception_Client">Failed to Connect to desired IP and Port after 7sec</string>
     <string name="IO_Exception_Server">Can\'t open desired port, please try another</string>
-    <string name="shortServerPort">Server Port value must be over 1100</string>
+    <string name="shortServerPort">Server Port lower than 1100 could be system reserved</string>
     <string name="xReturn">Return after Send</string>
     <string name="disabled">Disabled</string>
     <string name="textCopied">Text Copied!</string>
+    <string name="EndianSelect">Endian Selection</string>
+    <string name="LittleEndian" translatable="false">LittleEndian</string>
+    <string name="BigEndian" translatable="false">BigEndian</string>
 
 </resources>

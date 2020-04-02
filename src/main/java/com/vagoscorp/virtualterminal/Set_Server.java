@@ -32,7 +32,8 @@ public class Set_Server extends Activity {
 	protected void onStart() {
 		super.onStart();
 		Server_IP.setText(IP);
-		Server_Port.setText(Port + "");
+		String tempS = Port + "";
+		Server_Port.setText(tempS);
 		if(snip)
 			Server_IP.setVisibility(View.GONE);
 	}
@@ -40,13 +41,7 @@ public class Set_Server extends Activity {
 	public void Cambiar(View view) {
 		final String SIP = Server_IP.getText().toString();
         try {
-        	int tempP = Integer.parseInt(Server_Port.getText().toString());
-			if(tempP < 1100) {
-				Toast.makeText(Set_Server.this, R.string.shortServerPort, Toast.LENGTH_SHORT).show();
-				tempP = 1100;
-			}
-            final int SPort = tempP;
-
+			final int SPort = Integer.parseInt(Server_Port.getText().toString());
             Intent result = new Intent(PrincipalActivity.RESULT_ACTION);
             result.putExtra(PrincipalActivity.NSI, SIP);
             result.putExtra(PrincipalActivity.NSP, SPort);

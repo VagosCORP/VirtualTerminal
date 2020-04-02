@@ -21,7 +21,7 @@
             android:text="@string/ComXByte"
             android:id="@+id/byteButton"
             android:layout_weight="1"
-            android:onClick="addItem" />
+            android:onClick="addItem"/>
 
         <Button
             android:layout_width="0dp"

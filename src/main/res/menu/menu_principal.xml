@@ -50,8 +50,23 @@
         android:title="@string/title_activity_xtring"/>
 
     <item
-        android:id="@+id/visual_settings"
+        android:id="@+id/endian"
         android:orderInCategory="4"
+        android:visible="false"
+        android:title="@string/EndianSelect">
+        <menu>
+            <item
+                android:id="@+id/bigEndian"
+                android:title="@string/BigEndian"/>
+            <item
+                android:id="@+id/littleEndian"
+                android:title="@string/LittleEndian"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/visual_settings"
+        android:orderInCategory="5"
         android:title="@string/Appearance">
         <menu>
             <item
@@ -64,7 +79,7 @@
     </item>
     <item
         android:id="@+id/viewInstructions"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="@string/viewInstructions"/>
     <!--<item-->
         <!--android:id="@+id/endCOM"-->
