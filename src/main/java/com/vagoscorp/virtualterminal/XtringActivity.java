@@ -66,6 +66,10 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     Button[] Buttons = new Button[9];
     CheckBox XReturn;
     boolean xReturn = false;
+    boolean pro = false;
+
+    SharedPreferences shapre;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onStop() {
@@ -75,9 +79,15 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        boolean isPro = getIntent().getBooleanExtra(PrincipalActivity.IS_PRO, false);
-        boolean darkTheme = getIntent().getBooleanExtra(PrincipalActivity.theme, true);
-        if(isPro)
+        super.onCreate(savedInstanceState);
+        //shapre = getPreferences(MODE_PRIVATE);
+        shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
+        editor = shapre.edit();editor.commit();
+        boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
+        //boolean darkTheme = getIntent().getBooleanExtra(Configuration.DARK_THEME, true);
+        pro = shapre.getBoolean(getString(R.string.isPRO), false);
+        //boolean isPro = getIntent().getBooleanExtra(PrincipalActivity.IS_PRO, false);
+        if(pro)
             numItems = 64;
         listItems = new XtringItem[numItems + 1];
         tempListItems = new XtringItem[numItems + 1];
@@ -86,16 +96,18 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xtring);
         layout_xtring = findViewById(R.id.layout_xtring);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
+            layout_xtring.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+        //layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
         for(int i = 0; i < 9; i++)
             Buttons[i] = findViewById(ButtIDs[i]);
+        Buttons[6].setEnabled(pro);
+        Buttons[8].setEnabled(pro);
         xtringList = findViewById(R.id.xtringList);
         XReturn = findViewById(R.id.xReturn);
-        if(isPro)
+        if(pro)
             XReturn.setVisibility(View.VISIBLE);
         XReturn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -146,7 +158,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     item.setDisabled(isChecked);
                 }
             });
-            if(isPro)
+            if(pro)
                 item.disableX.setVisibility(View.VISIBLE);
             listItems[i] = item;
             tempListItems[i] = item;
@@ -167,7 +179,6 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     public void restore(int n) {
-        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         if(n > 0) {
             boolean enX = shapre.getBoolean(enabledX + n, false);
             if (enX) {
@@ -193,8 +204,6 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     public void saveAll() {
-        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = shapre.edit();
         editor.putBoolean(XRETURN, xReturn);
         for(int n = 1; n <= numItems; n++) {
             editor.putInt(sendTypeX + n, listItems[n].sendType);
@@ -208,8 +217,6 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     public void save(int n) {
         if(n > 0 && n <= numItems) {
-            SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = shapre.edit();
             editor.putInt(sendTypeX + n, listItems[n].sendType);
             editor.putString(valTXX + n, listItems[n].tx);
             editor.putBoolean(constantX + n, listItems[n].constant);
@@ -259,6 +266,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     void enableButtons(boolean en) {
         for(int i = 0; i < 9; i++)
             Buttons[i].setEnabled(en);
+        Buttons[6].setEnabled(pro);
+        Buttons[8].setEnabled(pro);
     }
 
     public void addItem(View view) {

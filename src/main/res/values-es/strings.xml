@@ -10,16 +10,20 @@
         - Si esta habilitado, el anexo CR+LF será enviado aún si TX esta vacio.\n
         - Use el menú de la App para acceder a otras opciones:\n
         *   Seleccionar como mostrar y administrar los datos entrantes \'RX\'.\n
-        *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float).\n
+        *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float,..).\n
         *   Iniciar/Finalizar el Modo EnvíoRápido.\n
         *   Iniciar el Modo Xtring.\n
+        *   Entrar a la ventana de configuración.\n
+        - La ventana de Configuración tiene opciones adicionales.\n
         *   Seleccionar opción de apariencia: Tema Normal o Dark.\n
+        *   Habilitar el borrado de TX tras cada envío.\n
+        *   Cambiar la cantidad de Botones de EnvíoRápido: Hasta 16 estáticos, 32 desplazables.\n
         - Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú.
         - En modo Servidor WiFi, el puerto de red debe ser mayor o igual a 1100 para evitar puertos usados por el sistema.
     </string>
     <string name="instructionsAjustesLayout">
-        - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.\n
-        - Gesto Abajo/Arriba en la barra de acciones para mostrarla/ocultarla respectivamente.\n
+        - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.(PRO)\n
+        - Gesto Abajo/Arriba en la barra de acciones para mostrarla/ocultarla respectivamente.(PRO)\n
         - Cuando se está conectado, Inicie/Finalice el modo EnvíoRápido manteniendo pulsado el botón \'Enviar\'.\n
         - Inicie/Finalice el modo EnvíoRápido deslizando el dedo respectivamente desde/hacia el lado derecho de la Pantalla.\n
         - Inicie el modo Xtring deslizando el dedo desde el lado izquierdo de la Pantalla hacia la derecha.
@@ -32,7 +36,8 @@
         *   Haga una pulsación larga en un botón de EnvíoRápido para salvar la información en él.\n
         *   Haga una pulsación en un botón de EnvíoRápido para enviar automáticamente la información almacenada.\n
         *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de EnvíoRápido borrará su información actual.\n
-        *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada.
+        *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada.\n
+        *   Los usuarios Pro tienen hasta 48 botones de EnvíoRápido en lugar de 8.
     </string>
     <string name="instructionsXtring">
         Operando el \'Modo Xtring\': Almacene un grupo de datos organizados y de distintos tipos para enviarlos como un paquete.\n
@@ -45,7 +50,9 @@
         *   Pulse el botón enviar para iniciar la transmisión del paquete y regresar a la pantalla principal.\n
         *   Finalice el modo Xtring(sin hacer envíos) deslizando el dedo desde el lado derecho de la Pantalla hacia la izquierda.\n
         *   La plantilla de paquete y los valores actuales se guardarán automáticamente en la memoria del dispositivo.\n
-        *   Los usuarios Pro pueden seleccionar elementos a ignorar durante la operación de envío.
+        *   Los usuarios Pro tienen hasta 64 items Xtring en lugar de 10.\n
+        *   Los usuarios Pro pueden seleccionar elementos a ignorar durante la operación de envío.\n
+        *   Los usuarios Pro pueden retornar automaticamente a la pantalla Xtring después de enviar el paquete.
     </string>
     <string name="instructionsAdvRcv">
         Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16, 32 y 64 bits) y números flotantes (32 y 64 bits).\n
@@ -66,8 +73,9 @@
     <string name="insGP">
         Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
         *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.\n
-        *   Modo EnvíoRápido de 32 botones desplazables.\n
-        *   Modo Xtring de hasta 64 objetos.
+        *   Tipos de dato Entero Largo y Doble Flotante para envío y recepción.\n
+        *   Modo EnvíoRápido de hasta 48 botones (Cantidades Configurables).\n
+        *   Modo Xtring de hasta 64 objetos y nuevas opciones.
     </string>
     <string-array name="sendtypes_array2">
         <item>Texto</item>
@@ -94,7 +102,7 @@
     <string name="NSIAS">No mostrar de nuevo al inicio</string>
     <string name="Instructions_Basics">Instrucciones Básicas</string>
     <string name="Instructions_Layout">Gestos sobre la interfaz</string>
-    <string name="Instructions_FastSend">Interface EnvíoRápido</string>
+    <string name="Instructions_FastSend">Interfaz EnvíoRápido</string>
     <string name="Instructions_AdvRcv">Recepción Avanzada</string>
     <string name="Instructions_PackRcv">Recepción de Paquetes</string>
     <string name="appendCRpLF">Anexar CR+LF</string>
@@ -133,8 +141,8 @@
     <string name="Sel_BT">Cliente Bluetooth</string>
     <string name="Sel_Ws">Servidor WiFi</string>
     <string name="Sel_BTs">Servidor Bluetooth</string>
-    <string name="Clientes">Clientes Inalámbricos</string>
-    <string name="Servidores">Servidores Inalámbricos</string>
+    <string name="Clients">Clientes Inalámbricos</string>
+    <string name="Servers">Servidores Inalámbricos</string>
     <string name="EnBT">Activación de Bluetooth Denegada por el Usuario</string>
     <string name="EnWF">WiFi Deshabilitado</string>
     <string name="EWF">Espere a que la conexión WiFi sea establecida</string>
@@ -185,6 +193,18 @@
     <string name="xReturn">Retornar tras envío</string>
     <string name="disabled">Deshabilitados</string>
     <string name="textCopied">Texto Copiado!</string>
-    <string name="EndianSelect">Selección de Endian</string>
+    <string name="EndianSelect">Selección de Endian (En Desarrollo)</string>
+    <string name="SendingEndian">Endian para Envíos</string>
+    <string name="ReceivingEndian">Endian para Recepción</string>
+    <string name="DarkTheme">Habilitar Tema Oscuro</string>
+    <string name="ClearTXAS">Borrar TX tras cada envío</string>
+    <string name="NumCommLabel">Cantidad de Botones de Envío Rápido</string>
+    <string name="NumCommStat">Botones Estáticos</string>
+    <string name="NumCommScroll">Botones Desplazables</string>
+    <string name="ApplyChanges">Aplicar Cambios</string>
+    <string name="DiscardChanges">Descartar Cambios</string>
+
+    <string name="NEED_PRO">Función Pro</string>
+    <string name="ConfigNotSaved">Cambios no Aplicados</string>
 
 </resources>

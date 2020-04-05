@@ -2,6 +2,7 @@ package com.vagoscorp.virtualterminal;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -18,9 +19,14 @@ public class XtringEditor extends Activity {
     int position = 0;
     String txVal = "";
 
+    SharedPreferences shapre;
+    boolean pro = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
+        pro = shapre.getBoolean(getString(R.string.isPRO), false);
         position = getIntent().getIntExtra(XtringActivity.POS, 0);
         sendType = getIntent().getIntExtra(XtringActivity.SENDTYPE, 0);
         txVal = getIntent().getStringExtra(XtringActivity.NEWTX);
@@ -36,6 +42,14 @@ public class XtringEditor extends Activity {
         newTXs[6] = findViewById(R.id.newTXint64);
         newTXs[7] = findViewById(R.id.newTXfloat);
         newTXs[8] = findViewById(R.id.newTXdouble);
+        if(!pro) {
+            newTXs[6].setEnabled(pro);
+            newTXs[8].setEnabled(pro);
+            newTXs[6].setText("");
+            newTXs[8].setText("");
+            newTXs[6].setHint(R.string.NEED_PRO);
+            newTXs[8].setHint(R.string.NEED_PRO);
+        }
         setSendType();
         String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
         String tempS = "Item" + position + " ( " + sendT[sendType] + " )";
@@ -50,50 +64,41 @@ public class XtringEditor extends Activity {
         try {
             if(!message.equals("")) {
                 switch (sendType) {
-                    case (PrincipalActivity.SEND_TXT): {
+                    case (PrincipalActivity.SEND_TXT):
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_BYTE): {
-                        int Messagen = Integer.parseInt(message);
+                    case (PrincipalActivity.SEND_BYTE):
+                        int MessageB = Integer.parseInt(message);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_BIN): {
-                        int Messagen = Integer.parseInt(message, 2);
+                    case (PrincipalActivity.SEND_BIN):
+                        int Messageb = Integer.parseInt(message, 2);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_HEX): {
-                        int Messagen = Integer.parseInt(message, 16);
+                    case (PrincipalActivity.SEND_HEX):
+                        int Messageh = Integer.parseInt(message, 16);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_SHORT): {
-                        int Messagen = Integer.parseInt(message);
+                    case (PrincipalActivity.SEND_SHORT):
+                        int Messages = Integer.parseInt(message);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_INT): {
-                        int Messagen = Integer.parseInt(message);
+                    case (PrincipalActivity.SEND_INT):
+                        int Messagei = Integer.parseInt(message);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_LONG): {
-                        long Messagen = Long.parseLong(message);
+                    case (PrincipalActivity.SEND_LONG):
+                        long Messagel = Long.parseLong(message);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_FLOAT): {
-                        float Messagen = Float.parseFloat(message);
+                    case (PrincipalActivity.SEND_FLOAT):
+                        float Messagef = Float.parseFloat(message);
 
                         break;
-                    }
-                    case (PrincipalActivity.SEND_DOUBLE): {
-                        double Messagen = Double.parseDouble(message);
+                    case (PrincipalActivity.SEND_DOUBLE):
+                        double Messaged = Double.parseDouble(message);
 
                         break;
-                    }
                 }
             }
         } catch (NumberFormatException nEx) {

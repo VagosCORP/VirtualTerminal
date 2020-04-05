@@ -149,6 +149,7 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
+            android:enabled="false"
             android:inputType="number">
 
             <requestFocus />
@@ -173,6 +174,7 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
+            android:enabled="false"
             android:inputType="numberDecimal|numberSigned">
 
             <requestFocus />
@@ -303,8 +305,8 @@
             android:id="@+id/commBase"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:clickable="false"
+            android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="vertical"
             android:visibility="gone">
@@ -344,32 +346,201 @@
                 android:onClick="commClick"
                 android:text="@string/commDVal" />
 
+            <Button
+                android:id="@+id/comm6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
+            <Button
+                android:id="@+id/comm16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="commClick"
+                android:text="@string/commDVal" />
+
             <ScrollView
                 android:id="@+id/commScroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:id="@+id/commScrollableL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <Button
-                        android:id="@+id/comm6"
+                        android:id="@+id/comm17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="commClick"
                         android:text="@string/commDVal" />
 
                     <Button
-                        android:id="@+id/comm7"
+                        android:id="@+id/comm18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="commClick"
                         android:text="@string/commDVal" />
 
                     <Button
-                        android:id="@+id/comm8"
+                        android:id="@+id/comm19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm23"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm24"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm25"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm26"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm27"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm28"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm29"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm31"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="commClick"
+                        android:text="@string/commDVal" />
+
+                    <Button
+                        android:id="@+id/comm32"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="commClick"
@@ -379,172 +550,115 @@
                         android:id="@+id/commander"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/comm9"
+                            android:id="@+id/comm33"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm10"
+                            android:id="@+id/comm34"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm11"
+                            android:id="@+id/comm35"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm12"
+                            android:id="@+id/comm36"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm13"
+                            android:id="@+id/comm37"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm14"
+                            android:id="@+id/comm38"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm15"
+                            android:id="@+id/comm39"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm16"
+                            android:id="@+id/comm40"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm17"
+                            android:id="@+id/comm41"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm18"
+                            android:id="@+id/comm42"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm19"
+                            android:id="@+id/comm43"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm20"
+                            android:id="@+id/comm44"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm21"
+                            android:id="@+id/comm45"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm22"
+                            android:id="@+id/comm46"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm23"
+                            android:id="@+id/comm47"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
                         <Button
-                            android:id="@+id/comm24"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm25"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm26"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm27"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm28"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm29"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm30"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm31"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="commClick"
-                            android:text="@string/commDVal" />
-
-                        <Button
-                            android:id="@+id/comm32"
+                            android:id="@+id/comm48"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="commClick"

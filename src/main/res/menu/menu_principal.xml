@@ -67,6 +67,7 @@
     <item
         android:id="@+id/visual_settings"
         android:orderInCategory="5"
+        android:visible="false"
         android:title="@string/Appearance">
         <menu>
             <item
@@ -77,6 +78,7 @@
                 android:title="@string/normalTheme"/>
         </menu>
     </item>
+
     <item
         android:id="@+id/viewInstructions"
         android:orderInCategory="6"
@@ -86,9 +88,8 @@
         <!--android:orderInCategory="7"-->
         <!--android:title="@string/Cancel_Conn"-->
         <!--android:visible="true"/>-->
-    <!--<item-->
-        <!--android:id="@+id/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="@string/action_settings"/>-->
-    <!--android:orderInCategory="7"-->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"/>
 </menu>

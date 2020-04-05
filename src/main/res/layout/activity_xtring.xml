@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="addItem"
-            android:text="@string/ComXInt32" />
+            android:text="@string/ComXInt32"/>
 
     </LinearLayout>
 
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="addItem"
-            android:text="@string/ComXString" />
+            android:text="@string/ComXString"/>
 
         <Button
             android:layout_width="0dp"
@@ -76,7 +76,8 @@
             android:text="@string/ComXInt64"
             android:id="@+id/longButton"
             android:layout_weight="1"
-            android:onClick="addItem"/>
+            android:onClick="addItem"
+            android:enabled="false"/>
 
         <Button
             android:layout_width="0dp"
@@ -92,7 +93,8 @@
             android:text="@string/ComXDouble"
             android:id="@+id/doubleButton"
             android:layout_weight="1"
-            android:onClick="addItem" />
+            android:onClick="addItem"
+            android:enabled="false"/>
 
         <!--<Button-->
             <!--android:layout_width="0dp"-->

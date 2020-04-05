@@ -115,6 +115,7 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
+            android:enabled="false"
             android:inputType="number">
 
             <requestFocus />
@@ -139,6 +140,7 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
+            android:enabled="false"
             android:inputType="numberDecimal|numberSigned">
 
             <requestFocus />

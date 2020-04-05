@@ -43,19 +43,24 @@ public class InstructionsActivity extends Activity {
     int versionCode = defversion;
     String versionName = "";
 
+    SharedPreferences shapre;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pro = getIntent().getBooleanExtra(getString(R.string.Extra_LVL), false);
-        boolean darkTheme = getIntent().getBooleanExtra(PrincipalActivity.theme, true);
+        shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
+        editor = shapre.edit();editor.commit();
+        boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
+        pro = shapre.getBoolean(getString(R.string.isPRO), false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_instructions);
-        SharedPreferences shapre = getPreferences(MODE_PRIVATE);
         checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
         slayout = findViewById(R.id.slayout);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            slayout.setBackgroundColor(Color.parseColor("#ff303030"));
+            slayout.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+            //slayout.setBackgroundColor(Color.parseColor("#ff303030"));
         getPRO = findViewById(R.id.getPRO);
         insGP = findViewById(R.id.insGP);
         InspVer = findViewById(R.id.InspVer);
@@ -78,7 +83,7 @@ public class InstructionsActivity extends Activity {
             getPRO.setVisibility(View.GONE);
             insGP.setVisibility(View.GONE);
         }
-        checkBox = (CheckBox)findViewById(R.id.checkBox);
+        checkBox = findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -86,8 +91,6 @@ public class InstructionsActivity extends Activity {
                 Intent result = new Intent(PrincipalActivity.RESULT_ACTION);
                 result.putExtra(PrincipalActivity.SIoS, checked);
                 setResult(Activity.RESULT_OK, result);
-                SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = shapre.edit();
                 editor.putBoolean(PrincipalActivity.SIoS, isChecked);
                 editor.commit();
             }

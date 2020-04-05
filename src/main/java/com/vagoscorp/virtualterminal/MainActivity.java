@@ -39,13 +39,17 @@ public class MainActivity extends Activity {
 
     int versionCode = defver;
     String versionName = "";
+
+	SharedPreferences shapre;
+	SharedPreferences.Editor editor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Intent launcherIntent = getIntent();
-		SharedPreferences shapre = getPreferences(MODE_PRIVATE);
-		SharedPreferences.Editor shapreEditor = shapre.edit();
+		//SharedPreferences shapre = getPreferences(MODE_PRIVATE);
+		shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
+		editor = shapre.edit();editor.commit();
 		setContentView(R.layout.layout_activity_main);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		verLab = findViewById(R.id.verLab);
@@ -71,15 +75,15 @@ public class MainActivity extends Activity {
 		String versioning = "v" + versionName;
 		verLab.setText(versioning);
 		isPRO = launcherIntent.getIntExtra(PRO, isPRO);
-		pro = shapre.getBoolean(PRO, false);
+		pro = shapre.getBoolean(getString(R.string.isPRO), false);
 		/*int ver = shapre.getInt(VER, defver);
         if(ver != versionCode) {
 			pro = false;
 			shapreEditor.putInt(VER, versionCode);
         }*/
 		pro = checkPro();
-		shapreEditor.putBoolean(PRO, pro);
-		shapreEditor.commit();
+		editor.putBoolean(getString(R.string.isPRO), pro);
+		editor.commit();
 		if(pro) {
 			proLabel.setVisibility(View.GONE);
 			serverBT.setVisibility(View.VISIBLE);
@@ -111,7 +115,7 @@ public class MainActivity extends Activity {
 		Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
-        Init.putExtra(getString(R.string.Extra_LVL), pro);
+        //Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
@@ -119,7 +123,7 @@ public class MainActivity extends Activity {
 		Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), false);
         Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
-        Init.putExtra(getString(R.string.Extra_LVL), pro);
+        //Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
@@ -127,7 +131,7 @@ public class MainActivity extends Activity {
         Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), SERVER);
-        Init.putExtra(getString(R.string.Extra_LVL), pro);
+        //Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 
@@ -135,7 +139,7 @@ public class MainActivity extends Activity {
         Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), false);
 		Init.putExtra(getString(R.string.Extra_TYP), SERVER);
-		Init.putExtra(getString(R.string.Extra_LVL), pro);
+		//Init.putExtra(getString(R.string.Extra_LVL), pro);
 		startActivity(Init);
 	}
 }

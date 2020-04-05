@@ -10,16 +10,20 @@
         - If enabled, \'append CR+LF\' bytes will be sent even if TX input is empty.\n
         - Use the app menu to access other options:\n
         *   Select how to show and manage the incoming data \'RX\'.\n
-        *   Select advanced numeric reception options (int16, int32, float, double).\n
+        *   Select advanced numeric reception options (int16, int32, float,..).\n
         *   Start/Stop FastSend Interface.\n
         *   Start Xtring Interface.\n
+        *   Enter Settings Screen.\n
+        - Settings Screen have additional options:\n
         *   Select appearance options: Light or Dark theme.\n
-        - Tablet users can select the reception options without entering to menu.
-        - In WiFi Server mode, net port must be greater or equal to 1100 to avoid ports used by the system.
+        *   Enable Clear TX input after Send.\n
+        *   Change Number of FastSend Buttons: Up to 16 Static, 32 Scrollable.\n
+        - Tablet users can select the reception options without entering to menu.\n
+        - In WiFi Server mode, net port should be greater or equal to 1100 to avoid ports used by the system.
     </string>
     <string name="instructionsAjustesLayout">
-        - LongClick on Connect button to show/hide ActionBar.\n
-        - Slide the ActionBar Down/Up to respectively Show/Hide it.\n
+        - LongClick on Connect button to show/hide ActionBar.(PRO)\n
+        - Slide the ActionBar Down/Up to respectively Show/Hide it.(PRO)\n
         - When connected, LongClick on \'Send\' button to Show/Hide FastSend Interface without entering to menu.\n
         - Also can Show/Hide FastSend Interface by Sliding respectively from/to the right side of the screen.\n
         - Start Xtring mode by sliding from left side of the screen to the right.
@@ -33,7 +37,7 @@
         *   Simple Click on FastSend Button to automatically send the saved data.\n
         *   If TX input is empty, LongClick on a FastSend Button will erase saved data.\n
         *   FastSend Buttons will show type and data you just save.
-        *   Pro users have up to 32 FastSend Buttons instead of 8.
+        *   Pro users have up to 48 FastSend Buttons instead of 8.
     </string>
     <string name="instructionsXtring">
         Operating \'Xtring Interface\': Save an organized group of various types of data to send it as a package.\n
@@ -46,8 +50,8 @@
         *   Press the Send Button to start the package transmission and return to the Principal Screen.\n
         *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left.\n
         *   The package template and the actual values will be automatically saved on device memory.\n
-        *   Pro users have up to 64 Xtring Items instead of 10.
-        *   Pro users can select items to ignore during the send operation.
+        *   Pro users have up to 64 Xtring Items instead of 10.\n
+        *   Pro users can select items to ignore during the send operation.\n
         *   Pro users can return automatically to the Xtring screen after sending the package.
     </string>
     <string name="instructionsAdvRcv">
@@ -69,7 +73,8 @@
     <string name="insGP">
         Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
         *   Server working mode for WiFi and Bluetooth, letting you debug other communication apps or exchange data with clients connected to your device.\n
-        *   Enhanced 32 button FastSend Interface.\n
+        *   Long and Double Send/Receive Data Types.\n
+        *   Enhanced FastSend Interface with Up to 48 button (Configurable Quantities).\n
         *   Enhanced Xtring Interface with up to 64 items and new options.
     </string>
     <string-array name="sendtypes_array" translatable="false">
@@ -147,16 +152,13 @@
     <string name="Sel_BT">Bluetooth Client</string>
     <string name="Sel_Ws">WiFi Server</string>
     <string name="Sel_BTs">Bluetooth Server</string>
-    <string name="Clientes">Wireless Clients</string>
-    <string name="Servidores">Wireless Servers</string>
+    <string name="Clients">Wireless Clients</string>
+    <string name="Servers">Wireless Servers</string>
     <string name="EnBT">Bluetooth Activation Denied by User</string>
     <string name="EnWF">WiFi Disabled</string>
     <string name="EWF">Wait until WiFi Connection is Established</string>
     <string name="BT_Device">Bluetooth device</string>
     <string name="Cancel_Conn">Finish Connection</string>
-    <string name="Extra_TCOM" translatable="false">TCOM</string>
-    <string name="Extra_TYP" translatable="false">TYPE</string>
-    <string name="Extra_LVL" translatable="false">LEVEL</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="cThemeToast">Restart Activity to apply changes</string>
     <string name="Text_RX" translatable="false">RX</string>
@@ -200,8 +202,36 @@
     <string name="xReturn">Return after Send</string>
     <string name="disabled">Disabled</string>
     <string name="textCopied">Text Copied!</string>
-    <string name="EndianSelect">Endian Selection</string>
+    <string name="EndianSelect">Endian Selection (In Development)</string>
+    <string name="SendingEndian">Sending Endian</string>
+    <string name="ReceivingEndian">Receiving Endian</string>
     <string name="LittleEndian" translatable="false">LittleEndian</string>
     <string name="BigEndian" translatable="false">BigEndian</string>
+    <string name="DarkTheme">Enable Dark Theme</string>
+    <string name="ClearTXAS">Clear TX After Send</string>
+    <string name="NumCommLabel">Number of FastSend Buttons</string>
+    <string name="NumCommStat">Static Buttons</string>
+    <string name="NumCommStatHint" translatable="false">4</string>
+    <string name="NumCommScroll">Scrollable Buttons</string>
+    <string name="NumCommScrollHint" translatable="false">4</string>
+    <string name="ApplyChanges">Apply Changes</string>
+    <string name="DiscardChanges">Discard Changes</string>
+
+    <string name="Extra_TCOM" translatable="false">TCOM</string>
+    <string name="Extra_TYP" translatable="false">TYPE</string>
+    <string name="Extra_LVL" translatable="false">LEVEL</string>
+
+    <string name="DT_Color" translatable="false">#ff303030</string>
+    <string name="SHARPREF" translatable="false">SHARPREF</string>
+    <string name="isPRO" translatable="false">isPRO</string>
+    <string name="DARK_THEME" translatable="false">DARK_THEME</string>
+    <string name="NUM_COMM_STAT" translatable="false">NUM_COMM_STAT</string>
+    <string name="NUM_COMM_SCROLL" translatable="false">NUM_COMM_SCROLL</string>
+    <string name="CLEAR_TX_AFTER_SEND" translatable="false">CLEAR_TX_AFTER_SEND</string>
+    <string name="LITTLE_ENDIAN4SEND" translatable="false">LITTLE_ENDIAN4SEND</string>
+    <string name="LITTLE_ENDIAN4RECEIVE" translatable="false">LITTLE_ENDIAN4RECEIVE</string>
+
+    <string name="NEED_PRO">Pro Function</string>
+    <string name="ConfigNotSaved">Changes not applied</string>
 
 </resources>
