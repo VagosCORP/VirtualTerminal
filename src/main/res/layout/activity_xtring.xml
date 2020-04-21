@@ -96,14 +96,6 @@
             android:onClick="addItem"
             android:enabled="false"/>
 
-        <!--<Button-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/ComXDouble"-->
-            <!--android:id="@+id/doubleButton"-->
-            <!--android:layout_weight="1"-->
-            <!--android:onClick="addItem"/>-->
-
     </LinearLayout>
 
     <ScrollView

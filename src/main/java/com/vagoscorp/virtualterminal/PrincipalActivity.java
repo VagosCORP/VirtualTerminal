@@ -46,7 +46,7 @@ import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
-public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,OnLongClickListener,GestureDetector.OnGestureListener {
+public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,/*OnLongClickListener,*/GestureDetector.OnGestureListener {
 
     Spinner spinner;
     TextView RX;// Received Data
@@ -59,7 +59,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     ScrollView scron;
     //LinearLayout commander;
     LinearLayout commBase;
-//    LinearLayout commScrollableL;
+    LinearLayout commStaticL;
+    LinearLayout commScrollableL;
 //    ScrollView commScroll;
     LinearLayout byteRCV;
     LinearLayout layout_principal;
@@ -69,13 +70,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     CheckBox aCRpLF;
 
     Button[] commX;
-    int[] commIDs = {R.id.comm1,R.id.comm2,R.id.comm3,R.id.comm4,R.id.comm5,R.id.comm6,R.id.comm7,
+    /*int[] commIDs = {R.id.comm1,R.id.comm2,R.id.comm3,R.id.comm4,R.id.comm5,R.id.comm6,R.id.comm7,
             R.id.comm8,R.id.comm9,R.id.comm10,R.id.comm11,R.id.comm12,R.id.comm13,R.id.comm14,
             R.id.comm15,R.id.comm16,R.id.comm17,R.id.comm18,R.id.comm19,R.id.comm20,R.id.comm21,
             R.id.comm22,R.id.comm23,R.id.comm24,R.id.comm25,R.id.comm26,R.id.comm27,R.id.comm28,
             R.id.comm29,R.id.comm30,R.id.comm31,R.id.comm32,R.id.comm33,R.id.comm34,R.id.comm35,
             R.id.comm36,R.id.comm37,R.id.comm38,R.id.comm39,R.id.comm40,R.id.comm41,R.id.comm42,
-            R.id.comm43,R.id.comm44,R.id.comm45,R.id.comm46,R.id.comm47,R.id.comm48};
+            R.id.comm43,R.id.comm44,R.id.comm45,R.id.comm46,R.id.comm47,R.id.comm48};*/
 
     ActionBar actionBar;
 
@@ -205,6 +206,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
+    int cantFastSendTot = 8;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -218,7 +220,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
         numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
-        //canFastSendTot = numCommStat + numCommScroll;
         checked = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
@@ -247,10 +248,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             CTM = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         }
         spinner = findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
 		RX = findViewById(R.id.RX);
         RXn = findViewById(R.id.RXn);
         sepLab = findViewById(R.id.sepLab);
@@ -293,7 +290,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         scron = findViewById(R.id.scron);
         //commander = findViewById(R.id.commander);
         commBase = findViewById(R.id.commBase);
-//        commScrollableL = findViewById(R.id.commScrollableL);
+        commStaticL = findViewById(R.id.commStaticL);
+        commScrollableL = findViewById(R.id.commScrollableL);
 //        commScroll = findViewById(R.id.commScroll);
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -322,6 +320,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 return true;
             }
         });
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -350,12 +352,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         }else if(!checked)
             showInstructions();
         UpdN.setChecked(false);
-        commX = new Button[48];
+        /*commX = new Button[48];
         for(int i = 0; i < 48; i++) {
             commX[i] = findViewById(commIDs[i]);
             buttSetAllCaps(commX[i]);
             commX[i].setOnLongClickListener(this);
-        }
+        }*/
         updCommButtons();
         gesDetector = new GestureDetector(this, this);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -399,12 +401,179 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void updCommButtons() {
-        for(int i = 0; i < 48; i++) {
-            commX[i].setVisibility(View.GONE);
-            if(i < numCommStat && i < 16)
+        cantFastSendTot = numCommStat + numCommScroll;
+        commX = new Button[cantFastSendTot];
+        commStaticL.removeAllViewsInLayout();
+        commScrollableL.removeAllViewsInLayout();
+        for(int i = 0; i < cantFastSendTot; i++) {
+            commX[i] = new Button(this);
+            buttSetAllCaps(commX[i]);
+            final int n = i + 1;
+            commX[i].setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int commType = COMMT_STRING;
+                    boolean N = true;
+                    //final int n = nComm(view);
+                    if(n != 0) {
+                        if(TXs[sendTyp].length() > 0) {
+                            String eom = "\r\n";
+                            if(!aCRpLF.isChecked())
+                                eom = "";
+                            String message = TXs[sendTyp].getText().toString() + eom;
+                            try {
+                                switch (sendTyp) {
+                                    case (SEND_TXT): {
+                                        editor.putString(comm + n, message);
+                                        editor.putString(commN + n, message); //n + " " +
+                                        commType = COMMT_STRING;
+                                        N = false;
+                                        break;
+                                    }
+                                    case (SEND_BYTE): {
+                                        int Messagen = Integer.parseInt(message);
+                                        editor.putInt(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + message);
+                                        commType = COMMT_INT8;
+                                        break;
+                                    }
+                                    case (SEND_BIN): {
+                                        int Messagen = Integer.parseInt(message, 2);
+                                        editor.putInt(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
+                                        commType = COMMT_INT8;
+                                        break;
+                                    }
+                                    case (SEND_HEX): {
+                                        int Messagen = Integer.parseInt(message, 16);
+                                        editor.putInt(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
+                                        commType = COMMT_INT8;
+                                        break;
+                                    }
+                                    case (SEND_SHORT): {
+                                        int Messagen = Integer.parseInt(message);
+                                        editor.putInt(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + message);
+                                        commType = COMMT_INT16;
+                                        break;
+                                    }
+                                    case (SEND_INT): {
+                                        int Messagen = Integer.parseInt(message);
+                                        editor.putInt(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + message);
+                                        commType = COMMT_INT32;
+                                        break;
+                                    }
+                                    case (SEND_LONG): {
+                                        long Messagen = Long.parseLong(message);
+                                        editor.putLong(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_LONG] + message);
+                                        commType = COMMT_INT64;
+                                        break;
+                                    }
+                                    case (SEND_FLOAT): {
+                                        float Messagen = Float.parseFloat(message);
+                                        editor.putFloat(comm + n, Messagen);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + message);
+                                        commType = COMMT_FLOAT;
+                                        break;
+                                    }
+                                    case (SEND_DOUBLE): {
+                                        double Messagen = Double.parseDouble(message);
+                                        ByteBuffer buffer = ByteBuffer.allocate(8);
+                                        buffer.putDouble(Messagen);
+                                        buffer.flip();
+                                        long Messagenx = buffer.getLong();
+                                        editor.putLong(comm + n, Messagenx);
+                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_DOUBLE] + message);
+                                        commType = COMMT_DOUBLE;
+                                        break;
+                                    }
+                                }
+                            } catch (NumberFormatException nEx) {
+                                nEx.printStackTrace();
+                                Toast.makeText(PrincipalActivity.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            N = false;
+                            editor.putString(comm + n, getResources().getString(R.string.commDVal));
+                            editor.putString(commN + n, getResources().getString(R.string.commDVal));
+                        }
+                        editor.putBoolean(commT + n, N);
+                        editor.putInt(commET + n, commType);
+                        editor.commit();
+                        UcommUI();
+                    }
+                    return true;
+                }
+            });
+            commX[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //int n = nComm(view);
+                    if(n != 0) {
+                        int commType = shapre.getInt(commET + n, COMMT_STRING);
+                        boolean commN = shapre.getBoolean(commT + n, defBcomm);
+                        switch(commType) {
+                            case(COMMT_INT8):
+                                if(TCOM)
+                                    comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                                else
+                                    comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                                break;
+                            case(COMMT_INT16):
+                                if(TCOM)
+                                    comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                                else
+                                    comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                                break;
+                            case(COMMT_INT32):
+                                if(TCOM)
+                                    comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                                else
+                                    comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                                break;
+                            case(COMMT_INT64): // Fallthrough
+                            case(COMMT_DOUBLE):
+                                if(TCOM)
+                                    comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
+                                else
+                                    comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
+                                break;
+                            case(COMMT_FLOAT):
+                                if(TCOM)
+                                    comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
+                                else
+                                    comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
+                                break;
+                            default:
+                                if (!commN){
+                                    if (TCOM)
+                                        comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                                    else
+                                        comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                                }else {
+                                    if (TCOM)
+                                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                                    else
+                                        comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                                }
+                        }
+                    }
+                }
+            });
+            if(i < numCommStat) {
+                commStaticL.addView(commX[i]);
+            }else {
+                commScrollableL.addView(commX[i]);
+            }
+            //commX[i].setVisibility(View.GONE);
+            /*if(i < numCommStat && i < 16)
                 commX[i].setVisibility(View.VISIBLE);
             else if(i > 15 && i < 16 + numCommScroll)
-                commX[i].setVisibility(View.VISIBLE);
+                commX[i].setVisibility(View.VISIBLE);*/
+
         }
     }
 
@@ -430,7 +599,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             byteRCV.setVisibility(View.GONE);
     }
 
-    @Override
+    /*@Override
     public boolean onLongClick(View view) {
         int commType = COMMT_STRING;
         boolean N = true;
@@ -526,7 +695,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             UcommUI();
         }
         return true;
-    }
+    }*/
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
@@ -1066,7 +1235,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 		super.onDestroy();
 	}
 	
-	public int nComm(View view) {
+	/*public int nComm(View view) {
         int num = 0;
 		for(int i = 0; i < 48; i++) {
 		    if(view.getId() == commIDs[i]) {
@@ -1074,11 +1243,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 break;
             }
         }
-
 		return num;
-	}
+	}*/
 	
-	public void commClick(View view) {
+	/*public void commClick(View view) {
 		int n = nComm(view);
 		if(n != 0) {
             int commType = shapre.getInt(commET + n, COMMT_STRING);
@@ -1129,10 +1297,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     }
             }
 		}
-	}
+	}*/
 	
 	public void UcommUI() {
-		for(int i = 0; i < 48; i++) {
+		for(int i = 0; i < cantFastSendTot; i++) {
 		    int num = i + 1;
             commX[i].setText(shapre.getString(commN + num, getResources().getString(R.string.commDVal)));
         }

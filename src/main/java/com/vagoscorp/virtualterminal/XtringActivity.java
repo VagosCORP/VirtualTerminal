@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,14 +25,16 @@ import android.widget.Toast;
 
 import java.nio.ByteBuffer;
 
-public class XtringActivity extends Activity implements GestureDetector.OnGestureListener{
+public class XtringActivity extends Activity implements GestureDetector.OnGestureListener {
 
     LinearLayout layout_xtring;
     LinearLayout xtringList;
     ActionBar actionBar;
-    public static int numItems = 10;
+    public int numItems = 0;
+    public static int maxNumItems = 10;
 
     public static final int XTRING_EDITOR = 199;
+    public static final int valXReturn = 0;
 
     public static final String NEWTX = "NEWTX";
     public static final String XRETURN = "XRETURN";
@@ -42,8 +45,9 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public static final String constantX = "constantX";
     public static final String enabledX = "enabledX";
     public static final String disabledX = "disabledX";
+    public static final String cantXItems = "cantXItems";
 
-    int[] ListIDs = {0, R.id.XtringItem01,R.id.XtringItem02,R.id.XtringItem03,R.id.XtringItem04,R.id.XtringItem05,
+    /*int[] ListIDs = {0, R.id.XtringItem01,R.id.XtringItem02,R.id.XtringItem03,R.id.XtringItem04,R.id.XtringItem05,
             R.id.XtringItem06,R.id.XtringItem07,R.id.XtringItem08,R.id.XtringItem09,R.id.XtringItem10,R.id.XtringItem11,
             R.id.XtringItem12,R.id.XtringItem13,R.id.XtringItem14,R.id.XtringItem15,R.id.XtringItem16,R.id.XtringItem17,
             R.id.XtringItem18,R.id.XtringItem19,R.id.XtringItem20,R.id.XtringItem21,R.id.XtringItem22,R.id.XtringItem23,
@@ -53,18 +57,20 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             R.id.XtringItem42,R.id.XtringItem43,R.id.XtringItem44,R.id.XtringItem45,R.id.XtringItem46,R.id.XtringItem47,
             R.id.XtringItem48,R.id.XtringItem49,R.id.XtringItem50,R.id.XtringItem51,R.id.XtringItem52,R.id.XtringItem53,
             R.id.XtringItem54,R.id.XtringItem55,R.id.XtringItem56,R.id.XtringItem57,R.id.XtringItem58,R.id.XtringItem59,
-            R.id.XtringItem60,R.id.XtringItem61,R.id.XtringItem62,R.id.XtringItem63,R.id.XtringItem64};
+            R.id.XtringItem60,R.id.XtringItem61,R.id.XtringItem62,R.id.XtringItem63,R.id.XtringItem64};*/
+
     XtringItem[] listItems;
     XtringItem[] tempListItems;
     GestureDetector gesDetector;
     float height = 0;
     float width = 0;
 
-    int comCont = 0;
+    //int comCont = 0;
     int[] ButtIDs = {R.id.txtButton,R.id.byteButton,R.id.binButton,R.id.hexButton,R.id.shortButton,
             R.id.intButton,R.id.longButton,R.id.floatButton,R.id.doubleButton};
     Button[] Buttons = new Button[9];
     CheckBox XReturn;
+    ArrayAdapter<CharSequence> adapter;
     boolean xReturn = false;
     boolean pro = false;
 
@@ -84,23 +90,16 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
         boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
-        //boolean darkTheme = getIntent().getBooleanExtra(Configuration.DARK_THEME, true);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
-        //boolean isPro = getIntent().getBooleanExtra(PrincipalActivity.IS_PRO, false);
-        if(pro)
-            numItems = 64;
-        listItems = new XtringItem[numItems + 1];
-        tempListItems = new XtringItem[numItems + 1];
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sendtypes_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        numItems = shapre.getInt(cantXItems, 0);
+        if(!pro && numItems > 10)
+            numItems = 10;
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_xtring);
         layout_xtring = findViewById(R.id.layout_xtring);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_xtring.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
-        //layout_xtring.setBackgroundColor(Color.parseColor("#ff303030"));
         for(int i = 0; i < 9; i++)
             Buttons[i] = findViewById(ButtIDs[i]);
         Buttons[6].setEnabled(pro);
@@ -115,11 +114,33 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                 xReturn = isChecked;
             }
         });
-        restore(0);
+        restore(valXReturn);
+        adapter = ArrayAdapter.createFromResource(this,
+                R.array.sendtypes_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        updateListItems();
+        gesDetector = new GestureDetector(this, this);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        height = metrics.heightPixels;
+        width = metrics.widthPixels;
+        setupActionBar();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        gesDetector.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
+    }
+
+    public void updateListItems() {
+        xtringList.removeAllViewsInLayout();
+        listItems = new XtringItem[numItems + 1];
+        tempListItems = new XtringItem[numItems + 1];
         for(int i = 1; i <= numItems; i++) {
             final XtringItem item = new XtringItem(this, i);
-            item.linearLayoutX = findViewById(ListIDs[i]);
-            item.enabled = false;
+            item.linearLayoutX = (LinearLayout) getLayoutInflater().inflate(R.layout.xtring_item, xtringList, false);
+            xtringList.addView(item.linearLayoutX);
             item.disabled = false;
             item.itemIndeX = item.linearLayoutX.findViewById(R.id.itemIndeX);
             item.spinnerX = item.linearLayoutX.findViewById(R.id.spinnerX);
@@ -164,64 +185,48 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             tempListItems[i] = item;
             restore(i);
         }
-        gesDetector = new GestureDetector(this, this);
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        height = metrics.heightPixels;
-        width = metrics.widthPixels;
-        setupActionBar();
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event){
-        gesDetector.onTouchEvent(event);
-        return super.dispatchTouchEvent(event);
+        if(!pro && numItems >= maxNumItems)
+            enableButtons(false);
     }
 
     public void restore(int n) {
         if(n > 0) {
-            boolean enX = shapre.getBoolean(enabledX + n, false);
-            if (enX) {
-                boolean disX = shapre.getBoolean(disabledX + n, false);
-                int commType = shapre.getInt(sendTypeX + n, PrincipalActivity.SEND_TXT);
-                String valTX = shapre.getString(valTXX + n, "");
-                boolean constX = shapre.getBoolean(constantX + n, false);
-                listItems[n].sendType = commType;
-                listItems[n].setSendType(commType, false);
-                listItems[n].setvalTX(valTX);
-                listItems[n].checkBoxX.setChecked(constX);
-                listItems[n].enabled = enX;
-                listItems[n].disableX.setChecked(disX);
-                listItems[n].linearLayoutX.setVisibility(View.VISIBLE);
-                comCont++;
-            }
-            if(comCont == numItems)
-                enableButtons(false);
+            boolean disX = shapre.getBoolean(disabledX + n, false);
+            int commType = shapre.getInt(sendTypeX + n, PrincipalActivity.SEND_TXT);
+            String valTX = shapre.getString(valTXX + n, "");
+            boolean constX = shapre.getBoolean(constantX + n, false);
+            listItems[n].sendType = commType;
+            listItems[n].setSendType(commType, false);
+            listItems[n].setvalTX(valTX);
+            listItems[n].checkBoxX.setChecked(constX);
+            listItems[n].disableX.setChecked(disX);
         }else if(n == 0) {
             xReturn = shapre.getBoolean(XRETURN, false);
             XReturn.setChecked(xReturn);
         }
     }
 
+    private void theSave(int n) {
+        editor.putInt(sendTypeX + n, listItems[n].sendType);
+        editor.putString(valTXX + n, listItems[n].tx);
+        editor.putBoolean(constantX + n, listItems[n].constant);
+        //editor.putBoolean(enabledX + n, listItems[n].enabled);
+        editor.putBoolean(disabledX + n, listItems[n].disabled);
+    }
+
     public void saveAll() {
         editor.putBoolean(XRETURN, xReturn);
         for(int n = 1; n <= numItems; n++) {
-            editor.putInt(sendTypeX + n, listItems[n].sendType);
-            editor.putString(valTXX + n, listItems[n].tx);
-            editor.putBoolean(constantX + n, listItems[n].constant);
-            editor.putBoolean(enabledX + n, listItems[n].enabled);
-            editor.putBoolean(disabledX + n, listItems[n].disabled);
+            theSave(n);
         }
+        editor.putInt(cantXItems, numItems);
         editor.commit();
     }
 
     public void save(int n) {
         if(n > 0 && n <= numItems) {
-            editor.putInt(sendTypeX + n, listItems[n].sendType);
-            editor.putString(valTXX + n, listItems[n].tx);
-            editor.putBoolean(constantX + n, listItems[n].constant);
-            editor.putBoolean(enabledX + n, listItems[n].enabled);
-            editor.putBoolean(disabledX + n, listItems[n].disabled);
+            theSave(n);
+            editor.putInt(cantXItems, numItems);
             editor.commit();
         }
     }
@@ -281,28 +286,28 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             }
             i++;
         }
-        if(comCont < numItems) {
-            comCont++;
-            listItems[comCont].enabled = true;
-            listItems[comCont].setSendType(txT, true);
-            listItems[comCont].linearLayoutX.setVisibility(View.VISIBLE);
-            if(comCont == numItems)
-                enableButtons(false);
+        if(pro || numItems < maxNumItems) {
+            numItems++;
+            updateListItems();
+            //listItems[numActualItems].enabled = true;
+            listItems[numItems].setSendType(txT, true);
+            //listItems[comCont].setVisibility(View.VISIBLE);
         }
     }
 
     public void delItem(View v) {
-        if(comCont > 0) {
-            listItems[comCont] = tempListItems[comCont];
-            listItems[comCont].enabled = false;
-            listItems[comCont].setConstant(false);
-            listItems[comCont].setDisabled(false);
-            listItems[comCont].checkBoxX.setChecked(false);
-            listItems[comCont].disableX.setChecked(false);
-            listItems[comCont].linearLayoutX.setVisibility(View.GONE);
+        if(numItems > 0) {
+            listItems[numItems] = tempListItems[numItems];
+            //listItems[comCont].enabled = false;
+            listItems[numItems].setConstant(false);
+            listItems[numItems].setDisabled(false);
+            listItems[numItems].checkBoxX.setChecked(false);
+            listItems[numItems].disableX.setChecked(false);
+            //listItems[comCont].linearLayoutX.setVisibility(View.GONE);
             enableButtons(true);
-            save(comCont);
-            comCont--;
+            save(numItems);
+            numItems--;
+            updateListItems();
         }
     }
 
@@ -315,7 +320,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         int dataCont = 0;
         try {
             for(int i = 1; i <= numItems; i++) {
-                if(listItems[i].enabled && !listItems[i].disabled) {
+                if(/*listItems[i].enabled && */!listItems[i].disabled) {
                     String Message = listItems[i].tx;
                     if (!Message.equals("")) {
                         switch (listItems[i].sendType) {
@@ -388,8 +393,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             resp.can = true;
             ByteBuffer byteArray = ByteBuffer.allocate(numDat);
             try {
-                for (int i = 1; i < numItems; i++) {
-                    if (listItems[i].enabled && !listItems[i].disabled) {
+                for (int i = 1; i <= numItems; i++) {
+                    if (/*listItems[i].enabled && */!listItems[i].disabled) {
                         String Message = listItems[i].tx;
                         if (!Message.equals("")) {
                             switch (listItems[i].sendType) {

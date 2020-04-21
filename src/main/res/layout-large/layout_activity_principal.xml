@@ -395,7 +395,16 @@
             android:visibility="gone"
             android:gravity="bottom">
 
-            <Button
+            <LinearLayout
+                android:id="@+id/commStaticL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="bottom">
+
+            </LinearLayout>
+
+            <!--<Button
                 android:id="@+id/comm1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -505,7 +514,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="commClick"
-                android:text="@string/commDVal" />
+                android:text="@string/commDVal" />-->
 
             <ScrollView
                 android:id="@+id/commScroll"
@@ -518,7 +527,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <Button
+                    <!--<Button
                         android:id="@+id/comm17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -748,7 +757,7 @@
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

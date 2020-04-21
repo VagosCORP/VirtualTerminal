@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="conect"
-            android:text="@string/Button_Conect" />
+            android:text="@string/Button_Conect"/>
 
         <Button
             android:id="@+id/chan_ser"
@@ -29,20 +29,20 @@
             android:layout_height="fill_parent"
             android:onClick="Chan_Ser"
             android:text="@string/Ser_Dat"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/DS"
             android:id="@+id/dataString"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/appendCRpLF"
-            android:id="@+id/aCRpLF" />
+            android:id="@+id/aCRpLF"/>
 
     </LinearLayout>
 
@@ -63,7 +63,8 @@
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
             android:visibility="gone"
-            android:inputType="text">
+            android:inputType="text"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -75,7 +76,8 @@
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
             android:visibility="visible"
-            android:inputType="textNoSuggestions" >
+            android:inputType="textNoSuggestions"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -87,7 +89,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -100,7 +103,8 @@
             android:hint="@string/Text_TXb"
             android:visibility="gone"
             android:digits="01"
-            android:inputType="number">
+            android:inputType="number"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -113,7 +117,8 @@
             android:hint="@string/Text_TXh"
             android:visibility="gone"
             android:inputType="textNoSuggestions"
-            android:digits="0123456789abcdefABCDEF">
+            android:digits="0123456789abcdefABCDEF"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -125,7 +130,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -137,7 +143,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -149,8 +156,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:enabled="false"
-            android:inputType="number">
+            android:inputType="number"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -162,7 +169,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
-            android:inputType="numberDecimal|numberSigned">
+            android:inputType="numberDecimal|numberSigned"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -174,8 +182,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
-            android:enabled="false"
-            android:inputType="numberDecimal|numberSigned">
+            android:inputType="numberDecimal|numberSigned"
+            android:autofillHints="">
 
             <requestFocus />
         </EditText>
@@ -221,7 +229,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/updRate"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:autofillHints=""/>
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -311,7 +320,16 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <Button
+            <LinearLayout
+                android:id="@+id/commStaticL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="bottom">
+
+            </LinearLayout>
+
+            <!--<Button
                 android:id="@+id/comm1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -421,7 +439,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="commClick"
-                android:text="@string/commDVal" />
+                android:text="@string/commDVal" />-->
 
             <ScrollView
                 android:id="@+id/commScroll"
@@ -434,7 +452,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Button
+                    <!--<Button
                         android:id="@+id/comm17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -664,12 +682,14 @@
                             android:onClick="commClick"
                             android:text="@string/commDVal" />
 
-                    </LinearLayout>
+                    </LinearLayout>-->
 
                 </LinearLayout>
 
             </ScrollView>
 
         </LinearLayout>
+        
     </LinearLayout>
+
 </LinearLayout>
