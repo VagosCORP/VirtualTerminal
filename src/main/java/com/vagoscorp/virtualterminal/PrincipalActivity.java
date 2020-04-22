@@ -88,6 +88,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public boolean clearTXAS = false;
     public int numCommStat = 4;
     public int numCommScroll = 4;
+    public int cantFastSendTot = 8;
 	public int SC;
     public int sendTyp = SEND_TXT;
     int cantDataTyp = 9;
@@ -161,6 +162,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public static final int COMMT_DOUBLE = 15;
     public static final int COMMT_DUAL = 21;
     public static final int COMMT_UPD = 22;
+    public static final int COMMT_XTRING = 25;
 
 //    private static final String MLDP_PRIVATE_SERVICE = "00035b03-58e6-07dd-021a-08123a000300"; //Private service for Microchip MLDP
 //    private static final String MLDP_DATA_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a000301"; //Characteristic for MLDP Data, properties - notify, write
@@ -206,7 +208,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
-    int cantFastSendTot = 8;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -401,6 +402,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void updCommButtons() {
+        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
+        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
         cantFastSendTot = numCommStat + numCommScroll;
         commX = new Button[cantFastSendTot];
         commStaticL.removeAllViewsInLayout();
@@ -951,12 +954,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         }
     }
 
-    /*private void themeSavePref(boolean dark) {
-        editor.putBoolean(getString(R.string.DARK_THEME), dark);
-        editor.apply();
-        Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -1065,13 +1062,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	
 	@Override
 	protected void onResume() {
-//        if(shapre.getBoolean(theme, false))
-//            setTheme(R.style.DarkTheme);
         if(TCOM)
             resumeBT(shapre);
         else
             resumeW(shapre);
-		UcommUI();
+        clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
+        updCommButtons();
+        UcommUI();
 		super.onResume();
 	}
 
@@ -1218,8 +1215,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 if(resultCode == Activity.RESULT_OK) {
                     darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
                     clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-                    numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
-                    numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
                     updCommButtons();
                 }
                 break;

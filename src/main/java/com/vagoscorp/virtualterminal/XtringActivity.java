@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -29,12 +29,24 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     LinearLayout layout_xtring;
     LinearLayout xtringList;
+    LinearLayout commBase;
+    LinearLayout commStaticL;
+    LinearLayout commScrollableL;
+    LinearLayout commX_NameLay;
+    LinearLayout typesLay1;
+    LinearLayout typesLay2;
+    EditText commX_Name;
     ActionBar actionBar;
     public int numItems = 0;
     public static int maxNumItems = 10;
 
     public static final int XTRING_EDITOR = 199;
     public static final int valXReturn = 0;
+    public int numCommStat = 4;
+    public int numCommScroll = 4;
+    public int cantFastSendTot = 8;
+
+    private final int ENTER_CONFIG = 18;
 
     public static final String NEWTX = "NEWTX";
     public static final String XRETURN = "XRETURN";
@@ -59,6 +71,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             R.id.XtringItem54,R.id.XtringItem55,R.id.XtringItem56,R.id.XtringItem57,R.id.XtringItem58,R.id.XtringItem59,
             R.id.XtringItem60,R.id.XtringItem61,R.id.XtringItem62,R.id.XtringItem63,R.id.XtringItem64};*/
 
+    Button[] commX;
+
     XtringItem[] listItems;
     XtringItem[] tempListItems;
     GestureDetector gesDetector;
@@ -70,28 +84,25 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             R.id.intButton,R.id.longButton,R.id.floatButton,R.id.doubleButton};
     Button[] Buttons = new Button[9];
     CheckBox XReturn;
+    Button sendX;
     ArrayAdapter<CharSequence> adapter;
     boolean xReturn = false;
     boolean pro = false;
+    boolean CM = false;
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
 
     @Override
-    protected void onStop() {
-        saveAll();
-        super.onStop();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //shapre = getPreferences(MODE_PRIVATE);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
         boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
         numItems = shapre.getInt(cantXItems, 0);
+        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
+        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
         if(!pro && numItems > 10)
             numItems = 10;
         if(darkTheme)
@@ -105,7 +116,15 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         Buttons[6].setEnabled(pro);
         Buttons[8].setEnabled(pro);
         xtringList = findViewById(R.id.xtringList);
+        commX_NameLay = findViewById(R.id.CommX_NameLay);
+        commX_Name = findViewById(R.id.CommX_Name);
+        typesLay1 = findViewById(R.id.TypesLay1);
+        typesLay2 = findViewById(R.id.TypesLay2);
+        commBase = findViewById(R.id.commBase);
+        commStaticL = findViewById(R.id.commStaticL);
+        commScrollableL = findViewById(R.id.commScrollableL);
         XReturn = findViewById(R.id.xReturn);
+        sendX = findViewById(R.id.SendX);
         if(pro)
             XReturn.setVisibility(View.VISIBLE);
         XReturn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -114,17 +133,45 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                 xReturn = isChecked;
             }
         });
+        sendX.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                commanderMode();
+                return true;
+            }
+        });
         restore(valXReturn);
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.sendtypes_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         updateListItems();
+        updCommButtons();
         gesDetector = new GestureDetector(this, this);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         width = metrics.widthPixels;
         setupActionBar();
+    }
+
+    void commanderMode() {
+        if(pro && !CM) {
+            CM = true;
+            commBase.setVisibility(View.VISIBLE);
+            commX_NameLay.setVisibility(View.VISIBLE);
+            typesLay1.setVisibility(View.GONE);
+            typesLay2.setVisibility(View.GONE);
+            updateListItems();
+        } else if(pro){
+            CM = false;
+            commBase.setVisibility(View.GONE);
+            commX_NameLay.setVisibility(View.GONE);
+            typesLay1.setVisibility(View.VISIBLE);
+            typesLay2.setVisibility(View.VISIBLE);
+            updateListItems();
+        }else {
+            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -179,6 +226,10 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     item.setDisabled(isChecked);
                 }
             });
+            if(CM) {
+                item.checkBoxX.setText(R.string.ComXConstantL);
+                item.disableX.setText(R.string.ComXIgnoreL);
+            }
             if(pro)
                 item.disableX.setVisibility(View.VISIBLE);
             listItems[i] = item;
@@ -187,6 +238,66 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         }
         if(!pro && numItems >= maxNumItems)
             enableButtons(false);
+    }
+
+    public void updCommButtons() {
+        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
+        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
+        cantFastSendTot = numCommStat + numCommScroll;
+        commX = new Button[cantFastSendTot];
+        commStaticL.removeAllViewsInLayout();
+        commScrollableL.removeAllViewsInLayout();
+        for(int i = 0; i < cantFastSendTot; i++) {
+            commX[i] = new Button(this);
+            buttSetAllCaps(commX[i]);
+            final int n = i + 1;
+            commX[i].setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int commType = PrincipalActivity.COMMT_STRING;
+                    boolean N = false;
+                    String name = getResources().getString(R.string.commDVal);
+                    String message = getResources().getString(R.string.commDVal);
+                    if(n != 0) {
+                        CanSendPlusData tempData = genBuff();
+                        if(tempData.can) {
+                            saveAll();
+                            if(commX_Name.length() > 0) {
+                                message = new String(tempData.data);
+                                name = "Xtr:" + commX_Name.getText().toString();
+                                commType = PrincipalActivity.COMMT_XTRING;
+                            }else
+                                Toast.makeText(XtringActivity.this, R.string.FastSendButtName, Toast.LENGTH_SHORT).show();
+                        }
+                        editor.putString(PrincipalActivity.comm + n, message);
+                        editor.putString(PrincipalActivity.commN + n, name);
+                        editor.putBoolean(PrincipalActivity.commT + n, N);
+                        editor.putInt(PrincipalActivity.commET + n, commType);
+                        editor.commit();
+
+                        UcommUI();
+                    }
+                    return true;
+                }
+            });
+            commX[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(XtringActivity.this, R.string.LongClick2Save, Toast.LENGTH_SHORT).show();
+                }
+            });
+            if(i < numCommStat) {
+                commStaticL.addView(commX[i]);
+            }else {
+                commScrollableL.addView(commX[i]);
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public void buttSetAllCaps(Button b) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            b.setAllCaps(false);
     }
 
     public void restore(int n) {
@@ -231,6 +342,13 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         }
     }
 
+    public void UcommUI() {
+        for(int i = 0; i < cantFastSendTot; i++) {
+            int num = i + 1;
+            commX[i].setText(shapre.getString(PrincipalActivity.commN + num, getResources().getString(R.string.commDVal)));
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -256,16 +374,24 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: {
+            case android.R.id.home:
                 exitXtring();
                 return true;
-            }
-            case R.id.action_settings: {
-
+            case R.id.commMode:
+                commanderMode();
                 return true;
-            }
+            case R.id.action_settings:
+                enterSettings();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void enterSettings() {
+        Intent startConfig = new Intent(this, Configuration.class);
+        startActivityForResult(startConfig, ENTER_CONFIG);
+        overridePendingTransition(R.animator.slide_in_right,
+                R.animator.slide_out_left);
     }
 
     void enableButtons(boolean en) {
@@ -311,9 +437,9 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         }
     }
 
-    public class CanSendPlusData {
-        public boolean can = false;
-        public byte[] data;
+    public static class CanSendPlusData {
+        boolean can = false;
+        byte[] data;
     }
 
     public int checkData() {
@@ -485,7 +611,24 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                 }
                 break;
             }
+            case ENTER_CONFIG:
+                if(resultCode == Activity.RESULT_OK) {
+                    updCommButtons();
+                }
+                break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        UcommUI();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        saveAll();
+        super.onStop();
     }
 
     @Override

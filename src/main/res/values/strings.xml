@@ -181,7 +181,7 @@
     <string name="ComXSendX">Send</string>
     <string name="commDVal" translatable="false">NoDat</string>
     <string name="ComXConstant">Constant</string>
-    <string name="ComXDisable">Ignore</string>
+    <string name="ComXIgnore">Ignore</string>
     <string name="Text_TXn" translatable="false">123456789</string>
     <string name="Text_TXb" translatable="false">01</string>
     <string name="Text_TXh" translatable="false">0123456789ABCDEF</string>
@@ -233,5 +233,10 @@
 
     <string name="NEED_PRO">Pro Function</string>
     <string name="ConfigNotSaved">Changes not applied</string>
+    <string name="LongClick2Save">LongClick to Save</string>
+    <string name="FastSendButtName">FastSend Name</string>
+    <string name="SaveAsFastSend">Save as FastSend</string>
+    <string name="ComXConstantL" translatable="false">C</string>
+    <string name="ComXIgnoreL" translatable="false">I</string>
 
 </resources>

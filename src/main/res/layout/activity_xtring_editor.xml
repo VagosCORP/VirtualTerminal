@@ -28,7 +28,8 @@
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
             android:visibility="gone"
-            android:inputType="text">
+            android:inputType="text"
+            android:importantForAutofill="no">
 
             <requestFocus />
 
@@ -41,7 +42,8 @@
             android:layout_weight="1"
             android:hint="@string/VagosCORP"
             android:visibility="visible"
-            android:inputType="textNoSuggestions">
+            android:inputType="textNoSuggestions"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -53,7 +55,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -66,7 +69,8 @@
             android:hint="@string/Text_TXb"
             android:visibility="gone"
             android:digits="01"
-            android:inputType="number">
+            android:inputType="number"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -79,7 +83,8 @@
             android:hint="@string/Text_TXh"
             android:visibility="gone"
             android:inputType="textNoSuggestions"
-            android:digits="0123456789abcdefABCDEF">
+            android:digits="0123456789abcdefABCDEF"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -91,7 +96,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -103,7 +109,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -115,7 +122,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXn"
             android:visibility="gone"
-            android:inputType="number">
+            android:inputType="number"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -127,7 +135,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
-            android:inputType="numberDecimal|numberSigned">
+            android:inputType="numberDecimal|numberSigned"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -139,7 +148,8 @@
             android:layout_weight="1"
             android:hint="@string/Text_TXf"
             android:visibility="gone"
-            android:inputType="numberDecimal|numberSigned">
+            android:inputType="numberDecimal|numberSigned"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>

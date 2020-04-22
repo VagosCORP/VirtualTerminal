@@ -172,7 +172,7 @@
     <string name="ComXSendX">Enviar</string>
 
     <string name="ComXConstant">Constante</string>
-    <string name="ComXDisable">Ignorar</string>
+    <string name="ComXIgnore">Ignorar</string>
 
 
 
@@ -206,5 +206,11 @@
 
     <string name="NEED_PRO">Función Pro</string>
     <string name="ConfigNotSaved">Cambios no Aplicados</string>
+    <string name="LongClick2Save">Pulso Largo para Guardar</string>
+    <string name="FastSendButtName">Nombre para Envío Rápido</string>
+    <string name="SaveAsFastSend">Guardar como Envío Rápido</string>
+
+
+
 
 </resources>
