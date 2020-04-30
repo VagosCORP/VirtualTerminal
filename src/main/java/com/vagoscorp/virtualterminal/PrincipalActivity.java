@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,6 +44,7 @@ import java.util.TimerTask;
 
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
+import vclibs.communication.Senders;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
@@ -107,6 +109,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	ComunicBT comunicBT;
 
     EditText[] TXs = new EditText[cantDataTyp];// Data to Send
+    InputMethodManager imm;
 //    EditText TX;// Data to Send
 
 	public int index;
@@ -206,6 +209,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     Timer timy = new Timer();
     int mCount = 0;
 
+    boolean littleEndian = false;
+
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
 
@@ -221,6 +226,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
         numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
+        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
         checked = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
@@ -293,6 +299,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         commBase = findViewById(R.id.commBase);
         commStaticL = findViewById(R.id.commStaticL);
         commScrollableL = findViewById(R.id.commScrollableL);
+        imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 //        commScroll = findViewById(R.id.commScroll);
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -887,6 +894,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 TXs[i].setVisibility(View.GONE);
             TXs[sendType].setVisibility(View.VISIBLE);
             TXs[sendType].requestFocus();
+            imm.showSoftInput(TXs[sendType], InputMethodManager.SHOW_IMPLICIT);
             if(sendType==SEND_TXT)
                 aCRpLF.setEnabled(true);
 //            switch (sendType) {
@@ -1202,10 +1210,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             case ENTER_XTRING:
                 if(resultCode == Activity.RESULT_OK) {
                     byte[] newTX = data.getByteArrayExtra(XtringActivity.NEWTX);
-                    if(TCOM)
+                    String newTXs = data.getStringExtra(XtringActivity.NEWTXs);
+                    if(TCOM) {
+                        //comunicBT.enviar(newTXs);
                         comunicBT.enviar_ByteArray(newTX);
-                    else
+                    }else {
+                        //comunic.enviar(newTXs);
                         comunic.enviar_ByteArray(newTX);
+                    }
                     boolean XReturn = data.getBooleanExtra(XtringActivity.XRETURN,false);
                     if(XReturn)
                         enterXtringMode();
@@ -1534,26 +1546,22 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                             if (bdato[i] == charEnd) {
                                 ByteBuffer byteBuffer = ByteBuffer.wrap(dataBytes);
                                 switch (dataRcvtyp) {
-                                    case (COMMT_INT16): {
+                                    case (COMMT_INT16):
                                         printOnTV(true, RXn, byteBuffer.getShort() + " ");
                                         break;
-                                    }
-                                    case (COMMT_INT32): {
+                                    case (COMMT_INT32):
                                         printOnTV(true, RXn, byteBuffer.getInt() + " ");
                                         break;
-                                    }
-                                    case (COMMT_INT64): {
+                                    case (COMMT_INT64):
                                         printOnTV(true, RXn, byteBuffer.getLong() + " ");
                                         break;
-                                    }
-                                    case (COMMT_FLOAT): {
+                                    case (COMMT_FLOAT):
                                         printOnTV(true, RXn, byteBuffer.getFloat() + " ");
                                         break;
-                                    }
-                                    case (COMMT_DOUBLE): {
+                                    case (COMMT_DOUBLE):
+
                                         printOnTV(true, RXn, byteBuffer.getDouble() + " ");
                                         break;
-                                    }
                                 }
                             } else
                                 RXn.append("Err");

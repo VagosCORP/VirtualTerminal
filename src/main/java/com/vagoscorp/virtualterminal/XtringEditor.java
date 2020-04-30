@@ -52,7 +52,7 @@ public class XtringEditor extends Activity {
         }
         setSendType();
         String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
-        String tempS = "Item" + position + " ( " + sendT[sendType] + " )";
+        String tempS = getString(R.string.Item) + position + " ( " + sendT[sendType] + " ) " + getString(R.string.Empty);
         editorXdetails.setText(tempS);
         newTXs[sendType].setText(txVal);
         newTXs[sendType].selectAll();

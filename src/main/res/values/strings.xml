@@ -16,8 +16,8 @@
         *   Enter Settings Screen.\n
         - Settings Screen have additional options:\n
         *   Select appearance options: Light or Dark theme.\n
-        *   Enable Clear TX input after Send.\n
-        *   Change Number of FastSend Buttons: Up to 16 Static, 32 Scrollable.\n
+        *   Clear TX input after Send if needed.\n
+        *   Change Number of Static and Scrollable FastSend Buttons.\n
         - Tablet users can select the reception options without entering to menu.\n
         - In WiFi Server mode, net port should be greater or equal to 1100 to avoid ports used by the system.
     </string>
@@ -36,23 +36,25 @@
         *   LongClick on one FastSend Button to save the TX data on the button.\n
         *   Simple Click on FastSend Button to automatically send the saved data.\n
         *   If TX input is empty, LongClick on a FastSend Button will erase saved data.\n
-        *   FastSend Buttons will show type and data you just save.
-        *   Pro users have up to 48 FastSend Buttons instead of 8.
+        *   FastSend Buttons will show type and data you just save.\n
+        *   Pro users have Unlimited FastSend Buttons instead of 8. Change Quantities in Settings Screen.
     </string>
     <string name="instructionsXtring">
         Operating \'Xtring Interface\': Save an organized group of various types of data to send it as a package.\n
         *   Press the data type button you want to add to the package.\n
         *   Write data you want for that item into the just appeared TextInput.\n
-        *   If you want to change the data type, just Select from Spinner the kind of data you want to use.\n
+        *   If you want to change the data type, just Select from the item Spinner the kind of data you want to use.\n
         *   You can define constant items to avoid replacing precious information\n
         *   You can delete the last package item by pressing the \'Delete Item\' Button.\n
-        *   If some item data is empty \'NO_DAT\' the package could not be sent and you will be prompted to write into the first empty item.\n
+        *   If some item data is empty \'No_Dat\' the package will not be sent and you be prompted to write into the first empty item.\n
         *   Press the Send Button to start the package transmission and return to the Principal Screen.\n
-        *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left.\n
+        *   Finish Xtring Mode(without sending a package) by sliding from the right side of the screen to the left or pressing Back.\n
         *   The package template and the actual values will be automatically saved on device memory.\n
-        *   Pro users have up to 64 Xtring Items instead of 10.\n
+        *   Pro users have Unlimited Xtring Items instead of 10.\n
         *   Pro users can select items to ignore during the send operation.\n
-        *   Pro users can return automatically to the Xtring screen after sending the package.
+        *   Pro users can return automatically to the Xtring screen after sending the package by activating the CheckBox.\n
+        *   Pro users can save Xtring Packages in FastSend Buttons by selecting the option on the menu or a LongClick on the Send Button.\n
+        *   The known FastSend interface will appear with a upper TextInput to define the Button name, be sure to have no empty Xtring Items.
     </string>
     <string name="instructionsAdvRcv">
         Operating \'Advanced Reception\' types: Receive and show big numbers (16, 32 and 64 bit integers) and float, double numbers (32 and 64 bit).\n
@@ -74,8 +76,9 @@
         Support Us installing the Virtual Terminal PROkey app, you will obtain:\n
         *   Server working mode for WiFi and Bluetooth, letting you debug other communication apps or exchange data with clients connected to your device.\n
         *   Long and Double Send/Receive Data Types.\n
-        *   Enhanced FastSend Interface with Up to 48 button (Configurable Quantities).\n
-        *   Enhanced Xtring Interface with up to 64 items and new options.
+        *   Enhanced FastSend Interface unlimited button and Configurable Quantities.\n
+        *   Enhanced Xtring Interface with unlimited items and new options.\n
+        *   Save the Xtring packages as FastSend Buttons to use from the principal Screen.
     </string>
     <string-array name="sendtypes_array" translatable="false">
         <item>T</item>
@@ -202,11 +205,6 @@
     <string name="xReturn">Return after Send</string>
     <string name="disabled">Disabled</string>
     <string name="textCopied">Text Copied!</string>
-    <string name="EndianSelect">Endian Selection (In Development)</string>
-    <string name="SendingEndian">Sending Endian</string>
-    <string name="ReceivingEndian">Receiving Endian</string>
-    <string name="LittleEndian" translatable="false">LittleEndian</string>
-    <string name="BigEndian" translatable="false">BigEndian</string>
     <string name="DarkTheme">Enable Dark Theme</string>
     <string name="ClearTXAS">Clear TX After Send</string>
     <string name="NumCommLabel">Number of FastSend Buttons</string>
@@ -228,14 +226,23 @@
     <string name="NUM_COMM_STAT" translatable="false">NUM_COMM_STAT</string>
     <string name="NUM_COMM_SCROLL" translatable="false">NUM_COMM_SCROLL</string>
     <string name="CLEAR_TX_AFTER_SEND" translatable="false">CLEAR_TX_AFTER_SEND</string>
-    <string name="LITTLE_ENDIAN4SEND" translatable="false">LITTLE_ENDIAN4SEND</string>
-    <string name="LITTLE_ENDIAN4RECEIVE" translatable="false">LITTLE_ENDIAN4RECEIVE</string>
+    <string name="LITTLE_ENDIAN" translatable="false">LITTLE_ENDIAN</string>
+
+    <string name="EndianSelect">Endian Selection (In Development)</string>
+    <string name="GlobalEndian">Global Endian</string>
+    <!--<string name="ReceivingEndian">Receiving Endian</string>-->
+    <string name="LittleEndian" translatable="false">LittleEndian</string>
+    <string name="BigEndian" translatable="false">BigEndian</string>
 
     <string name="NEED_PRO">Pro Function</string>
     <string name="ConfigNotSaved">Changes not applied</string>
     <string name="LongClick2Save">LongClick to Save</string>
     <string name="FastSendButtName">FastSend Name</string>
+    <string name="Item">Item</string>
+    <string name="Empty"> is Empty</string>
     <string name="SaveAsFastSend">Save as FastSend</string>
+    <string name="SavedAsFS">Saved as </string>
+    <string name="EmptyXtringItem">Empty Xtring Item</string>
     <string name="ComXConstantL" translatable="false">C</string>
     <string name="ComXIgnoreL" translatable="false">I</string>
 

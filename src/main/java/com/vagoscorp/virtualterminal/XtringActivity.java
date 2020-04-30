@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 public class XtringActivity extends Activity implements GestureDetector.OnGestureListener {
@@ -36,6 +38,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     LinearLayout typesLay1;
     LinearLayout typesLay2;
     EditText commX_Name;
+    InputMethodManager imm;
     ActionBar actionBar;
     public int numItems = 0;
     public static int maxNumItems = 10;
@@ -49,6 +52,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     private final int ENTER_CONFIG = 18;
 
     public static final String NEWTX = "NEWTX";
+    public static final String NEWTXs = "NEWTXs";
     public static final String XRETURN = "XRETURN";
     public static final String POS = "POS";
     public static final String SENDTYPE = "SENDTYPE";
@@ -125,6 +129,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         commScrollableL = findViewById(R.id.commScrollableL);
         XReturn = findViewById(R.id.xReturn);
         sendX = findViewById(R.id.SendX);
+        imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         if(pro)
             XReturn.setVisibility(View.VISIBLE);
         XReturn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -136,7 +141,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         sendX.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                commanderMode();
+                commanderMode(true);
                 return true;
             }
         });
@@ -154,7 +159,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         setupActionBar();
     }
 
-    void commanderMode() {
+    void commanderMode(boolean isButton) {
         if(pro && !CM) {
             CM = true;
             commBase.setVisibility(View.VISIBLE);
@@ -162,15 +167,25 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             typesLay1.setVisibility(View.GONE);
             typesLay2.setVisibility(View.GONE);
             updateListItems();
-        } else if(pro){
+            String tempX = getString(R.string.FastSendButtName) + " " + getString(R.string.Empty);
+            commX_Name.requestFocus();
+            imm.showSoftInput(commX_Name, InputMethodManager.SHOW_IMPLICIT);
+            if(commX_Name.length() <= 0)
+                Toast.makeText(XtringActivity.this, tempX, Toast.LENGTH_SHORT).show();
+        }else if(pro) {
             CM = false;
             commBase.setVisibility(View.GONE);
             commX_NameLay.setVisibility(View.GONE);
             typesLay1.setVisibility(View.VISIBLE);
             typesLay2.setVisibility(View.VISIBLE);
             updateListItems();
+            commX_Name.clearFocus();
+            imm.hideSoftInputFromWindow(commX_Name.getWindowToken(), 0);
         }else {
-            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
+            if(!isButton)
+                Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
+            else
+                enviarX(null);
         }
     }
 
@@ -186,7 +201,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         tempListItems = new XtringItem[numItems + 1];
         for(int i = 1; i <= numItems; i++) {
             final XtringItem item = new XtringItem(this, i);
-            item.linearLayoutX = (LinearLayout) getLayoutInflater().inflate(R.layout.xtring_item, xtringList, false);
+            item.linearLayoutX = (LinearLayout)getLayoutInflater().inflate(R.layout.xtring_item, xtringList, false);
             xtringList.addView(item.linearLayoutX);
             item.disabled = false;
             item.itemIndeX = item.linearLayoutX.findViewById(R.id.itemIndeX);
@@ -262,19 +277,38 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                         CanSendPlusData tempData = genBuff();
                         if(tempData.can) {
                             saveAll();
-                            if(commX_Name.length() > 0) {
-                                message = new String(tempData.data);
-                                name = "Xtr:" + commX_Name.getText().toString();
+                            boolean mutable = false;
+                            try {
+                                message = new String(tempData.data, "ISO-8859-1");
                                 commType = PrincipalActivity.COMMT_XTRING;
-                            }else
-                                Toast.makeText(XtringActivity.this, R.string.FastSendButtName, Toast.LENGTH_SHORT).show();
+                                mutable = true;
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            String theName = "Pack" + n;
+                            if(mutable){
+                                if(commX_Name.length() > 0) {
+                                    name = "Xtr:" + commX_Name.getText().toString();
+                                }else {
+                                    name = "Xtr:" + theName;
+                                    //String tempX = getString(R.string.FastSendButtName) + " " + getString(R.string.Empty);
+                                    //commX_Name.requestFocus();
+                                    //commX_Name.setText(theName);
+                                    commX_Name.setHint(theName);
+                                    //commX_Name.clearFocus();
+                                    //imm.showSoftInput(commX_Name, InputMethodManager.SHOW_IMPLICIT);
+
+                                }
+                                imm.hideSoftInputFromWindow(commX_Name.getWindowToken(), 0);
+                                String tempX = getString(R.string.SavedAsFS) + " " + name;
+                                Toast.makeText(XtringActivity.this, tempX, Toast.LENGTH_SHORT).show();
+                            }
                         }
                         editor.putString(PrincipalActivity.comm + n, message);
                         editor.putString(PrincipalActivity.commN + n, name);
                         editor.putBoolean(PrincipalActivity.commT + n, N);
                         editor.putInt(PrincipalActivity.commET + n, commType);
                         editor.commit();
-
                         UcommUI();
                     }
                     return true;
@@ -378,7 +412,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                 exitXtring();
                 return true;
             case R.id.commMode:
-                commanderMode();
+                commanderMode(false);
                 return true;
             case R.id.action_settings:
                 enterSettings();
@@ -497,7 +531,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                         }
                     }else {
                         listItems[i].openEditor();
-                        Toast.makeText(this, R.string.commDVal, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.EmptyXtringItem, Toast.LENGTH_SHORT).show();
                         dataCont = 0;
                         break;
                     }
@@ -572,7 +606,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                         } else {
                             resp.can = false;
                             listItems[i].openEditor();
-                            Toast.makeText(this, R.string.commDVal, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.EmptyXtringItem, Toast.LENGTH_SHORT).show();
                             break;
                         }
                     }
@@ -589,10 +623,18 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     public void enviarX(View v) {
         CanSendPlusData tempData = genBuff();
+        String txPack = "";
         if(tempData.can) {
             saveAll();
+            try {
+                txPack = new String(tempData.data, "ISO-8859-1");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                //txPack = "";
+            }
             Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
             resIntent.putExtra(NEWTX, tempData.data);
+            resIntent.putExtra(NEWTXs, txPack);
             resIntent.putExtra(XRETURN, xReturn);
             setResult(Activity.RESULT_OK, resIntent);
             exitXtring();

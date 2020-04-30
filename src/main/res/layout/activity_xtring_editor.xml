@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
+        <!--<EditText
             android:id="@+id/newTX"
             android:text="@string/VagosCORP"
             android:layout_width="0dp"
@@ -33,7 +33,7 @@
 
             <requestFocus />
 
-        </EditText>
+        </EditText>-->
 
         <EditText
             android:id="@+id/newTXtext"

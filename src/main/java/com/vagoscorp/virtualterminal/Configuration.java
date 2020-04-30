@@ -39,8 +39,8 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     private boolean clearTXAS = false;
     private int numCommStat = defNumCommStat;
     private int numCommScroll = defNumCommScroll;
-    private boolean littleEndianForSend = false;
-    private boolean littleEndianForReceive = false;
+    private boolean littleEndianGlobal = false;
+    //private boolean littleEndianForReceive = false;
 
     CheckBox enDarkTheme;
     CheckBox enClearTX_AS;
@@ -48,9 +48,9 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     EditText cantCommStat;
     LinearLayout cantCommScroll_Layout;
     EditText cantCommScroll;
-    RadioGroup endian4Send;
-    RadioButton bigEndian4Send;
-    RadioButton littleEndian4Send;
+    RadioGroup endianGlobal;
+    RadioButton bigEndian;
+    RadioButton littleEndian;
 
     RadioGroup endian4Receive;
     RadioButton bigEndian4Receive;
@@ -70,8 +70,8 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), defNumCommStat);
         numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), defNumCommScroll);
-        littleEndianForSend = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN4SEND), false);
-        littleEndianForReceive = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), false);
+        littleEndianGlobal = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+        //littleEndianForReceive = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_configuration);
@@ -92,16 +92,16 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
         cantCommScroll = findViewById(R.id.cantCommScroll);
         temp = "" + numCommScroll;
         cantCommScroll.setText(temp);
-        endian4Send = findViewById(R.id.endian4Send);
-        bigEndian4Send = findViewById(R.id.bigEndian4Send);
-        bigEndian4Send.setChecked(!littleEndianForSend);
-        littleEndian4Send = findViewById(R.id.littleEndian4Send);
-        littleEndian4Send.setChecked(littleEndianForSend);
-        endian4Receive = findViewById(R.id.endian4Receive);
-        bigEndian4Receive = findViewById(R.id.bigEndian4Receive);
-        bigEndian4Receive.setChecked(!littleEndianForReceive);
-        littleEndian4Receive = findViewById(R.id.littleEndian4Receive);
-        littleEndian4Receive.setChecked(littleEndianForReceive);
+        endianGlobal = findViewById(R.id.endianGlobal);
+        bigEndian = findViewById(R.id.bigEndian);
+        bigEndian.setChecked(!littleEndianGlobal);
+        littleEndian = findViewById(R.id.littleEndian);
+        littleEndian.setChecked(littleEndianGlobal);
+        //endian4Receive = findViewById(R.id.endian4Receive);
+        //bigEndian4Receive = findViewById(R.id.bigEndian4Receive);
+        //bigEndian4Receive.setChecked(!littleEndianForReceive);
+        //littleEndian4Receive = findViewById(R.id.littleEndian4Receive);
+        //littleEndian4Receive.setChecked(littleEndianForReceive);
         if(!pro) {
             cantCommStat.setEnabled(pro);
             cantCommScroll.setEnabled(pro);
@@ -109,7 +109,7 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
             cantCommScroll.setText("");
             cantCommStat.setHint(R.string.NEED_PRO);
             cantCommScroll.setHint(R.string.NEED_PRO);
-            bigEndian4Send.setEnabled(pro);
+            bigEndian.setEnabled(pro);
             bigEndian4Receive.setEnabled(pro);
             numCommStat = defNumCommStat;
             numCommScroll = defNumCommScroll;
@@ -117,7 +117,7 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
             editor.putInt(getString(R.string.NUM_COMM_SCROLL), numCommScroll);
             editor.commit();
         }
-        littleEndian4Send.setEnabled(false);
+        littleEndian.setEnabled(false);
         littleEndian4Receive.setEnabled(false);
     }
 
@@ -128,14 +128,14 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
             numCommStat = Integer.parseInt(cantCommStat.getText().toString());
         if(!cantCommScroll.getText().toString().equals(""))
             numCommScroll = Integer.parseInt(cantCommScroll.getText().toString());
-        littleEndianForSend = littleEndian4Send.isChecked();
-        littleEndianForReceive = littleEndian4Receive.isChecked();
+        littleEndianGlobal = littleEndian.isChecked();
+        //littleEndianForReceive = littleEndian4Receive.isChecked();
         editor.putBoolean(getString(R.string.DARK_THEME), darkTheme);
         editor.putBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), clearTXAS);
         editor.putInt(getString(R.string.NUM_COMM_STAT), numCommStat);
         editor.putInt(getString(R.string.NUM_COMM_SCROLL), numCommScroll);
-        editor.putBoolean(getString(R.string.LITTLE_ENDIAN4SEND), littleEndianForSend);
-        editor.putBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), littleEndianForReceive);
+        editor.putBoolean(getString(R.string.LITTLE_ENDIAN), littleEndianGlobal);
+        //editor.putBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), littleEndianForReceive);
         editor.commit();
         Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
         setResult(Activity.RESULT_OK, resIntent);

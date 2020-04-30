@@ -91,7 +91,7 @@
         android:text="@string/EndianSelect" />
 
     <RadioGroup
-        android:id="@+id/endian4Send"
+        android:id="@+id/endianGlobal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -100,42 +100,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/SendingEndian" />
+            android:text="@string/GlobalEndian" />
 
         <RadioButton
-            android:id="@+id/bigEndian4Send"
+            android:id="@+id/bigEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/BigEndian" />
 
         <RadioButton
-            android:id="@+id/littleEndian4Send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/LittleEndian" />
-    </RadioGroup>
-
-    <RadioGroup
-        android:id="@+id/endian4Receive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ReceivingEndian" />
-
-        <RadioButton
-            android:id="@+id/bigEndian4Receive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/BigEndian" />
-
-        <RadioButton
-            android:id="@+id/littleEndian4Receive"
+            android:id="@+id/littleEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"

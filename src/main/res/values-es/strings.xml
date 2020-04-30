@@ -17,7 +17,7 @@
         - La ventana de Configuración tiene opciones adicionales.\n
         *   Seleccionar opción de apariencia: Tema Normal o Dark.\n
         *   Habilitar el borrado de TX tras cada envío.\n
-        *   Cambiar la cantidad de Botones de EnvíoRápido: Hasta 16 estáticos, 32 desplazables.\n
+        *   Cambiar la cantidad de Botones de EnvíoRápido estáticos y desplazables.\n
         - Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú.
         - En modo Servidor WiFi, el puerto de red debe ser mayor o igual a 1100 para evitar puertos usados por el sistema.
     </string>
@@ -37,22 +37,24 @@
         *   Haga una pulsación en un botón de EnvíoRápido para enviar automáticamente la información almacenada.\n
         *   Si la entrada de texto TX está vacía, la pulsación larga en un botón de EnvíoRápido borrará su información actual.\n
         *   Los Botones de EnvíoRápido mostrarán el tipo de dato y la información almacenada.\n
-        *   Los usuarios Pro tienen hasta 48 botones de EnvíoRápido en lugar de 8.
+        *   Los usuarios Pro tienen botones de EnvíoRápido ilimitados en lugar de 8. Definibles en la ventana de configiración.
     </string>
     <string name="instructionsXtring">
         Operando el \'Modo Xtring\': Almacene un grupo de datos organizados y de distintos tipos para enviarlos como un paquete.\n
         *   Presione el botón del tipo de dato que desea añadir al paquete.\n
         *   Escriba la información deseada para ese ítem en la entrada de texto que aparece.\n
-        *   Si desea cambiar el tipo de dato del ítem ya creado, seleccione desde la lista desplegable el nuevo tipo de información que desea utilizar.\n
+        *   Si desea cambiar el tipo de dato de un ítem ya creado, seleccione desde la lista desplegable del ítem el nuevo tipo de información que desea utilizar.\n
         *   Puede definir algunos items como constantes, para evitar su modificación.\n
         *   Puede Eliminar el último ítem del paquete presionando el Botón \'Borrar Item\'.\n
-        *   Si el texto de algún ítem está vacío \'NO_DAT\' el paquete no se podrá enviar y se le pedirá que rellene el primer ítem sin datos encontrado.\n
+        *   Si el texto de algún ítem está vacío \'No_Dat\' el paquete no se podrá enviar y se le pedirá que rellene el primer ítem sin datos encontrado.\n
         *   Pulse el botón enviar para iniciar la transmisión del paquete y regresar a la pantalla principal.\n
-        *   Finalice el modo Xtring(sin hacer envíos) deslizando el dedo desde el lado derecho de la Pantalla hacia la izquierda.\n
+        *   Finalice el modo Xtring(sin hacer envíos) deslizando el dedo desde el lado derecho de la Pantalla hacia la izquierda o presionando Volver.\n
         *   La plantilla de paquete y los valores actuales se guardarán automáticamente en la memoria del dispositivo.\n
-        *   Los usuarios Pro tienen hasta 64 items Xtring en lugar de 10.\n
+        *   Los usuarios Pro tienen Ítems Xtring ilimitados en lugar de 10.\n
         *   Los usuarios Pro pueden seleccionar elementos a ignorar durante la operación de envío.\n
-        *   Los usuarios Pro pueden retornar automaticamente a la pantalla Xtring después de enviar el paquete.
+        *   Los usuarios Pro pueden retornar automaticamente a la pantalla Xtring después de enviar el paquete activando una casilla.\n
+        *   Los usuarios Pro pueden guardar paquetes Xtring en botones de EnvíoRápido seleccionando la opción en el menú o con un pulso largo en el botón \'Enviar\'.\n
+        *   La Iterfaz de EnvíoRápido aparecerá con una entrada de texto superior para definir el nombre del botón, asegurece de no tener Items Xtring vacíos.
     </string>
     <string name="instructionsAdvRcv">
         Operando los modos de \'Recepción Avanzada\': Reciba y muestre números grandes (enteros de 16, 32 y 64 bits) y números flotantes (32 y 64 bits).\n
@@ -73,9 +75,10 @@
     <string name="insGP">
         Apoyenos instalando la aplicación Virtual Terminal PROkey, obtendrá:\n
         *   La posibilidad de usar Virtual Terminal como Servidor en los modos de trabajo WiFi y Bluetooth.\n
-        *   Tipos de dato Entero Largo y Doble Flotante para envío y recepción.\n
-        *   Modo EnvíoRápido de hasta 48 botones (Cantidades Configurables).\n
-        *   Modo Xtring de hasta 64 objetos y nuevas opciones.
+        *   Tipos de dato Entero Largo y Flotante Doble para envío y recepción.\n
+        *   Modo EnvíoRápido con botones ilimitados y Cantidades Configurables.\n
+        *   Modo Xtring con ítems ilimitados y nuevas opciones.\n
+        *   Poder guardar los paquetes Xtring como botones de EnvíoRápido para su uso desde la ventana principal.
     </string>
     <string-array name="sendtypes_array2">
         <item>Texto</item>
@@ -193,9 +196,6 @@
     <string name="xReturn">Retornar tras envío</string>
     <string name="disabled">Deshabilitados</string>
     <string name="textCopied">Texto Copiado!</string>
-    <string name="EndianSelect">Selección de Endian (En Desarrollo)</string>
-    <string name="SendingEndian">Endian para Envíos</string>
-    <string name="ReceivingEndian">Endian para Recepción</string>
     <string name="DarkTheme">Habilitar Tema Oscuro</string>
     <string name="ClearTXAS">Borrar TX tras cada envío</string>
     <string name="NumCommLabel">Cantidad de Botones de Envío Rápido</string>
@@ -204,11 +204,21 @@
     <string name="ApplyChanges">Aplicar Cambios</string>
     <string name="DiscardChanges">Descartar Cambios</string>
 
+    <string name="EndianSelect">Selección de Endian (En Desarrollo)</string>
+    <string name="GlobalEndian">Endian para Global</string>
+    <!--<string name="ReceivingEndian">Endian para Recepción</string>-->
+
+
+
     <string name="NEED_PRO">Función Pro</string>
     <string name="ConfigNotSaved">Cambios no Aplicados</string>
     <string name="LongClick2Save">Pulso Largo para Guardar</string>
     <string name="FastSendButtName">Nombre para Envío Rápido</string>
+    <string name="Item">Ítem</string>
+    <string name="Empty"> Indefinido</string>
     <string name="SaveAsFastSend">Guardar como Envío Rápido</string>
+    <string name="SavedAsFS">Guardado como </string>
+    <string name="EmptyXtringItem">Ítem Xtring Vacío</string>
 
 
 
