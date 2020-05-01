@@ -94,6 +94,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     boolean pro = false;
     boolean CM = false;
 
+    boolean littleEndian = false;
+
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
 
@@ -107,6 +109,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         numItems = shapre.getInt(cantXItems, 0);
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
         numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
+        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
         if(!pro && numItems > 10)
             numItems = 10;
         if(darkTheme)
@@ -484,50 +487,41 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     String Message = listItems[i].tx;
                     if (!Message.equals("")) {
                         switch (listItems[i].sendType) {
-                            case (PrincipalActivity.SEND_TXT): {
+                            case (PrincipalActivity.SEND_TXT):
                                 dataCont += Message.length();
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_BYTE): {
-                                int Messagen = Integer.parseInt(Message);
+                            case (PrincipalActivity.SEND_BYTE):
+                                Integer.parseInt(Message);
                                 dataCont++;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_BIN): {
-                                int Messagen = Integer.parseInt(Message, 2);
+                            case (PrincipalActivity.SEND_BIN):
+                                Integer.parseInt(Message, 2);
                                 dataCont++;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_HEX): {
-                                int Messagen = Integer.parseInt(Message, 16);
+                            case (PrincipalActivity.SEND_HEX):
+                                Integer.parseInt(Message, 16);
                                 dataCont++;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_SHORT): {
-                                int Messagen = Integer.parseInt(Message);
+                            case (PrincipalActivity.SEND_SHORT):
+                                Integer.parseInt(Message);
                                 dataCont += 2;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_INT): {
-                                int Messagen = Integer.parseInt(Message);
+                            case (PrincipalActivity.SEND_INT):
+                                Integer.parseInt(Message);
                                 dataCont += 4;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_LONG): {
-                                int Messagen = Integer.parseInt(Message);
+                            case (PrincipalActivity.SEND_LONG):
+                                Long.parseLong(Message);
                                 dataCont += 8;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_FLOAT): {
-                                float Messagen = Float.parseFloat(Message);
+                            case (PrincipalActivity.SEND_FLOAT):
+                                Float.parseFloat(Message);
                                 dataCont += 4;
                                 break;
-                            }
-                            case (PrincipalActivity.SEND_DOUBLE): {
-                                float Messagen = Float.parseFloat(Message);
+                            case (PrincipalActivity.SEND_DOUBLE):
+                                Double.parseDouble(Message);
                                 dataCont += 8;
                                 break;
-                            }
                         }
                     }else {
                         listItems[i].openEditor();
@@ -557,51 +551,70 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     if (/*listItems[i].enabled && */!listItems[i].disabled) {
                         String Message = listItems[i].tx;
                         if (!Message.equals("")) {
+                            int messageInt;
+                            int byteIndex;
+                            byte[] dataBytes;
                             switch (listItems[i].sendType) {
-                                case (PrincipalActivity.SEND_TXT): {
+                                case (PrincipalActivity.SEND_TXT):
                                     byteArray.put(Message.getBytes());
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_BYTE): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    byteArray.put((byte) Messagen);
+                                case (PrincipalActivity.SEND_BYTE):
+                                    messageInt = Integer.parseInt(Message);
+                                    byteArray.put((byte) messageInt);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_BIN): {
-                                    int Messagen = Integer.parseInt(Message, 2);
-                                    byteArray.put((byte) Messagen);
+                                case (PrincipalActivity.SEND_BIN):
+                                    messageInt = Integer.parseInt(Message, 2);
+                                    byteArray.put((byte) messageInt);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_HEX): {
-                                    int Messagen = Integer.parseInt(Message, 16);
-                                    byteArray.put((byte) Messagen);
+                                case (PrincipalActivity.SEND_HEX):
+                                    messageInt = Integer.parseInt(Message, 16);
+                                    byteArray.put((byte) messageInt);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_SHORT): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    byteArray.putShort((short) Messagen);
+                                case (PrincipalActivity.SEND_SHORT):
+                                    messageInt = Integer.parseInt(Message);
+                                    if(littleEndian) {
+                                        dataBytes = ByteBuffer.allocate(4).putInt(messageInt).array();
+                                        byteArray.put((byte)(0xff&dataBytes[3]));
+                                        byteArray.put((byte)(0xff&dataBytes[2]));
+                                    }else
+                                        byteArray.putShort((short) messageInt);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_INT): {
-                                    int Messagen = Integer.parseInt(Message);
-                                    byteArray.putInt(Messagen);
+                                case (PrincipalActivity.SEND_INT):
+                                    messageInt = Integer.parseInt(Message);
+                                    if(littleEndian) {
+                                        dataBytes = ByteBuffer.allocate(4).putInt(messageInt).array();
+                                        for(byteIndex = 3; byteIndex >= 0; byteIndex--)
+                                            byteArray.put((byte)(0xff&dataBytes[i]));
+                                    }else
+                                        byteArray.putInt(messageInt);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_LONG): {
-                                    long Messagen = Long.parseLong(Message);
-                                    byteArray.putLong(Messagen);
+                                case (PrincipalActivity.SEND_LONG):
+                                    long messageLong = Long.parseLong(Message);
+                                    if(littleEndian) {
+                                        dataBytes = ByteBuffer.allocate(8).putLong(messageLong).array();
+                                        for(byteIndex = 7; byteIndex >= 0; byteIndex--)
+                                            byteArray.put((byte)(0xff&dataBytes[i]));
+                                    }else
+                                        byteArray.putLong(messageLong);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_FLOAT): {
-                                    float Messagen = Float.parseFloat(Message);
-                                    byteArray.putFloat(Messagen);
+                                case (PrincipalActivity.SEND_FLOAT):
+                                    float messageFloat = Float.parseFloat(Message);
+                                    if(littleEndian) {
+                                        dataBytes = ByteBuffer.allocate(4).putFloat(messageFloat).array();
+                                        for(byteIndex = 3; byteIndex >= 0; byteIndex--)
+                                            byteArray.put((byte)(0xff&dataBytes[i]));
+                                    }else
+                                        byteArray.putFloat(messageFloat);
                                     break;
-                                }
-                                case (PrincipalActivity.SEND_DOUBLE): {
-                                    double Messagen = Double.parseDouble(Message);
-                                    byteArray.putDouble(Messagen);
+                                case (PrincipalActivity.SEND_DOUBLE):
+                                    double messageDouble = Double.parseDouble(Message);
+                                    if(littleEndian) {
+                                        dataBytes = ByteBuffer.allocate(8).putDouble(messageDouble).array();
+                                        for(byteIndex = 7; byteIndex >= 0; byteIndex--)
+                                            byteArray.put((byte)(0xff&dataBytes[i]));
+                                    }else
+                                        byteArray.putDouble(messageDouble);
                                     break;
-                                }
                             }
                         } else {
                             resp.can = false;
@@ -655,6 +668,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             }
             case ENTER_CONFIG:
                 if(resultCode == Activity.RESULT_OK) {
+                    littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
                     updCommButtons();
                 }
                 break;

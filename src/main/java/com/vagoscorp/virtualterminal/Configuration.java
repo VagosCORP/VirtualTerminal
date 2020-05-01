@@ -52,9 +52,9 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     RadioButton bigEndian;
     RadioButton littleEndian;
 
-    RadioGroup endian4Receive;
-    RadioButton bigEndian4Receive;
-    RadioButton littleEndian4Receive;
+    //RadioGroup endian4Receive;
+    //RadioButton bigEndian4Receive;
+    //RadioButton littleEndian4Receive;
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
@@ -110,15 +110,15 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
             cantCommStat.setHint(R.string.NEED_PRO);
             cantCommScroll.setHint(R.string.NEED_PRO);
             bigEndian.setEnabled(pro);
-            bigEndian4Receive.setEnabled(pro);
+            littleEndian.setEnabled(pro);
+            //bigEndian4Receive.setEnabled(pro);
             numCommStat = defNumCommStat;
             numCommScroll = defNumCommScroll;
             editor.putInt(getString(R.string.NUM_COMM_STAT), numCommStat);
             editor.putInt(getString(R.string.NUM_COMM_SCROLL), numCommScroll);
             editor.commit();
         }
-        littleEndian.setEnabled(false);
-        littleEndian4Receive.setEnabled(false);
+        //littleEndian4Receive.setEnabled(false);
     }
 
     public void applyConfig(View view) {

@@ -38,13 +38,13 @@ import android.widget.Toast;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
-import vclibs.communication.Senders;
 import vclibs.communication.android.Comunic;
 import vclibs.communication.android.ComunicBT;
 
@@ -241,6 +241,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         //pro = tip.getBooleanExtra(getString(R.string.Extra_LVL), false);
         comunic = new Comunic();
         comunicBT = new ComunicBT();
+        comunicBT.littleEndian = littleEndian;
+        comunic.littleEndian = littleEndian;
         if(TCOM) {
             BTAdapter = BluetoothAdapter.getDefaultAdapter();
             index = defIndex;
@@ -1023,8 +1025,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeEndian(boolean big) {
-
+    private void applyEndian() {
+        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+        comunicBT.littleEndian = littleEndian;
+        comunic.littleEndian = littleEndian;
     }
 
     private void enterXtringMode() {
@@ -1075,6 +1079,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         else
             resumeW(shapre);
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
+        applyEndian();
         updCommButtons();
         UcommUI();
 		super.onResume();
@@ -1227,6 +1232,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 if(resultCode == Activity.RESULT_OK) {
                     darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
                     clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
+                    applyEndian();
                     updCommButtons();
                 }
                 break;
@@ -1357,6 +1363,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 }
                 comunicBT.setComunicationListener(this);
                 comunicBT.setConnectionListener(this);
+                comunicBT.littleEndian = littleEndian;
                 Chan_Ser.setEnabled(false);
                 Conect.setText(getString(R.string.Button_Conecting));
                 comunicBT.execute();
@@ -1375,6 +1382,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     }
                     comunic.setComunicationListener(this);
                     comunic.setConnectionListener(this);
+                    comunic.littleEndian = littleEndian;
                     Chan_Ser.setEnabled(false);
                     Conect.setText(getString(R.string.Button_Conecting));
                     comunic.execute();
@@ -1533,6 +1541,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public void onDataReceived(final int nbytes, String dato, int[] ndato, final byte[] bdato) {
         printOnTV(false, RX, dato);
         if (enNumericRcv) {
+            String hexStr;
+            String binStr;
             if (advRcv) {
                 for (int i = 0; i < nbytes; i++) {
                     if (!dataInit) {
@@ -1545,22 +1555,67 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         } else {
                             if (bdato[i] == charEnd) {
                                 ByteBuffer byteBuffer = ByteBuffer.wrap(dataBytes);
+                                byte[] myBytes;
+                                ByteBuffer bbb;
                                 switch (dataRcvtyp) {
                                     case (COMMT_INT16):
-                                        printOnTV(true, RXn, byteBuffer.getShort() + " ");
+                                        short messageShort = byteBuffer.getShort();
+                                        if(littleEndian) {
+                                            myBytes = ByteBuffer.allocate(2).putShort(messageShort).array();
+                                            bbb = ByteBuffer.wrap(myBytes);
+                                            bbb.order(ByteOrder.LITTLE_ENDIAN);
+                                            messageShort = bbb.getShort();
+                                        }
+                                        hexStr = String.format("0x%04x", messageShort);
+                                        binStr = String.format("0b%16s", Integer.toBinaryString(messageShort)).replace(" ", "0");
+                                        printOnTV(true, RXn, messageShort + " ");
+                                        //printOnTV(true, RXn, hexStr + " ");
                                         break;
                                     case (COMMT_INT32):
-                                        printOnTV(true, RXn, byteBuffer.getInt() + " ");
+                                        int messageInt = byteBuffer.getInt();
+                                        if(littleEndian) {
+                                            myBytes = ByteBuffer.allocate(4).putInt(messageInt).array();
+                                            bbb = ByteBuffer.wrap(myBytes);
+                                            bbb.order(ByteOrder.LITTLE_ENDIAN);
+                                            messageInt = bbb.getInt();
+                                        }
+                                        hexStr = String.format("0x%08x", messageInt);
+                                        binStr = String.format("0b%32s", Integer.toBinaryString(messageInt)).replace(" ", "0");
+                                        printOnTV(true, RXn, messageInt + " ");
+                                        //printOnTV(true, RXn, hexStr + " ");
                                         break;
                                     case (COMMT_INT64):
-                                        printOnTV(true, RXn, byteBuffer.getLong() + " ");
+                                        long messageLong = byteBuffer.getLong();
+                                        if(littleEndian) {
+                                            myBytes = ByteBuffer.allocate(8).putLong(messageLong).array();
+                                            bbb = ByteBuffer.wrap(myBytes);
+                                            bbb.order(ByteOrder.LITTLE_ENDIAN);
+                                            messageLong = bbb.getLong();
+                                        }
+                                        hexStr = String.format("0x%016x", messageLong);
+                                        binStr = String.format("0b%64s", Long.toBinaryString(messageLong)).replace(" ", "0");
+                                        printOnTV(true, RXn, messageLong + " ");
+                                        //printOnTV(true, RXn, hexStr + " ");
                                         break;
                                     case (COMMT_FLOAT):
-                                        printOnTV(true, RXn, byteBuffer.getFloat() + " ");
+                                        float messageFloat = byteBuffer.getFloat();
+                                        if(littleEndian) {
+                                            myBytes = ByteBuffer.allocate(4).putFloat(messageFloat).array();
+                                            bbb = ByteBuffer.wrap(myBytes);
+                                            bbb.order(ByteOrder.LITTLE_ENDIAN);
+                                            messageFloat = bbb.getFloat();
+                                        }
+                                        printOnTV(true, RXn, messageFloat + " ");
                                         break;
                                     case (COMMT_DOUBLE):
-
-                                        printOnTV(true, RXn, byteBuffer.getDouble() + " ");
+                                        double messageDouble = byteBuffer.getDouble();
+                                        if(littleEndian) {
+                                            myBytes = ByteBuffer.allocate(8).putDouble(messageDouble).array();
+                                            bbb = ByteBuffer.wrap(myBytes);
+                                            bbb.order(ByteOrder.LITTLE_ENDIAN);
+                                            messageDouble = bbb.getDouble();
+                                        }
+                                        printOnTV(true, RXn, messageDouble + " ");
                                         break;
                                 }
                             } else
@@ -1571,8 +1626,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     }
                 }
             } else {
-                for (int val : ndato)
+                for (int val : ndato) {
+                    hexStr = String.format("0x%02x", val);
+                    binStr = String.format("0b%8s", Integer.toBinaryString(val)).replace(" ", "0");
                     printOnTV(true, RXn, val + " ");
+                }
             }
             scron.post(new Runnable() {
                 @Override
