@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/IOConf_LYT"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/main_vertical_margin"
+    android:paddingLeft="@dimen/main_horizontal_margin"
+    android:paddingRight="@dimen/main_horizontal_margin"
+    android:paddingTop="@dimen/main_vertical_margin"
+    tools:context=".IOc" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/typesRG"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/labelDataType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/IODataTypes" />
+
+            <RadioButton
+                android:id="@+id/SelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXString" />
+
+            <RadioButton
+                android:id="@+id/SelByte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXByte"/>
+
+            <RadioButton
+                android:id="@+id/SelDual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ioTypeDual"/>
+
+            <RadioButton
+                android:id="@+id/SelPackage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ioTypePackage"/>
+
+            <RadioButton
+                android:id="@+id/SelShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXInt16"/>
+
+            <RadioButton
+                android:id="@+id/SelInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXInt32"/>
+
+            <RadioButton
+                android:id="@+id/SelLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXInt64"/>
+
+            <RadioButton
+                android:id="@+id/SelFloat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXFloat"/>
+
+            <RadioButton
+                android:id="@+id/SelDouble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ComXDouble"/>
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/intFormRG"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/labelDataFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/IOIntDataFormats"/>
+
+            <RadioButton
+                android:id="@+id/SelDec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ioFormDec"/>
+
+            <RadioButton
+                android:id="@+id/SelHex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ioFormHex"/>
+
+            <RadioButton
+                android:id="@+id/SelBin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ioFormBin"/>
+
+            <TextView
+                android:id="@+id/endianMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/BigEndian"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end|bottom"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/TX_Menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/TXConfig"/>
+
+                <Button
+                    android:id="@+id/RX_Menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/RXConfig"/>
+
+                <Button
+                    android:id="@+id/AcceptIO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/OK"/>
+
+            </LinearLayout>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</LinearLayout>

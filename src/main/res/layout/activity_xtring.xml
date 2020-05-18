@@ -11,36 +11,44 @@
     tools:context=".XtringActivity">
 
     <LinearLayout
-        android:id="@+id/CommX_NameLay"
+        android:id="@+id/CommX_Lay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:gravity="end">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/CommX_NameLab"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="@string/FastSendButtName" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/DS"
-            android:id="@+id/dataString"
-            android:visibility="visible"/>
+            android:text="@string/FastSendButtName"/>-->
 
         <EditText
             android:id="@+id/CommX_Name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:hint="@string/FastSendButtName"
             android:inputType="text"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/dataString"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/DS"
+            android:visibility="visible"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ComXaddItem"
+            android:id="@+id/newXtringItem"
+            android:onClick="addItem"/>
 
     </LinearLayout>
 
@@ -48,20 +56,29 @@
         android:id="@+id/TypesLay1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <Button
+            android:id="@+id/txtButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/ComXByte"
-            android:id="@+id/byteButton"
             android:layout_weight="1"
+            android:text="@string/ComXString"
             android:onClick="addItem"/>
 
         <Button
+            android:id="@+id/byteButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/ComXBinary"
+            android:layout_weight="1"
+            android:text="@string/ComXByte"
+            android:onClick="addItem"/>
+
+        <!--<Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ioFormBin"
             android:id="@+id/binButton"
             android:layout_weight="1"
             android:onClick="addItem"/>
@@ -69,18 +86,35 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/ComXHexadecimal"
+            android:text="@string/ioFormHex"
             android:id="@+id/hexButton"
             android:layout_weight="1"
+            android:onClick="addItem"/>-->
+
+        <Button
+            android:id="@+id/shortButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ComXInt16"
             android:onClick="addItem"/>
 
         <Button
+            android:id="@+id/advButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/ComXInt16"
-            android:id="@+id/shortButton"
             android:layout_weight="1"
+            android:text="@string/advType"
             android:onClick="addItem"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TypesLay2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/intButton"
@@ -89,22 +123,6 @@
             android:layout_weight="1"
             android:onClick="addItem"
             android:text="@string/ComXInt32"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/TypesLay2"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/txtButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="addItem"
-            android:text="@string/ComXString"/>
 
         <Button
             android:layout_width="0dp"

@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -23,15 +24,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +48,9 @@ import vclibs.communication.android.ComunicBT;
 
 public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,/*OnLongClickListener,*/GestureDetector.OnGestureListener {
 
-    Spinner spinner;
+    //Spinner spinner;
+    TextView endianMode;
+    TextView typeTXB;
     TextView RX;// Received Data
     TextView RXn;// Received Data
     TextView sepLab;// Received Data
@@ -59,11 +59,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	Button Send;
     ScrollView scro;
     ScrollView scron;
-    //LinearLayout commander;
     LinearLayout commBase;
     LinearLayout commStaticL;
     LinearLayout commScrollableL;
-//    ScrollView commScroll;
     LinearLayout byteRCV;
     LinearLayout layout_principal;
     LinearLayout layNAct;
@@ -72,14 +70,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     CheckBox aCRpLF;
 
     Button[] commX;
-    /*int[] commIDs = {R.id.comm1,R.id.comm2,R.id.comm3,R.id.comm4,R.id.comm5,R.id.comm6,R.id.comm7,
-            R.id.comm8,R.id.comm9,R.id.comm10,R.id.comm11,R.id.comm12,R.id.comm13,R.id.comm14,
-            R.id.comm15,R.id.comm16,R.id.comm17,R.id.comm18,R.id.comm19,R.id.comm20,R.id.comm21,
-            R.id.comm22,R.id.comm23,R.id.comm24,R.id.comm25,R.id.comm26,R.id.comm27,R.id.comm28,
-            R.id.comm29,R.id.comm30,R.id.comm31,R.id.comm32,R.id.comm33,R.id.comm34,R.id.comm35,
-            R.id.comm36,R.id.comm37,R.id.comm38,R.id.comm39,R.id.comm40,R.id.comm41,R.id.comm42,
-            R.id.comm43,R.id.comm44,R.id.comm45,R.id.comm46,R.id.comm47,R.id.comm48};*/
-
     ActionBar actionBar;
 
     public String serverip;// IP to Connect
@@ -92,12 +82,17 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public int numCommScroll = 4;
     public int cantFastSendTot = 8;
 	public int SC;
-    public int sendTyp = SEND_TXT;
-    int cantDataTyp = 9;
+    public int txType = TX_FORM_TXT;
+    int cantDataTyp = 5;
 
     public BluetoothAdapter BTAdapter;
-//    private BluetoothGatt mBluetoothGatt;
-//    private BluetoothGattCharacteristic mDataMDLP, mControlMLDP;
+    /*private BluetoothGatt mBluetoothGatt;
+    private BluetoothGattCharacteristic mDataMDLP, mControlMLDP;
+    private static final String MLDP_PRIVATE_SERVICE = "00035b03-58e6-07dd-021a-08123a000300"; //Private service for Microchip MLDP
+    private static final String MLDP_DATA_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a000301"; //Characteristic for MLDP Data, properties - notify, write
+    private static final String MLDP_CONTROL_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a0003ff"; //Characteristic for MLDP Control, properties - read, write
+    private static final String CHARACTERISTIC_NOTIFICATION_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";	//Special UUID for descriptor needed to enable notifications
+    public boolean lowLvl = true;*/
 	public BluetoothDevice[] BondedDevices;
 	public BluetoothDevice mDevice;
 	public int mDeviceIndex;
@@ -125,6 +120,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     private final int SHOW_INSTRUCTIONS = 16;
     private final int ENTER_XTRING = 17;
     private final int ENTER_CONFIG = 18;
+    private final int ENTER_IO_CONFIG = 19;
+    private final int ENTER_TUTORIAL = 20;
 
     public static final String IS_PRO = "IS_PRO";
     public static final String SIoS = "SIoS";
@@ -153,9 +150,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public static final int SEND_HEX = 3;
     public static final int SEND_SHORT = 4;
     public static final int SEND_INT = 5;
-    public static final int SEND_LONG = 6;//7
-    public static final int SEND_FLOAT = 7;//6
-    public static final int SEND_DOUBLE = 8;//-
+    public static final int SEND_LONG = 6;
+    public static final int SEND_FLOAT = 7;
+    public static final int SEND_DOUBLE = 8;
     public static final int COMMT_STRING = 0;
     public static final int COMMT_INT8 = 1;
     public static final int COMMT_INT16 = 11;
@@ -167,11 +164,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public static final int COMMT_UPD = 22;
     public static final int COMMT_XTRING = 25;
 
-//    private static final String MLDP_PRIVATE_SERVICE = "00035b03-58e6-07dd-021a-08123a000300"; //Private service for Microchip MLDP
-//    private static final String MLDP_DATA_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a000301"; //Characteristic for MLDP Data, properties - notify, write
-//    private static final String MLDP_CONTROL_PRIVATE_CHAR = "00035b03-58e6-07dd-021a-08123a0003ff"; //Characteristic for MLDP Control, properties - read, write
-//    private static final String CHARACTERISTIC_NOTIFICATION_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";	//Special UUID for descriptor needed to enable notifications
-//    public boolean lowLvl = true;
+    public static final int TX_FORM_TXT = 0;
+    public static final int TX_FORM_DEC = 1;
+    public static final int TX_FORM_HEX = 2;
+    public static final int TX_FORM_BIN = 3;
+    public static final int TX_FORM_FLOAT = 4;
+
     boolean both = false;
     boolean upd = false;
     boolean nextUpd = false;
@@ -211,13 +209,26 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     boolean littleEndian = false;
 
+    int actualTXtype = 0;
+    int actualTXform = 0;
+    int actualRXtype = 0;
+    int actualRXform = 0;
+    int sendTX = 0;
+
+    String Message = "";
+    int Messagen = 0;
+    long MessageL = 0;
+    float MessageF = 0;
+    double MessageD = 0;
+
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
+
+    boolean showKeyBoard = false;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //shapre = getPreferences(MODE_PRIVATE);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
         abHidden = shapre.getBoolean(abH, false);
@@ -234,11 +245,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         layout_principal = findViewById(R.id.layout_principal);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
             layout_principal.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
-        //layout_principal.setBackgroundColor(Color.parseColor("#ff303030"));
         Intent tip = getIntent();
         TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
         SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
-        //pro = tip.getBooleanExtra(getString(R.string.Extra_LVL), false);
         comunic = new Comunic();
         comunicBT = new ComunicBT();
         comunicBT.littleEndian = littleEndian;
@@ -256,40 +265,31 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             WFM = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
             CTM = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         }
-        spinner = findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
-		RX = findViewById(R.id.RX);
+        imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        //spinner = findViewById(R.id.spinner); // Create an ArrayAdapter using the string array and a default spinner layout
+        typeTXB = findViewById(R.id.typeTXB);
+        RX = findViewById(R.id.RX);
         RXn = findViewById(R.id.RXn);
         sepLab = findViewById(R.id.sepLab);
         layNAct = findViewById(R.id.layNAct);
         editNAct = findViewById(R.id.editNAct);
         UpdN = findViewById(R.id.UpdN);
         aCRpLF = findViewById(R.id.aCRpLF);
-        TXs[SEND_TXT] = findViewById(R.id.TXtext);
-        TXs[SEND_BYTE] = findViewById(R.id.TXnum);
-        TXs[SEND_BIN] = findViewById(R.id.TXbin);
-        TXs[SEND_HEX] = findViewById(R.id.TXhex);
-        TXs[SEND_SHORT] = findViewById(R.id.TXint16);
-        TXs[SEND_INT] = findViewById(R.id.TXint32);
-        TXs[SEND_LONG] = findViewById(R.id.TXint64);
-        TXs[SEND_FLOAT] = findViewById(R.id.TXfloat);
-        TXs[SEND_DOUBLE] = findViewById(R.id.TXdouble);
-        if(!pro) {
-            TXs[SEND_LONG].setEnabled(pro);
-            TXs[SEND_DOUBLE].setEnabled(pro);
-            TXs[SEND_LONG].setText("");
-            TXs[SEND_DOUBLE].setText("");
-            TXs[SEND_LONG].setHint(R.string.NEED_PRO);
-            TXs[SEND_DOUBLE].setHint(R.string.NEED_PRO);
-        }
-//        TX = (EditText)findViewById(TX);
-//        TX.setOnLongClickListener(new OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                mDataMDLP.setValue("=>R" + TX.getText() + "\r\n");                     //Set value of MLDP characteristic to send die roll information
-//                writeCharacteristic(mDataMDLP);
-//                return true;
-//            }
-//        });
+        endianMode = findViewById(R.id.endianMode);
+        TXs[TX_FORM_TXT] = findViewById(R.id.TXtext);
+        TXs[TX_FORM_DEC] = findViewById(R.id.TXnum);
+        TXs[TX_FORM_HEX] = findViewById(R.id.TXhex);
+        TXs[TX_FORM_BIN] = findViewById(R.id.TXbin);
+        TXs[TX_FORM_FLOAT] = findViewById(R.id.TXfloat);
+        /*TX = (EditText)findViewById(TX);
+        TX.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mDataMDLP.setValue("=>R" + TX.getText() + "\r\n");                     //Set value of MLDP characteristic to send die roll information
+                writeCharacteristic(mDataMDLP);
+                return true;
+            }
+        });*/
         byteRCV = findViewById(R.id.byteRCV);
 		Conect =  findViewById(R.id.Conect);
 		Chan_Ser = findViewById(R.id.chan_ser);
@@ -297,12 +297,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 		Send = findViewById(R.id.Send);
         scro = findViewById(R.id.scro);
         scron = findViewById(R.id.scron);
-        //commander = findViewById(R.id.commander);
         commBase = findViewById(R.id.commBase);
         commStaticL = findViewById(R.id.commStaticL);
         commScrollableL = findViewById(R.id.commScrollableL);
-        imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-//        commScroll = findViewById(R.id.commScroll);
+        aCRpLF.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(getApplicationContext(), R.string.appendCRpLF, Toast.LENGTH_SHORT).show();
+            }
+        });
         UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -330,7 +333,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 return true;
             }
         });
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
@@ -344,7 +347,16 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });*/
+        typeTXB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterIOConfig(IOc.TX_CONFIG);
+            }
         });
+        //typeTXB.setBackgroundColor(Color.DKGRAY);
+        setTXType();
+        setRXType();
 		Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);
         try {
@@ -358,16 +370,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         if(ver != versionCode) {
             editor.putInt(VER, versionCode);
             editor.commit();
-            showInstructions();
+            enterInstructions();
         }else if(!checked)
-            showInstructions();
+            enterInstructions();
         UpdN.setChecked(false);
-        /*commX = new Button[48];
-        for(int i = 0; i < 48; i++) {
-            commX[i] = findViewById(commIDs[i]);
-            buttSetAllCaps(commX[i]);
-            commX[i].setOnLongClickListener(this);
-        }*/
         updCommButtons();
         gesDetector = new GestureDetector(this, this);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -383,8 +389,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!sumTextRXn.equals("")/*isNum*/) {
-                                if (nextUpdn) {
+                            if(!sumTextRXn.equals("")/*isNum*/) {
+                                if(nextUpdn) {
                                     RXn.setText(sumTextRXn);
                                     nextUpdn = false;
                                 } else
@@ -399,6 +405,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                             }
                             sumTextRX = "";
                             sumTextRXn = "";
+                            if(showKeyBoard) {
+                                showKeyBoard = false;
+                                TXs[sendTX].dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
+                                TXs[sendTX].dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+                                //imm.showSoftInput(TXs[sendTX], InputMethodManager.SHOW_IMPLICIT);
+                            }
                         }
                     });
                     mCount=0;
@@ -409,6 +421,34 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         //registerForContextMenu(RX);
         //registerForContextMenu(RXn);
 	}
+
+	public int getTXval() {
+        int res = 5;
+        if (TXs[sendTX].length() > 0) {
+            Message = TXs[sendTX].getText().toString();
+            Messagen = 0;
+            MessageL = 0;
+            MessageF = 0;
+            MessageD = 0;
+            int theRadix = IOc.radixTX[actualTXform];
+            try {
+                if (actualTXtype > 0 && actualTXtype < IOc.TYPE_LONG)
+                    Messagen = Integer.parseInt(Message, theRadix);
+                else if (actualTXtype == IOc.TYPE_LONG)
+                    MessageL = Long.parseLong(Message, theRadix);
+                else if (actualTXtype == IOc.TYPE_FLOAT)
+                    MessageF = Float.parseFloat(Message);
+                else if (actualTXtype == IOc.TYPE_DOUBLE)
+                    MessageD = Double.parseDouble(Message);
+                res = sendTX;
+            }catch (NumberFormatException nEx) {
+                nEx.printStackTrace();
+                Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+            }
+        }else
+            res = 6;
+        return res;
+    }
 
 	public void updCommButtons() {
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
@@ -426,88 +466,69 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 public boolean onLongClick(View v) {
                     int commType = COMMT_STRING;
                     boolean N = true;
-                    //final int n = nComm(view);
                     if(n != 0) {
-                        if(TXs[sendTyp].length() > 0) {
-                            String eom = "\r\n";
-                            if(!aCRpLF.isChecked())
-                                eom = "";
-                            String message = TXs[sendTyp].getText().toString() + eom;
-                            try {
-                                switch (sendTyp) {
-                                    case (SEND_TXT): {
-                                        editor.putString(comm + n, message);
-                                        editor.putString(commN + n, message); //n + " " +
-                                        commType = COMMT_STRING;
-                                        N = false;
-                                        break;
-                                    }
-                                    case (SEND_BYTE): {
-                                        int Messagen = Integer.parseInt(message);
-                                        editor.putInt(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + message);
-                                        commType = COMMT_INT8;
-                                        break;
-                                    }
-                                    case (SEND_BIN): {
-                                        int Messagen = Integer.parseInt(message, 2);
-                                        editor.putInt(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
-                                        commType = COMMT_INT8;
-                                        break;
-                                    }
-                                    case (SEND_HEX): {
-                                        int Messagen = Integer.parseInt(message, 16);
-                                        editor.putInt(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
-                                        commType = COMMT_INT8;
-                                        break;
-                                    }
-                                    case (SEND_SHORT): {
-                                        int Messagen = Integer.parseInt(message);
-                                        editor.putInt(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + message);
-                                        commType = COMMT_INT16;
-                                        break;
-                                    }
-                                    case (SEND_INT): {
-                                        int Messagen = Integer.parseInt(message);
-                                        editor.putInt(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + message);
-                                        commType = COMMT_INT32;
-                                        break;
-                                    }
-                                    case (SEND_LONG): {
-                                        long Messagen = Long.parseLong(message);
-                                        editor.putLong(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_LONG] + message);
-                                        commType = COMMT_INT64;
-                                        break;
-                                    }
-                                    case (SEND_FLOAT): {
-                                        float Messagen = Float.parseFloat(message);
-                                        editor.putFloat(comm + n, Messagen);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + message);
-                                        commType = COMMT_FLOAT;
-                                        break;
-                                    }
-                                    case (SEND_DOUBLE): {
-                                        double Messagen = Double.parseDouble(message);
-                                        ByteBuffer buffer = ByteBuffer.allocate(8);
-                                        buffer.putDouble(Messagen);
-                                        buffer.flip();
-                                        long Messagenx = buffer.getLong();
-                                        editor.putLong(comm + n, Messagenx);
-                                        editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_DOUBLE] + message);
-                                        commType = COMMT_DOUBLE;
-                                        break;
-                                    }
+                        int sas = getTXval();
+                        if(sas < 5) {
+                            switch (actualTXtype) {
+                                case (IOc.TYPE_TEXT):
+                                    String eom = "\r\n";
+                                    if(!aCRpLF.isChecked())
+                                        eom = "";
+                                    editor.putString(comm + n, Message + eom);
+                                    editor.putString(commN + n, Message + eom);
+                                    commType = COMMT_STRING;
+                                    N = false;
+                                    break;
+                                case (IOc.TYPE_BYTE):
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_INT8;
+                                    break;
+                                /*case (SEND_BIN): {
+                                    int Messagen = Integer.parseInt(message, 2);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
+                                    commType = COMMT_INT8;
+                                    break;
                                 }
-                            } catch (NumberFormatException nEx) {
-                                nEx.printStackTrace();
-                                Toast.makeText(PrincipalActivity.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+                                case (SEND_HEX): {
+                                    int Messagen = Integer.parseInt(message, 16);
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
+                                    commType = COMMT_INT8;
+                                    break;
+                                }*/
+                                case (IOc.TYPE_SHORT):
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_INT16;
+                                    break;
+                                case (IOc.TYPE_INT):
+                                    editor.putInt(comm + n, Messagen);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_INT32;
+                                    break;
+                                case (IOc.TYPE_LONG):
+                                    editor.putLong(comm + n, MessageL);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_INT64;
+                                    break;
+                                case (IOc.TYPE_FLOAT):
+                                    editor.putFloat(comm + n, MessageF);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_FLOAT;
+                                    break;
+                                case (IOc.TYPE_DOUBLE):
+                                    ByteBuffer buffer = ByteBuffer.allocate(8);
+                                    buffer.putDouble(MessageD);
+                                    buffer.flip();
+                                    long MessageDL = buffer.getLong();
+                                    editor.putLong(comm + n, MessageDL);
+                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                    commType = COMMT_DOUBLE;
+                                    break;
                             }
-                        }else {
+                        }else if(sas == 6){
                             N = false;
                             editor.putString(comm + n, getResources().getString(R.string.commDVal));
                             editor.putString(commN + n, getResources().getString(R.string.commDVal));
@@ -580,13 +601,210 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }else {
                 commScrollableL.addView(commX[i]);
             }
-            //commX[i].setVisibility(View.GONE);
-            /*if(i < numCommStat && i < 16)
-                commX[i].setVisibility(View.VISIBLE);
-            else if(i > 15 && i < 16 + numCommScroll)
-                commX[i].setVisibility(View.VISIBLE);*/
-
         }
+    }
+
+    public void enviar(View view) {
+        int sas = getTXval();
+        if (sas < 5) {
+            switch (actualTXtype) {
+                case (IOc.TYPE_TEXT):
+                    String eom = "\r\n";
+                    if(!aCRpLF.isChecked())
+                        eom = "";
+                    if(TCOM) {
+                        comunicBT.enviar(Message + eom);//???
+                    }else {
+                        comunic.enviar(Message + eom);//???
+                    }
+                    break;
+                case (IOc.TYPE_BYTE):
+                    if(TCOM)
+                        comunicBT.enviar_Int8(Messagen);
+                    else
+                        comunic.enviar_Int8(Messagen);
+                    break;
+                /*case (SEND_BIN):
+                    Messagen = Integer.parseInt(message, 2);
+                    if(TCOM)
+                        comunicBT.enviar_Int8(Messagen);
+                    else
+                        comunic.enviar_Int8(Messagen);
+                    break;
+                case (SEND_HEX):
+                    Messagen = Integer.parseInt(message, 16);
+                    if(TCOM)
+                        comunicBT.enviar_Int8(Messagen);
+                    else
+                        comunic.enviar_Int8(Messagen);
+                    break;*/
+                case (IOc.TYPE_SHORT):
+                    if(TCOM)
+                        comunicBT.enviar_Int16(Messagen);
+                    else
+                        comunic.enviar_Int16(Messagen);
+                    break;
+                case (IOc.TYPE_INT):
+                    if(TCOM)
+                        comunicBT.enviar_Int32(Messagen);
+                    else
+                        comunic.enviar_Int32(Messagen);
+                    break;
+                case (IOc.TYPE_LONG):
+                    if(TCOM)
+                        comunicBT.enviar_Int64(MessageL);
+                    else
+                        comunic.enviar_Int64(MessageL);
+                    break;
+                case (IOc.TYPE_FLOAT):
+                    if(TCOM)
+                        comunicBT.enviar_Float(MessageF);
+                    else
+                        comunic.enviar_Float(MessageF);
+                    break;
+                case (IOc.TYPE_DOUBLE):
+                    if(TCOM)
+                        comunicBT.enviar_Double(MessageD);
+                    else
+                        comunic.enviar_Double(MessageD);
+                    break;
+            }
+        }else if(sas == 6 && actualTXtype == IOc.TYPE_TEXT && aCRpLF.isChecked()) {
+            if(TCOM) {
+                comunicBT.enviar_Int8(13);
+                comunicBT.enviar_Int8(10);
+            }else {
+                comunic.enviar_Int8(13);
+                comunic.enviar_Int8(10);
+            }
+        }
+        if(clearTXAS)
+            BTX(null);
+    }
+
+    public String genTXtypeLbl(boolean fastSend) {
+        String premisa = "";
+        String dasEnde = ":";
+        if(!fastSend) {
+            premisa = "TX ";
+            dasEnde = "▼";
+        }
+        if(actualTXtype > 0 && actualTXtype < 5)
+            premisa += getString(IOc.formStrings[actualTXform]);
+        return premisa + getString(IOc.typeStrings[actualTXtype]) + dasEnde;
+    }
+
+    /*public String genRXtypeLbl() {
+        String premisa = "";
+        String endian = " ";
+        String updMode = "RX ";
+        if(littleEndian)
+            endian += getString(R.string.LittleEndian);
+        else
+            endian += getString(R.string.BigEndian);
+        String res = "";
+        if(actualRXtype > 0 && actualRXtype < 5 || actualRXtype > 6)
+            premisa = getString(IOc.formStrings[actualRXform]);
+        if(actualRXtype > 0 && actualRXtype < 7) {
+            res = getString(IOc.typeStrings[actualRXtype]);
+            if(actualRXtype > 1) {
+                res += endian;
+                if(upd)
+                    updMode = getString(R.string.ioTypePackage) + " ";
+            }
+        }else if(actualRXtype > 6)
+            res = getString(IOc.typeStrings[IOc.TYPE_BYTE]);
+        return updMode + premisa + res;
+    }*/
+
+    public void setTXType() {
+        typeTXB.setText(genTXtypeLbl(false));
+        aCRpLF.setVisibility(View.GONE);//aCRpLF.setEnabled(false);
+        endianMode.setVisibility(View.VISIBLE);
+        if(actualTXtype == IOc.TYPE_TEXT) {
+            sendTX = TX_FORM_TXT;
+            aCRpLF.setVisibility(View.VISIBLE);//aCRpLF.setEnabled(true);
+            endianMode.setVisibility(View.GONE);
+        }else if(actualTXtype < IOc.TYPE_FLOAT){
+            if(actualTXtype == IOc.TYPE_BYTE)
+                endianMode.setVisibility(View.INVISIBLE);
+            if(actualTXform == IOc.INT_FORM_DEC)
+                sendTX = TX_FORM_DEC;
+            else if(actualTXform == IOc.INT_FORM_HEX)
+                sendTX = TX_FORM_HEX;
+            else
+                sendTX = TX_FORM_BIN;
+        }else
+            sendTX = TX_FORM_FLOAT;
+        for (int i = 0; i < cantDataTyp; i++) {
+            TXs[i].setVisibility(View.GONE);
+            TXs[sendTX].clearFocus();
+        }
+        TXs[sendTX].setVisibility(View.VISIBLE);
+        TXs[sendTX].selectAll();
+        TXs[sendTX].requestFocus();
+        showKeyBoard = true;
+        //imm.showSoftInput(TXs[sendTX], InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void setRXType() {
+        switch(actualRXtype) {
+            case IOc.TYPE_TEXT:
+                setRcvTtxt(null);
+                break;
+            case IOc.TYPE_BYTE:
+                setRcvTint8(null);
+                break;
+            case IOc.TYPE_SHORT:
+                setRcvTint16(null);
+                break;
+            case IOc.TYPE_INT:
+                setRcvTint32(null);
+                break;
+            case IOc.TYPE_LONG:
+                setRcvTint64(null);
+                break;
+            case IOc.TYPE_FLOAT:
+                setRcvTfloat(null);
+                break;
+            case IOc.TYPE_DOUBLE:
+                setRcvTdouble(null);
+                break;
+            case IOc.TYPE_DUAL:
+                setRcvTboth(null);
+                break;
+            case IOc.TYPE_PACKAGE:
+                setRcvTupd(null);
+                break;
+        }
+        updRXlab();
+    }
+
+    private void updRXlab() {
+        String premisa = "";
+        String endian = " ";
+        String updMode = getString(R.string.hintRX) + " ";
+        if(littleEndian)
+            endian += getString(R.string.LittleEndian);
+        else
+            endian += getString(R.string.BigEndian);
+        String res = "";
+        if(actualRXtype > 0 && actualRXtype < 5 || actualRXtype > 6)
+            premisa = getString(IOc.formStrings[actualRXform]);
+        if(actualRXtype > 0 && actualRXtype < 7) {
+            res = getString(IOc.typeStrings[actualRXtype]);
+            if(actualRXtype > 1) {
+                res += endian;
+                if(upd)
+                    updMode = getString(R.string.ioTypePackage) + " ";
+            }
+        }else if(actualRXtype > 6) {
+            res = getString(IOc.typeStrings[IOc.TYPE_BYTE]);
+            if(upd)
+                updMode = getString(R.string.ioTypePackage) + " ";
+        }
+        String temp = updMode + premisa + res;//String temp = genRXtypeLbl();
+        sepLab.setText(temp);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -604,110 +822,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     private void updPNum(boolean bool) {
         enNumericRcv = bool;
         both = bool;
-        sepLab.setText(R.string.byteRX);
+        //sepLab.setText(R.string.byteRX);
         if (bool)
             byteRCV.setVisibility(View.VISIBLE);
         else
             byteRCV.setVisibility(View.GONE);
     }
-
-    /*@Override
-    public boolean onLongClick(View view) {
-        int commType = COMMT_STRING;
-        boolean N = true;
-        int n = nComm(view);
-        if(n != 0) {
-            if(TXs[sendTyp].length() > 0) {
-                String eom = "\r\n";
-                if(!aCRpLF.isChecked())
-                    eom = "";
-                String message = TXs[sendTyp].getText().toString() + eom;
-                try {
-                    switch (sendTyp) {
-                        case (SEND_TXT): {
-                            editor.putString(comm + n, message);
-                            editor.putString(commN + n, message); //n + " " +
-                            commType = COMMT_STRING;
-                            N = false;
-                            break;
-                        }
-                        case (SEND_BYTE): {
-                            int Messagen = Integer.parseInt(message);
-                            editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BYTE] + message);
-                            commType = COMMT_INT8;
-                            break;
-                        }
-                        case (SEND_BIN): {
-                            int Messagen = Integer.parseInt(message, 2);
-                            editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
-                            commType = COMMT_INT8;
-                            break;
-                        }
-                        case (SEND_HEX): {
-                            int Messagen = Integer.parseInt(message, 16);
-                            editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
-                            commType = COMMT_INT8;
-                            break;
-                        }
-                        case (SEND_SHORT): {
-                            int Messagen = Integer.parseInt(message);
-                            editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_SHORT] + message);
-                            commType = COMMT_INT16;
-                            break;
-                        }
-                        case (SEND_INT): {
-                            int Messagen = Integer.parseInt(message);
-                            editor.putInt(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_INT] + message);
-                            commType = COMMT_INT32;
-                            break;
-                        }
-                        case (SEND_LONG): {
-                            long Messagen = Long.parseLong(message);
-                            editor.putLong(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_LONG] + message);
-                            commType = COMMT_INT64;
-                            break;
-                        }
-                        case (SEND_FLOAT): {
-                            float Messagen = Float.parseFloat(message);
-                            editor.putFloat(comm + n, Messagen);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_FLOAT] + message);
-                            commType = COMMT_FLOAT;
-                            break;
-                        }
-                        case (SEND_DOUBLE): {
-                            double Messagen = Double.parseDouble(message);
-                            ByteBuffer buffer = ByteBuffer.allocate(8);
-                            buffer.putDouble(Messagen);
-                            buffer.flip();
-                            long Messagenx = buffer.getLong();
-                            editor.putLong(comm + n, Messagenx);
-                            editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_DOUBLE] + message);
-                            commType = COMMT_DOUBLE;
-                            break;
-                        }
-                    }
-                } catch (NumberFormatException nEx) {
-                    nEx.printStackTrace();
-                    Toast.makeText(PrincipalActivity.this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
-                }
-            }else {
-                N = false;
-                editor.putString(comm + n, getResources().getString(R.string.commDVal));
-                editor.putString(commN + n, getResources().getString(R.string.commDVal));
-            }
-            editor.putBoolean(commT + n, N);
-            editor.putInt(commET + n, commType);
-            editor.commit();
-            UcommUI();
-        }
-        return true;
-    }*/
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
@@ -777,10 +897,91 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         both = false;
         upd = false;
         advRcv = false;
-        sepLab.setText(R.string.byteRX);
+        //sepLab.setText(R.string.byteRX);
         layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
+    }
+
+    public void setRcvTint16(View view) {
+        dataBytes = new byte[2];
+        dataNBytes = 2;
+        enNumericRcv = true;
+        dataRcvtyp = COMMT_INT16;
+        advRcv = true;
+        both = false;
+        //upd = false;
+        //sepLab.setText(R.string.shortRX);
+        UpdN.setEnabled(false);
+        //layNAct.setVisibility(View.GONE);
+        byteRCV.setVisibility(View.VISIBLE);
+        scro.setVisibility(View.GONE);
+    }
+
+    public void setRcvTint32(View view) {
+        dataBytes = new byte[4];
+        dataNBytes = 4;
+        enNumericRcv = true;
+        dataRcvtyp = COMMT_INT32;
+        advRcv = true;
+        both = false;
+//        upd = false;
+        //sepLab.setText(R.string.intRX);
+        UpdN.setEnabled(false);
+//            layNAct.setVisibility(View.GONE);
+        byteRCV.setVisibility(View.VISIBLE);
+        scro.setVisibility(View.GONE);
+    }
+
+    public void setRcvTint64(View view) {
+        if(pro) {
+            dataBytes = new byte[8];
+            dataNBytes = 8;
+            enNumericRcv = true;
+            dataRcvtyp = COMMT_INT64;
+            advRcv = true;
+            both = false;
+            //upd = false;
+            //sepLab.setText(R.string.longRX);
+            UpdN.setEnabled(false);
+            //layNAct.setVisibility(View.GONE);
+            byteRCV.setVisibility(View.VISIBLE);
+            scro.setVisibility(View.GONE);
+        }else
+            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setRcvTfloat(View view) {
+        dataBytes = new byte[4];
+        dataNBytes = 4;
+        enNumericRcv = true;
+        dataRcvtyp = COMMT_FLOAT;
+        advRcv = true;
+        both = false;
+        //upd = false;
+        //sepLab.setText(R.string.floatRX);
+        UpdN.setEnabled(false);
+        //layNAct.setVisibility(View.GONE);
+        byteRCV.setVisibility(View.VISIBLE);
+        scro.setVisibility(View.GONE);
+    }
+
+    public void setRcvTdouble(View view) {
+        if(pro) {
+            dataBytes = new byte[8];
+            dataNBytes = 8;
+            enNumericRcv = true;
+            dataRcvtyp = COMMT_DOUBLE;
+            advRcv = true;
+            both = false;
+            //upd = false;
+            //sepLab.setText(R.string.doubleRX);
+            UpdN.setEnabled(false);
+            //layNAct.setVisibility(View.GONE);
+            byteRCV.setVisibility(View.VISIBLE);
+            scro.setVisibility(View.GONE);
+        }else
+            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
     }
 
     public void setRcvTboth(View view) {
@@ -788,7 +989,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         both = true;
         upd = false;
         advRcv = false;
-        sepLab.setText(R.string.byteRX);
+        //sepLab.setText(R.string.byteRX);
         layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.VISIBLE);
@@ -806,90 +1007,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         scro.setVisibility(View.VISIBLE);
     }
 
-    public void setRcvTint16(View view) {
-        dataBytes = new byte[2];
-        dataNBytes = 2;
-        enNumericRcv = true;
-        dataRcvtyp = COMMT_INT16;
-        advRcv = true;
-        both = false;
-//        upd = false;
-        sepLab.setText(R.string.shortRX);
-        UpdN.setEnabled(false);
-//            layNAct.setVisibility(View.GONE);
-        byteRCV.setVisibility(View.VISIBLE);
-        scro.setVisibility(View.GONE);
-    }
-
-    public void setRcvTint32(View view) {
-        dataBytes = new byte[4];
-        dataNBytes = 4;
-        enNumericRcv = true;
-        dataRcvtyp = COMMT_INT32;
-        advRcv = true;
-        both = false;
-//        upd = false;
-        sepLab.setText(R.string.intRX);
-        UpdN.setEnabled(false);
-//            layNAct.setVisibility(View.GONE);
-        byteRCV.setVisibility(View.VISIBLE);
-        scro.setVisibility(View.GONE);
-    }
-
-    public void setRcvTint64(View view) {
-        if(pro) {
-            dataBytes = new byte[8];
-            dataNBytes = 8;
-            enNumericRcv = true;
-            dataRcvtyp = COMMT_INT64;
-            advRcv = true;
-            both = false;
-            //upd = false;
-            sepLab.setText(R.string.longRX);
-            UpdN.setEnabled(false);
-            //layNAct.setVisibility(View.GONE);
-            byteRCV.setVisibility(View.VISIBLE);
-            scro.setVisibility(View.GONE);
-        }else
-            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
-    }
-
-    public void setRcvTfloat(View view) {
-        dataBytes = new byte[4];
-        dataNBytes = 4;
-        enNumericRcv = true;
-        dataRcvtyp = COMMT_FLOAT;
-        advRcv = true;
-        both = false;
-//        upd = false;
-        sepLab.setText(R.string.floatRX);
-        UpdN.setEnabled(false);
-//            layNAct.setVisibility(View.GONE);
-        byteRCV.setVisibility(View.VISIBLE);
-        scro.setVisibility(View.GONE);
-    }
-
-    public void setRcvTdouble(View view) {
-        if(pro) {
-            dataBytes = new byte[8];
-            dataNBytes = 8;
-            enNumericRcv = true;
-            dataRcvtyp = COMMT_DOUBLE;
-            advRcv = true;
-            both = false;
-            //upd = false;
-            sepLab.setText(R.string.doubleRX);
-            UpdN.setEnabled(false);
-            //layNAct.setVisibility(View.GONE);
-            byteRCV.setVisibility(View.VISIBLE);
-            scro.setVisibility(View.GONE);
-        }else
-            Toast.makeText(this, R.string.NEED_PRO, Toast.LENGTH_SHORT).show();
-    }
-
-    public void setSendType(int sendType) {
-        if(sendTyp != sendType) {
-            sendTyp = sendType;
+    /*public void setSendType(int sendType) {
+        if(txType != sendType) {
+            txType = sendType;
 //            TX.setText("");
             aCRpLF.setEnabled(false);
             for(int i = 0; i < cantDataTyp; i++)
@@ -945,22 +1065,17 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //                }
 //            }
         }
-    }
+    }*/
 
-    void commanderMode() {
+    public void commanderMode() {
         if(!CM) {
             CM = true;
-//            item.setTitle(R.string.exitCommMode);
-//            commScroll.setVisibility(View.VISIBLE);
+            //item.setTitle(R.string.exitCommMode);
             commBase.setVisibility(View.VISIBLE);
-            /*if(pro)
-                commander.setVisibility(View.VISIBLE);*/
         }else {
             CM = false;
-//            item.setTitle(R.string.commMode);
-//            commScroll.setVisibility(View.GONE);
+            //item.setTitle(R.string.commMode);
             commBase.setVisibility(View.GONE);
-            //commander.setVisibility(View.GONE);
         }
     }
 
@@ -970,7 +1085,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.rcvText:
+            case R.id.rcvTyp:
+                enterIOConfig(IOc.RX_CONFIG);
+                return true;
+            /*case R.id.rcvText:
                 setRcvTtxt(null);
                 return true;
             case R.id.rcvNum:
@@ -996,28 +1114,31 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 return true;
             case R.id.doubleRcv:
                 setRcvTdouble(null);
-                return true;
-            case R.id.viewInstructions:
-                showInstructions();
+                return true;*/
+            case R.id.commMode:
+                commanderMode();
                 return true;
             case R.id.XtringMode:
                 enterXtringMode();
                 return true;
             /*case R.id.themeDark:
-                themeSavePref(true);
+                //themeSavePref(true);
                 return true;
             case R.id.themeNormal:
-                themeSavePref(false);
-                return true;*/
-            case R.id.commMode:
-                commanderMode();
+                //themeSavePref(false);
                 return true;
-            /*case R.id.bigEndian:
+            case R.id.bigEndian:
                 changeEndian(true);
                 return true;
             case R.id.littleEndian:
                 changeEndian(false);
                 return true;*/
+            case R.id.viewInstructions:
+                enterInstructions();
+                return true;
+            case R.id.enterTutorial:
+                enterTutorial();
+                return true;
             case R.id.action_settings:
                 enterSettings();
                 return true;
@@ -1029,6 +1150,27 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
         comunicBT.littleEndian = littleEndian;
         comunic.littleEndian = littleEndian;
+        String endian = "⚠ ";
+        if(littleEndian)
+            endian += getString(R.string.LittleEndian);//endianMode.setText(R.string.LittleEndian);
+        else
+            endian += getString(R.string.BigEndian);//endianMode.setText(R.string.BigEndian);
+        endianMode.setText(endian);
+        updRXlab();
+    }
+
+    private void enterIOConfig(int TX_RX) {
+        TXs[sendTX].clearFocus();
+        imm.hideSoftInputFromWindow(TXs[sendTX].getWindowToken(), 0);
+        Intent startIOConfig = new Intent(this, IOc.class);
+        startIOConfig.putExtra(IOc.TX_TYPE, actualTXtype);
+        startIOConfig.putExtra(IOc.TX_FORM, actualTXform);
+        startIOConfig.putExtra(IOc.RX_TYPE, actualRXtype);
+        startIOConfig.putExtra(IOc.RX_FORM, actualRXform);
+        startIOConfig.putExtra(IOc.CONFIG_ACT, TX_RX);
+        startActivityForResult(startIOConfig, ENTER_IO_CONFIG);
+        overridePendingTransition(R.animator.slide_in_top,
+                R.animator.slide_out_bottom);
     }
 
     private void enterXtringMode() {
@@ -1045,9 +1187,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 R.animator.slide_out_left);
     }
 
-    void showInstructions() {
-        Intent enableIntent = new Intent(this, InstructionsActivity.class);
-        startActivityForResult(enableIntent, SHOW_INSTRUCTIONS);
+    private void enterInstructions() {
+        Intent instructIntent = new Intent(this, InstructionsActivity.class);
+        startActivityForResult(instructIntent, SHOW_INSTRUCTIONS);
+    }
+
+    private void enterTutorial() {
+        Intent tutorialIntent = new Intent(this, TutorialActivity.class);
+        startActivityForResult(tutorialIntent, ENTER_TUTORIAL);
     }
 
     private void initBTD(BluetoothDevice[] BonDev) {
@@ -1208,8 +1355,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             case SHOW_INSTRUCTIONS:
                 if(resultCode == Activity.RESULT_OK) {
                     checked = data.getBooleanExtra(SIoS, false);
-                    editor.putBoolean(PrincipalActivity.SIoS, checked);
-                    editor.commit();
+                    //editor.putBoolean(SIoS, checked);
+                    //editor.commit();
                 }
                 break;
             case ENTER_XTRING:
@@ -1236,6 +1383,22 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     updCommButtons();
                 }
                 break;
+            case ENTER_IO_CONFIG:
+                if(resultCode == Activity.RESULT_OK) {
+                    actualTXtype = data.getIntExtra(IOc.TX_TYPE, IOc.TYPE_TEXT);
+                    actualTXform = data.getIntExtra(IOc.TX_FORM, IOc.INT_FORM_DEC);
+                    actualRXtype = data.getIntExtra(IOc.RX_TYPE, IOc.TYPE_TEXT);
+                    actualRXform = data.getIntExtra(IOc.RX_FORM, IOc.INT_FORM_DEC);
+                    setRXType();
+                    setTXType();
+                }else
+                    Toast.makeText(this, R.string.ConfigNotSaved, Toast.LENGTH_SHORT).show();
+                break;
+            case ENTER_TUTORIAL:
+                /*if(resultCode == Activity.RESULT_OK) {
+
+                }*/
+                break;
 		}
 	}
 
@@ -1247,70 +1410,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             comunic.Detener_Actividad();
 		super.onDestroy();
 	}
-	
-	/*public int nComm(View view) {
-        int num = 0;
-		for(int i = 0; i < 48; i++) {
-		    if(view.getId() == commIDs[i]) {
-                num = i + 1;
-                break;
-            }
-        }
-		return num;
-	}*/
-	
-	/*public void commClick(View view) {
-		int n = nComm(view);
-		if(n != 0) {
-            int commType = shapre.getInt(commET + n, COMMT_STRING);
-            boolean commN = shapre.getBoolean(commT + n, defBcomm);
-            switch(commType) {
-                case(COMMT_INT8):
-                    if(TCOM)
-                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                    break;
-                case(COMMT_INT16):
-                    if(TCOM)
-                        comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
-                    break;
-                case(COMMT_INT32):
-                    if(TCOM)
-                        comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
-                    break;
-                case(COMMT_INT64): // Fallthrough
-                case(COMMT_DOUBLE):
-                    if(TCOM)
-                        comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                    break;
-                case(COMMT_FLOAT):
-                    if(TCOM)
-                        comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
-                    else
-                        comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
-                    break;
-                default:
-                    if (!commN){
-                        if (TCOM)
-                            comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
-                        else
-                            comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
-                    }else {
-                        if (TCOM)
-                            comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                        else
-                            comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                    }
-            }
-		}
-	}*/
 	
 	public void UcommUI() {
 		for(int i = 0; i < cantFastSendTot; i++) {
@@ -1392,108 +1491,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         }
 	}
 
-	public void enviar(View view) {
-        if (TXs[sendTyp].length() > 0) {
-            String message = TXs[sendTyp].getText().toString();
-            try {
-                switch (sendTyp) {
-                    case (SEND_TXT): {
-                        String eom = "\r\n";
-                        if(!aCRpLF.isChecked())
-                            eom = "";
-                        if(TCOM) {
-                            comunicBT.enviar(message + eom);//???
-                        }else {
-                            comunic.enviar(message + eom);//???
-                        }
-                        break;
-                    }
-                    case (SEND_BYTE): {
-                        int Messagen = Integer.parseInt(message);
-                        if(TCOM)
-                            comunicBT.enviar_Int8(Messagen);
-                        else
-                            comunic.enviar_Int8(Messagen);
-                        break;
-                    }
-                    case (SEND_BIN): {
-                        int Messagen = Integer.parseInt(message, 2);
-                        if(TCOM)
-                            comunicBT.enviar_Int8(Messagen);
-                        else
-                            comunic.enviar_Int8(Messagen);
-                        break;
-                    }
-                    case (SEND_HEX): {
-                        int Messagen = Integer.parseInt(message, 16);
-                        if(TCOM)
-                            comunicBT.enviar_Int8(Messagen);
-                        else
-                            comunic.enviar_Int8(Messagen);
-                        break;
-                    }
-                    case (SEND_SHORT): {
-                        int Messagen = Integer.parseInt(message);
-                        if(TCOM)
-                            comunicBT.enviar_Int16(Messagen);
-                        else
-                            comunic.enviar_Int16(Messagen);
-                        break;
-                    }
-                    case (SEND_INT): {
-                        int Messagen = Integer.parseInt(message);
-                        if(TCOM)
-                            comunicBT.enviar_Int32(Messagen);
-                        else
-                            comunic.enviar_Int32(Messagen);
-                        break;
-                    }
-                    case (SEND_LONG): {
-                        long Messagen = Long.parseLong(message);
-                        if(TCOM)
-                            comunicBT.enviar_Int64(Messagen);
-                        else
-                            comunic.enviar_Int64(Messagen);
-                        break;
-                    }
-                    case (SEND_FLOAT): {
-                        float Messagen = Float.parseFloat(message);
-                        if(TCOM)
-                            comunicBT.enviar_Float(Messagen);
-                        else
-                            comunic.enviar_Float(Messagen);
-                        break;
-                    }
-                    case (SEND_DOUBLE): {
-                        double Messagen = Double.parseDouble(message);
-                        if(TCOM)
-                            comunicBT.enviar_Double(Messagen);
-                        else
-                            comunic.enviar_Double(Messagen);
-                        break;
-                    }
-                }
-            } catch (NumberFormatException nEx) {
-                nEx.printStackTrace();
-                Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
-            }
-        }else if(sendTyp == SEND_TXT && aCRpLF.isChecked()) {
-            if (TCOM) {
-                comunicBT.enviar_Int8(13);
-                comunicBT.enviar_Int8(10);
-            } else {
-                comunic.enviar_Int8(13);
-                comunic.enviar_Int8(10);
-            }
-        }
-        if(clearTXAS)
-            BTX(null);
-	}
-
 	public void BTX(View view) { //Borrar TX
-//        for(int i = 0; i< 9; i++)
-//            TXs[i].setText("");
-        TXs[sendTyp].setText("");
+        TXs[txType].setText("");
 	}
 
 	public void BRX(View view) { //Borrar RX
@@ -1541,8 +1540,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public void onDataReceived(final int nbytes, String dato, int[] ndato, final byte[] bdato) {
         printOnTV(false, RX, dato);
         if (enNumericRcv) {
-            String hexStr;
-            String binStr;
+            String formText = "";
             if (advRcv) {
                 for (int i = 0; i < nbytes; i++) {
                     if (!dataInit) {
@@ -1561,41 +1559,53 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                                     case (COMMT_INT16):
                                         short messageShort = byteBuffer.getShort();
                                         if(littleEndian) {
-                                            myBytes = ByteBuffer.allocate(2).putShort(messageShort).array();
+                                            messageShort = Short.reverseBytes(messageShort);
+                                            /*myBytes = ByteBuffer.allocate(2).putShort(messageShort).array();
                                             bbb = ByteBuffer.wrap(myBytes);
                                             bbb.order(ByteOrder.LITTLE_ENDIAN);
-                                            messageShort = bbb.getShort();
+                                            messageShort = bbb.getShort();*/
                                         }
-                                        hexStr = String.format("0x%04x", messageShort);
-                                        binStr = String.format("0b%16s", Integer.toBinaryString(messageShort)).replace(" ", "0");
-                                        printOnTV(true, RXn, messageShort + " ");
-                                        //printOnTV(true, RXn, hexStr + " ");
+                                        if(actualRXform == IOc.INT_FORM_DEC)
+                                            formText = messageShort + " ";
+                                        else if(actualRXform == IOc.INT_FORM_HEX)
+                                            formText = String.format("0x%04x ", messageShort);
+                                        else if(actualRXform == IOc.INT_FORM_BIN)
+                                            formText = String.format("0b%16s", Integer.toBinaryString(messageShort)).
+                                                    replace(" ", "0") + " ";
                                         break;
                                     case (COMMT_INT32):
                                         int messageInt = byteBuffer.getInt();
                                         if(littleEndian) {
-                                            myBytes = ByteBuffer.allocate(4).putInt(messageInt).array();
+                                            messageInt = Integer.reverseBytes(messageInt);
+                                            /*myBytes = ByteBuffer.allocate(4).putInt(messageInt).array();
                                             bbb = ByteBuffer.wrap(myBytes);
                                             bbb.order(ByteOrder.LITTLE_ENDIAN);
-                                            messageInt = bbb.getInt();
+                                            messageInt = bbb.getInt();*/
                                         }
-                                        hexStr = String.format("0x%08x", messageInt);
-                                        binStr = String.format("0b%32s", Integer.toBinaryString(messageInt)).replace(" ", "0");
-                                        printOnTV(true, RXn, messageInt + " ");
-                                        //printOnTV(true, RXn, hexStr + " ");
+                                        if(actualRXform == IOc.INT_FORM_DEC)
+                                            formText = messageInt + " ";
+                                        else if(actualRXform == IOc.INT_FORM_HEX)
+                                            formText = String.format("0x%08x ", messageInt);
+                                        else if(actualRXform == IOc.INT_FORM_BIN)
+                                            formText = String.format("0b%32s", Integer.toBinaryString(messageInt)).
+                                                    replace(" ", "0") + " ";
                                         break;
                                     case (COMMT_INT64):
                                         long messageLong = byteBuffer.getLong();
                                         if(littleEndian) {
-                                            myBytes = ByteBuffer.allocate(8).putLong(messageLong).array();
+                                            messageLong = Long.reverseBytes(messageLong);
+                                            /*myBytes = ByteBuffer.allocate(8).putLong(messageLong).array();
                                             bbb = ByteBuffer.wrap(myBytes);
                                             bbb.order(ByteOrder.LITTLE_ENDIAN);
-                                            messageLong = bbb.getLong();
+                                            messageLong = bbb.getLong();*/
                                         }
-                                        hexStr = String.format("0x%016x", messageLong);
-                                        binStr = String.format("0b%64s", Long.toBinaryString(messageLong)).replace(" ", "0");
-                                        printOnTV(true, RXn, messageLong + " ");
-                                        //printOnTV(true, RXn, hexStr + " ");
+                                        if(actualRXform == IOc.INT_FORM_DEC)
+                                            formText = messageLong + " ";
+                                        else if(actualRXform == IOc.INT_FORM_HEX)
+                                            formText = String.format("0x%016x ", messageLong);
+                                        else if(actualRXform == IOc.INT_FORM_BIN)
+                                            formText = String.format("0b%64s", Long.toBinaryString(messageLong)).
+                                                    replace(" ", "0") + " ";
                                         break;
                                     case (COMMT_FLOAT):
                                         float messageFloat = byteBuffer.getFloat();
@@ -1605,7 +1615,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                                             bbb.order(ByteOrder.LITTLE_ENDIAN);
                                             messageFloat = bbb.getFloat();
                                         }
-                                        printOnTV(true, RXn, messageFloat + " ");
+                                        formText = messageFloat + " ";
                                         break;
                                     case (COMMT_DOUBLE):
                                         double messageDouble = byteBuffer.getDouble();
@@ -1615,11 +1625,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                                             bbb.order(ByteOrder.LITTLE_ENDIAN);
                                             messageDouble = bbb.getDouble();
                                         }
-                                        printOnTV(true, RXn, messageDouble + " ");
+                                        formText = messageDouble + " ";
                                         break;
                                 }
+                                printOnTV(true, RXn, formText);
                             } else
-                                RXn.append("Err");
+                                RXn.append("Err ");
                             dataCont = 0;
                             dataInit = false;
                         }
@@ -1627,9 +1638,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 }
             } else {
                 for (int val : ndato) {
-                    hexStr = String.format("0x%02x", val);
-                    binStr = String.format("0b%8s", Integer.toBinaryString(val)).replace(" ", "0");
-                    printOnTV(true, RXn, val + " ");
+                    if(actualRXform == IOc.INT_FORM_DEC)
+                        formText = val + " ";
+                    else if(actualRXform == IOc.INT_FORM_HEX)
+                        formText = String.format("0x%02x ", val);
+                    else if(actualRXform == IOc.INT_FORM_BIN)
+                        formText = String.format("0b%8s", Integer.toBinaryString(val)).
+                                replace(" ", "0") + " ";
+                    printOnTV(true, RXn, formText);
                 }
             }
             scron.post(new Runnable() {

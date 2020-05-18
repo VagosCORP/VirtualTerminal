@@ -13,7 +13,7 @@ public class XtringEditor extends Activity {
 
     TextView editorXdetails;
 //    EditText newTX;
-    EditText[] newTXs = new EditText[9];
+    EditText[] newTXs = new EditText[5];
 
     int sendType = 0;
     int position = 0;
@@ -21,19 +21,29 @@ public class XtringEditor extends Activity {
 
     SharedPreferences shapre;
     boolean pro = false;
+    int actualTXtype = 0;
+    int actualTXform = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent data = getIntent();
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
-        position = getIntent().getIntExtra(XtringActivity.POS, 0);
-        sendType = getIntent().getIntExtra(XtringActivity.SENDTYPE, 0);
-        txVal = getIntent().getStringExtra(XtringActivity.NEWTX);
+        position = data.getIntExtra(XtringActivity.POS, 0);
+        sendType = data.getIntExtra(XtringActivity.SENDTYPE, 0);
+        txVal = data.getStringExtra(XtringActivity.NEWTX);
+        actualTXtype = data.getIntExtra(IOc.TX_TYPE, IOc.TYPE_TEXT);
+        actualTXform = data.getIntExtra(IOc.TX_FORM, IOc.INT_FORM_DEC);
         setContentView(R.layout.activity_xtring_editor);
         editorXdetails = findViewById(R.id.editorXdetails);
 //        newTX = findViewById(R.id.newTX);
-        newTXs[0] = findViewById(R.id.newTXtext);
+        newTXs[PrincipalActivity.TX_FORM_TXT] = findViewById(R.id.newTXtext);
+        newTXs[PrincipalActivity.TX_FORM_DEC] = findViewById(R.id.newTXnum);
+        newTXs[PrincipalActivity.TX_FORM_HEX] = findViewById(R.id.newTXhex);
+        newTXs[PrincipalActivity.TX_FORM_BIN] = findViewById(R.id.newTXbin);
+        newTXs[PrincipalActivity.TX_FORM_FLOAT] = findViewById(R.id.newTXfloat);
+        /*newTXs[0] = findViewById(R.id.newTXtext);
         newTXs[1] = findViewById(R.id.newTXnum);
         newTXs[2] = findViewById(R.id.newTXbin);
         newTXs[3] = findViewById(R.id.newTXhex);
@@ -49,55 +59,94 @@ public class XtringEditor extends Activity {
             newTXs[8].setText("");
             newTXs[6].setHint(R.string.NEED_PRO);
             newTXs[8].setHint(R.string.NEED_PRO);
-        }
-        setSendType();
-        String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
-        String tempS = getString(R.string.Item) + position + " ( " + sendT[sendType] + " ) " + getString(R.string.Empty);
+        }*/
+        //setSendType();
+        setTXType();
+        String tempS = getString(R.string.Item) + " " + position + " ( " + genTXtypeLbl() + " ) ";
+        if(txVal.equals(""))
+            tempS += getString(R.string.Empty);
+        //String[] sendT = getResources().getStringArray(R.array.sendtypes_array2);
+        //String tempS = getString(R.string.Item) + position + " ( " + sendT[sendType] + " ) " + getString(R.string.Empty);
         editorXdetails.setText(tempS);
         newTXs[sendType].setText(txVal);
         newTXs[sendType].selectAll();
         newTXs[sendType].requestFocus();
     }
 
+    public String genTXtypeLbl() {
+        String premisa = "";
+        if(actualTXtype > 0 && actualTXtype < 5)
+            premisa = getString(IOc.formStrings[actualTXform]);
+        return premisa + getString(IOc.typeStrings[actualTXtype]);
+    }
+
     boolean check(String message) {
+        boolean res = true;
+        try {
+            if(!message.equals("")) {
+                switch (actualTXtype) {
+                    case (IOc.TYPE_TEXT):
+                        break;
+                    case (IOc.TYPE_BYTE):
+                    case (IOc.TYPE_SHORT):
+                    case (IOc.TYPE_INT):
+                        //Integer.parseInt(message);
+                        Integer.parseInt(message, IOc.radixTX[actualTXform]);
+                        break;
+                    /*case (PrincipalActivity.SEND_BIN):
+                        Integer.parseInt(message, 2);
+                        break;
+                    case (PrincipalActivity.SEND_HEX):
+                        Integer.parseInt(message, 16);
+                        break;*/
+                    case (IOc.TYPE_LONG):
+                        //Long.parseLong(message);
+                        Long.parseLong(message, IOc.radixTX[actualTXform]);
+                        break;
+                    case (IOc.TYPE_FLOAT):
+                        Float.parseFloat(message);
+                        break;
+                    case (IOc.TYPE_DOUBLE):
+                        Double.parseDouble(message);
+                        break;
+                }
+            }else {
+                Toast.makeText(this, R.string.EmptyXtringItem, Toast.LENGTH_SHORT).show();
+            }
+        } catch (NumberFormatException nEx) {
+            nEx.printStackTrace();
+            Toast.makeText(this, R.string.numFormExc, Toast.LENGTH_SHORT).show();
+            res = false;
+        }
+        return res;
+    }
+
+    boolean checks(String message) {
         boolean res = true;
         try {
             if(!message.equals("")) {
                 switch (sendType) {
                     case (PrincipalActivity.SEND_TXT):
-
                         break;
                     case (PrincipalActivity.SEND_BYTE):
-                        int MessageB = Integer.parseInt(message);
-
+                    case (PrincipalActivity.SEND_SHORT):
+                    case (PrincipalActivity.SEND_INT):
+                        Integer.parseInt(message);
                         break;
                     case (PrincipalActivity.SEND_BIN):
-                        int Messageb = Integer.parseInt(message, 2);
-
+                        Integer.parseInt(message, 2);
                         break;
                     case (PrincipalActivity.SEND_HEX):
-                        int Messageh = Integer.parseInt(message, 16);
-
-                        break;
-                    case (PrincipalActivity.SEND_SHORT):
-                        int Messages = Integer.parseInt(message);
-
-                        break;
-                    case (PrincipalActivity.SEND_INT):
-                        int Messagei = Integer.parseInt(message);
-
+                        Integer.parseInt(message, 16);
                         break;
                     case (PrincipalActivity.SEND_LONG):
-                        long Messagel = Long.parseLong(message);
-
+                        Long.parseLong(message);
                         break;
                     case (PrincipalActivity.SEND_FLOAT):
-                        float Messagef = Float.parseFloat(message);
-
+                        Float.parseFloat(message);
                         break;
                     case (PrincipalActivity.SEND_DOUBLE):
-                        double Messaged = Double.parseDouble(message);
-
+                        Double.parseDouble(message);
                         break;
                 }
             }
@@ -117,6 +166,8 @@ public class XtringEditor extends Activity {
             resIntent.putExtra(XtringActivity.NEWTX, txVal);
             setResult(Activity.RESULT_OK, resIntent);
             finish();
+            overridePendingTransition(R.animator.slide_in_top,
+                    R.animator.slide_out_bottom);
         }
     }
 
@@ -168,6 +219,28 @@ public class XtringEditor extends Activity {
                 break;
             }
         }*/
+    }
+
+    public void setTXType() {
+        //typeTXB.setText(genTXtypeLbl());
+        //aCRpLF.setEnabled(false);
+        for (int i = 0; i < 5; i++)
+            newTXs[i].setVisibility(View.GONE);
+        sendType = PrincipalActivity.TX_FORM_TXT;
+        if(actualTXtype == IOc.TYPE_TEXT) {
+            //aCRpLF.setEnabled(true);
+        }else if(actualTXtype < IOc.TYPE_FLOAT){
+            if(actualTXform == IOc.INT_FORM_DEC)
+                sendType = PrincipalActivity.TX_FORM_DEC;
+            else if(actualTXform == IOc.INT_FORM_HEX)
+                sendType = PrincipalActivity.TX_FORM_HEX;
+            else
+                sendType = PrincipalActivity.TX_FORM_BIN;
+        }else
+            sendType = PrincipalActivity.TX_FORM_FLOAT;
+        newTXs[sendType].setVisibility(View.VISIBLE);
+        newTXs[sendType].requestFocus();
+        //imm.showSoftInput(TXs[sendTX], InputMethodManager.SHOW_IMPLICIT);
     }
 
 }

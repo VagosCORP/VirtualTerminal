@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -8,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PrincipalActivity">
+    tools:context=".TutorialActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,23 +21,20 @@
             android:id="@+id/Conect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="conect"
             android:text="@string/Button_Conect"/>
 
         <Button
             android:id="@+id/chan_ser"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:onClick="Chan_Ser"
             android:text="@string/Ser_Dat"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/dataString"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:text="@string/DS"
+            android:id="@+id/dataString"
             android:visibility="visible"/>
 
         <TextView
@@ -50,7 +48,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/appendCRpLFl"
+            android:text="@string/appendCRpLF"
             android:id="@+id/aCRpLF"/>
 
     </LinearLayout>
@@ -60,18 +58,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!--<Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:visibility="gone"/>-->
-
         <TextView
-            android:id="@+id/typeTXB"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="@string/typeString"/>
+            android:id="@+id/typeTXB"
+            android:text="@string/typSend"/>
 
         <EditText
             android:id="@+id/TXle"
@@ -157,7 +149,6 @@
             android:id="@+id/Send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="enviar"
             android:text="@string/BSend"/>
 
     </LinearLayout>
@@ -171,14 +162,12 @@
             android:id="@+id/DelTX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="BTX"
             android:text="@string/BTX"/>
 
         <Button
             android:id="@+id/DelRX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="BRX"
             android:text="@string/BRX"/>
 
         <LinearLayout
@@ -211,7 +200,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:baselineAligned="false">
 
         <LinearLayout
@@ -250,7 +240,7 @@
 
                 <TextView
                     android:id="@+id/sepLab"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/byteRX"/>
 
@@ -305,5 +295,26 @@
 
             </ScrollView>
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/prevTut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prev"
+            android:onClick="prevTut"/>
+
+        <Button
+            android:id="@+id/nextTut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:onClick="nextTut"/>
+
     </LinearLayout>
 </LinearLayout>

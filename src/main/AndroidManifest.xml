@@ -68,7 +68,24 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vagoscorp.virtualterminal.MainActivity" />
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
+            android:name=".TutorialActivity"
+            android:label="@string/VT_Tutorial"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/DarkTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PrincipalActivity"/>
+        </activity>
+        <activity
+            android:name=".IOc"
+            android:label="@string/IOConfigLabel"
+            android:theme="@style/Dialog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PrincipalActivity"/>
         </activity>
         <activity
             android:name=".InstructionsActivity"
@@ -77,7 +94,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vagoscorp.virtualterminal.MainActivity" />
+                android:value=".PrincipalActivity"/>
         </activity>
         <activity
             android:name=".XtringActivity"
@@ -86,7 +103,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vagoscorp.virtualterminal.PrincipalActivity" />
+                android:value=".PrincipalActivity" />
         </activity>
         <activity
             android:name=".XtringEditor"
@@ -95,7 +112,7 @@
             android:windowSoftInputMode="stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vagoscorp.virtualterminal.XtringActivity" />
+                android:value=".XtringActivity" />
         </activity>
     </application>
 

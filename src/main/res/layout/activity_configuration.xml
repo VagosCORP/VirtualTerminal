@@ -58,6 +58,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/NumCommStatHint"
+            android:importantForAutofill="no"
             android:inputType="number" />
 
     </LinearLayout>
@@ -80,15 +81,16 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/NumCommScrollHint"
+            android:importantForAutofill="no"
             android:inputType="number" />
 
     </LinearLayout>
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/EndianSelect" />
+        android:text="@string/EndianSelect" />-->
 
     <RadioGroup
         android:id="@+id/endianGlobal"
@@ -100,7 +102,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/GlobalEndian" />
+            android:text="@string/EndianSelect" />
 
         <RadioButton
             android:id="@+id/bigEndian"

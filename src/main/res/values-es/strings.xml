@@ -4,12 +4,12 @@
     <string name="instructionsBasic">
         - Pulse el botón de información de conexión para cambiar los datos de conexión.\n
         - Pulse el botón Conectar para iniciar/finalizar la conexión.\n
-        - Use la lista desplegable TX para seleccionar el tipo de información que desea enviar.\n
+        - Use el texto Tipo-TX para seleccionar el tipo de información que desea enviar.\n
         - Escriba en la entrada de texto TX la información que desea enviar.\n
         - En modo texto, puede habilitar el anexado de CR+LF durante el envío.\n
-        - Si esta habilitado, el anexo CR+LF será enviado aún si TX esta vacio.\n
+        - Si esta habilitado, los bytes de anexo CR+LF serán enviado incluso si TX esta vacío.\n
         - Use el menú de la App para acceder a otras opciones:\n
-        *   Seleccionar como mostrar y administrar los datos entrantes \'RX\'.\n
+        *   Seleccionar como mostrar y administrar los datos entrantes \'RX▼\'.\n
         *   Seleccionar opciones de recepción numérica avanzadas (int16, int32, float,..).\n
         *   Iniciar/Finalizar el Modo EnvíoRápido.\n
         *   Iniciar el Modo Xtring.\n
@@ -18,19 +18,20 @@
         *   Seleccionar opción de apariencia: Tema Normal o Dark.\n
         *   Habilitar el borrado de TX tras cada envío.\n
         *   Cambiar la cantidad de Botones de EnvíoRápido estáticos y desplazables.\n
+        *   Cambiar el orden de envío de bytes(endian) cuando se envían numeros multi-Byte.\n
         - Los usuarios de tabletas pueden seleccionar las opciones de recepción sin necesidad de entrar al menú.
         - En modo Servidor WiFi, el puerto de red debe ser mayor o igual a 1100 para evitar puertos usados por el sistema.
     </string>
     <string name="instructionsAjustesLayout">
-        - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.(PRO)\n
-        - Gesto Abajo/Arriba en la barra de acciones para mostrarla/ocultarla respectivamente.(PRO)\n
+        - Pulse y mantenga el botón Conectar para mostrar/ocultar la barra de acciones.(Pro)\n
+        - Gesto Abajo/Arriba en la barra de acciones para mostrarla/ocultarla respectivamente.(Pro)\n
         - Cuando se está conectado, Inicie/Finalice el modo EnvíoRápido manteniendo pulsado el botón \'Enviar\'.\n
         - Inicie/Finalice el modo EnvíoRápido deslizando el dedo respectivamente desde/hacia el lado derecho de la Pantalla.\n
         - Inicie el modo Xtring deslizando el dedo desde el lado izquierdo de la Pantalla hacia la derecha.
     </string>
     <string name="instructionsFastSend">
         Operando el \'Modo EnvíoRápido\': Almacene información en botones para enviarla más agilmente.\n
-        *   Seleccione desde la lista desplegable TX el tipo de información que desea almacenar en un botón de EnvíoRápido.\n
+        *   Seleccione desde el texto Tipo-TX el tipo de información que desea almacenar en un botón de EnvíoRápido.\n
         *   Escriba la información en la entrada de texto TX.\n
         *   Inicie el Modo EnvíoRápido (Si no lo ha iniciado aún).\n
         *   Haga una pulsación larga en un botón de EnvíoRápido para salvar la información en él.\n
@@ -41,9 +42,12 @@
     </string>
     <string name="instructionsXtring">
         Operando el \'Modo Xtring\': Almacene un grupo de datos organizados y de distintos tipos para enviarlos como un paquete.\n
-        *   Presione el botón del tipo de dato que desea añadir al paquete.\n
-        *   Escriba la información deseada para ese ítem en la entrada de texto que aparece.\n
-        *   Si desea cambiar el tipo de dato de un ítem ya creado, seleccione desde la lista desplegable del ítem el nuevo tipo de información que desea utilizar.\n
+        *   Presione el botón de añadir ítem, se le preguntará qué tipo de dato desea añadir al paquete.\n
+        *   Los tipos de envío son los mismos que en el modo de operación normal.\n
+        *   Tras seleccionar el tipo de dato, una ventana emergerá para asignarle un valor.\n
+        *   Finalizado ésto, el item Xtring crwdo aparecwerá en la lista indicando el tipo y valor asignados.\n
+        *   Puede presionar el texto de \'Tipo\' de un ítem ya existente para cambiar el tipo de dato guardado.\n
+        *   Puede presionar el texto de \'Valor\' de un ítem ya existente para modificar el dato guardado.\n
         *   Puede definir algunos items como constantes, para evitar su modificación.\n
         *   Puede Eliminar el último ítem del paquete presionando el Botón \'Borrar Item\'.\n
         *   Si el texto de algún ítem está vacío \'No_Dat\' el paquete no se podrá enviar y se le pedirá que rellene el primer ítem sin datos encontrado.\n
@@ -80,7 +84,7 @@
         *   Modo Xtring con ítems ilimitados y nuevas opciones.\n
         *   Poder guardar los paquetes Xtring como botones de EnvíoRápido para su uso desde la ventana principal.
     </string>
-    <string-array name="sendtypes_array2">
+    <!--<string-array name="sendtypes_array2">
         <item>Texto</item>
         <item>Byte</item>
         <item>Binario</item>
@@ -90,7 +94,7 @@
         <item>int 64-bits</item>
         <item>Float</item>
         <item>Double</item>
-    </string-array>
+    </string-array>-->
 
 
     <string name="hello_world">Hola mundo!</string>
@@ -102,7 +106,7 @@
     <string name="updRate">#Act</string>
 
     <string name="viewInstructions">Ver Instrucciones</string>
-    <string name="NSIAS">No mostrar de nuevo al inicio</string>
+    <string name="NSIAS">No mostrar al inicio</string>
     <string name="Instructions_Basics">Instrucciones Básicas</string>
     <string name="Instructions_Layout">Gestos sobre la interfaz</string>
     <string name="Instructions_FastSend">Interfaz EnvíoRápido</string>
@@ -171,6 +175,7 @@
 
 
 
+    <string name="ComXaddItem">Añadir Item</string>
     <string name="ComXdeleteItem">Borrar Item</string>
     <string name="ComXSendX">Enviar</string>
 
@@ -204,14 +209,14 @@
     <string name="ApplyChanges">Aplicar Cambios</string>
     <string name="DiscardChanges">Descartar Cambios</string>
 
-    <string name="EndianSelect">Selección de Endian (En Desarrollo)</string>
+    <string name="EndianSelect">Selección de Endian</string>
     <string name="GlobalEndian">Endian para Global</string>
-    <!--<string name="ReceivingEndian">Endian para Recepción</string>-->
+    <string name="NoXtring">Sin Items para Enviar</string>
 
 
 
     <string name="NEED_PRO">Función Pro</string>
-    <string name="ConfigNotSaved">Cambios no Aplicados</string>
+    <string name="ConfigNotSaved">Ningún Cambio Aplicado</string>
     <string name="LongClick2Save">Pulso Largo para Guardar</string>
     <string name="FastSendButtName">Nombre para Envío Rápido</string>
     <string name="Item">Ítem</string>
@@ -221,6 +226,171 @@
     <string name="EmptyXtringItem">Ítem Xtring Vacío</string>
 
 
+    <string name="IOConfigLabel">Configuración E/S</string>
+    <string name="IODataTypes">Tipo de Dato</string>
 
+    <string name="IOIntDataFormats">Formato de Entero</string>
+
+    <string name="TXConfig">Config TX</string>
+    <string name="RXConfig">Config RX</string>
+    <string name="XtringConfig">Tipo de Ítem</string>
+    <string name="xItemNoEdited">Valor del ítem no editado</string>
+    <string name="showFastAdd">Interfaz Rápida</string>
+    <string name="advType">Tipo</string>
+
+    <string name="VT_Tutorial">Tutorial</string>
+    <string name="exitTutorial">Salir del Tutorial</string>
+    <string name="prev">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="exitTutToast">Presione Volver para salir del Tutorial o seleccione la opción del menú.</string>
+
+    <string name="tutPresentation">
+        - Esta es la Interfaz Principal de Virtual Terminal.\n
+        - Tome un momento para verla y jugar con los botones si lo desea.\n
+        - También puede navegar por el menú, busque el botón RX▼.\n
+        - La pantalla de configurasión de E/S debería aparecer cuando RX▼ es presionado.\n
+        - Presione el botón \'Siguiente\' para iniciar el recorrido.
+    </string>
+    <string name="tutChanSer">
+        - Este botón sirve para seleccionar a donde se conectará.\n
+        - En modo Bluetooth, mostrará una lista de los dispositivos sincronizados para que seleccione uno.\n
+        - En modo WiFi, mostrará una dirección IP y puerto editables, asegurese de escribir los valores correctos.\n
+        - Una presión prolongada del botón, debería abrir la pantalla de configuración.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutConnect">
+        - Este botón se usa para iniciar una conexión al dispositivo o dirección especificada.\n
+        - El texto del botón cambiará en base a la situación o estado de conexión.\n
+        - si la conexión no puede realizarse, el proceso se cancelerá en menos de 7 segundos.\n
+        - Los usuarios Pro pueden aplicar una presión larga al botón para ocultar/mostrar la barra de acciones.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutSendType">
+        - Este texto de \"Tipo de envío\" puede ser presionado para abrir la pantalla de configuración de E/S.\n
+        - Es posible enviar texto, bytes, numeros grandes de 2 o más bytes y flotantes.\n
+        - También notará una lista de formatos en la pantalla de configuración E/S, para poder escribir en Binario o Hexadecimal.\n
+        - Intente presionarlo!, se encuentra a la izquierda de la entrada de texto TX \"Vagos CORP\".\n
+        - Este texto de \"Tipo de envío\" cambiará el valor que muestra en base a su selección.\n
+        - La pantalla de configuración de E/S tiene un botón de acceso rápido hacia la configuración de recepción.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutACRpLF">
+        - Esta casilla permite anexar los bytes/carácteres CR+LF a su mensaje.\n
+        - Está habilitada solo cuando se envía texto y sirve para marcar el final de una línea.\n
+        - Cuando se manda datos de tipo numérico, queda deshabilitada.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutEndianLab">
+        - Este ⚠ texto notifica el orden de envío de los bytes cuando se está enviando un número.\n
+        - Más precisamente, un número formado por más de 8 bits, como un short(16) o un Float(32).\n
+        - Se mostrará automaticamente dependiendo del tipo de envío seleccionado.\n
+        - Big Endian significa que el byte de mayor significancia es enviado primero, de otro modo sería Little Endian.\n
+        - Big Endian es el orden de envío por defecto, Usuarios Pro pueden cambiarlo en configuración.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutTXinputText">
+        - Esta es la entrada de texto TX para los datos que se desea enviar.\n
+        - El texto de ayuda y carácteres permitidos cambiaría según en tipo de envío seleccionado.\n
+        - Por defecrto el tipo de envío es texto, puede tratar de escribir en él si lo desea.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutTXinputNum">
+        - Ahora el comportamiento de la entrada de texto TX está en modo numérico.\n
+        - Los carácteres permitidos se muestran en el texto de ayuda/pista.\n
+        - También el teclado ahora debería mostrar solo números, puede tratar de escribir en él si lo desea.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutTXinputHex">
+        - Ahora el comportamiento de la entrada de texto TX está en modo numérico hexadecimal.\n
+        - Los carácteres permitidos se muestran en el texto de ayuda/pista.\n
+        - También el teclado ahora debería mostrar todos los carácteres, pero filtrará los inadecuados.\n
+        - Puede tratar de escribir en él si lo desea, los carácteres mayores a F serán ignorados.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutTXinputBin">
+        - Ahora el comportamiento de la entrada de texto TX está en modo numérico binario.\n
+        - Los carácteres permitidos se muestran en el texto de ayuda/pista.\n
+        - También el teclado ahora debería mostrar solo números, pero filtrará los inadecuados.\n
+        - Puede tratar de escribir en él si lo desea, los valores mayores a 1 serán ignorados.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutTXinputFloat">
+        - Ahora el comportamiento de la entrada TX está en modo numérico con decimales(float).\n
+        - Los carácteres permitidos se muestran en el texto de ayuda/pista.\n
+        - También el teclado ahora debería mostrar solo números, Puede tratar de escribir en él si lo desea.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutSend">
+        - Este botón se usa para enviar el conyenido actual de la entrada TX.\n
+        - La operación de envío respetará el tipo de envío y opciones aplicadas.\n
+        - Puede habilitar el borrado automático de la entrada TX tras cada envío desde configuración.\n
+        - Una presión larga del botón abrirá/cerrará la Interfaz de EnvíoRápido, Inténtelo!.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutFastSend">
+        - La Interfaz de EnvíoRápido es un grupo de botones configurables para \'Envío rápido de datos\'.\n
+        - Cada botón puede almacenar un valor con el tipo de dato seleccionado.\n
+        - La presión larga en un botón hará que el contenido actual de TX sea almacenado en él.\n
+        - Tras un guardado, el tipo de dato y valor almacenados se mostrarán en el texto del botón.\n
+        - Al presionar un botón, los datos almacenados en él se enviarán de manera automática.\n
+        - La presión larga cuando la entrada TX está vacía borrará el contenido actual del botón.\n
+        - Un botón de EnvíoRápido vacío tiene un texto \"NoDat\" almacenado, éste puede ser enviado también.\n
+        - Los usuarios Pro pueden configurar la cantidad de botones desde la pantalla de configuración.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutDelTRX">
+        - estos dos botones pueden borrar el contenido de la entrada TX ó la vista RX respectivamente.\n
+        - Para la entrada TX, resulta más rápido que realizar el borrado con el teclado.\n
+        - Para la vista RX, esta es la única manera de limpiar la pantalla de recepción.\n
+        - A menos que se esté usando un tipo de recepción avanzada como \'Package RX\'.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutRXt">
+        - Este texto se está mostrando en la vista RX, toda la información recivida se muestra aquí.\n
+        - Al igual que el tipo de envío, puede utilizar el menú RX▼ para definir el tipo de recepción.\n
+        - Dispone de las mismas opciones que el tipo de envío, además de dos nuevas pensadas para RX.\n
+        - El modo \'Dual RX\' permite ver los datos recibidos como texto y bytes al mismo tiempo.\n
+        - El modo \'Package RX\' borra automaticamente la vista RX cada que se reciba una cantidad definida de paquetes.\n
+        - Los paquetes de datos se reconocen por el último byte recibido, si EndByte = 10, Eso es un paquete.\n
+        - Después de limpiar la vista RX, la cuenta de paquetes se reinicia para ver los datos mas recientes.\n
+        - \'Package RX\' puede ser combinado con todos los tipops de recepción numérica para ver valores en tiempo real.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutlayNAct">
+        - Esta entrada de texto y casilla permiten administrar el modo \'Package RX\'.\n
+        - La entrada de texto define la cantidad de paquetes antes del borrado de RX(1 por defecto).\n
+        - La casilla de tiqueo abre una vista de recepción numerica para ver los datos igual que el modo \'Dual RX\'.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutRXn">
+        - Abajo puede verse la vista de recepción numérica mencionada.\n
+        - Ésta se habilita con todos los tipos de recepción numérica, más los modos Dual y Paquetes.\n
+        - Para recibir un numero multi-byte, se necesita agregar un byte de inicio y de finalización a su dato.\n
+        - StartByte = 13 y EndByte = 10, la app tratará los bytes en medio como el tipo de dato seleccionado.\n
+        - Siendo EndByte = 10 es posible combinar el modo paquete con cualquiera de los numéricos.\n
+        - Cuando se usen estos tipos de recepción avanzada, la app esperará al byte de finalización.\n
+        - Ó en modo numérico, por el número máximo de bytes del tipo de recepción seleccionado.\n
+        - Presione el botón \'Siguiente\' para continuar.
+    </string>
+    <string name="tutExit">
+        - Use las instrucciones para más información, puede encontrarlas en el menú.\n
+        - En el menú también notará la opcíon \'Interfaz Xtring\'.\n
+        - La Interfaz Xtring permite crear una lista de datos que se enviarán en secuencia.\n
+        - Presione Volver para salir del Tutorial o seleccione la opción del menú.
+    </string>
+    <string name="tutXtring">
+        - In the menu you will notice the Interfaz Xtring option.\n
+        - The Xtring Mode let you create a list of data to be sent in sequence.\n
+        - By pressing the \'Add Item\' button you will be prompted to select a type of data.\n
+        - The enabled Send-Types are the same as normal operation on the principal screen.\n
+        - After selecting the type, a new screen will appear to write the desired Data.\n
+        - Finishing this, your just created XtringItem will be shown in the list.\n
+        - You can press the \'Type Label\' at any moment to change the type of any item.\n
+        - You can press the \'Data Label\' at any moment to change the Data value of any item.\n
+        - You can delete the last item by pressing the \'Delete Item\' button.\n
+        - You can send the entire list/package of data by pressing the \'Send\' button.\n
+        - Pro Users can open the Interfaz de EnvíoRápido by a LongClick on \'Send\' or Select it from the menu.\n
+        - Presione Volver para salir del Tutorial o seleccione la opción del menú.
+    </string>
 
 </resources>

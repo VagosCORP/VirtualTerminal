@@ -134,11 +134,26 @@
         </LinearLayout>
     </ScrollView>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/NSIAS"
-        android:id="@+id/checkBox" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/enterTutorial"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/VT_Tutorial"
+            android:onClick="enterTutorial"/>
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NSIAS"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -146,21 +161,20 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/getPRO"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/close"
-            android:id="@+id/closeIns"
-            android:onClick="closeIns"
-            android:layout_weight="1" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/getPRO"
+            android:onClick="getpro" />
 
         <Button
+            android:id="@+id/closeIns"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/getPRO"
-            android:id="@+id/getPRO"
             android:layout_weight="1"
-            android:onClick="getpro" />
+            android:text="@string/close"
+            android:onClick="closeIns"/>
+
     </LinearLayout>
-
-
 </LinearLayout>

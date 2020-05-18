@@ -46,6 +46,8 @@ public class InstructionsActivity extends Activity {
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
 
+    private final int ENTER_TUTORIAL = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +150,6 @@ public class InstructionsActivity extends Activity {
         hideInst();
         if(sas)
             textViewPackRcv.setVisibility(View.VISIBLE);
-
     }
 
     public void closeIns(View view) {
@@ -159,6 +160,11 @@ public class InstructionsActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("market://details?id=com.vagoscorp.virtualterminal.prokey"));
         startActivity(intent);
+    }
+
+    public void enterTutorial(View view) {
+        Intent tutorialIntent = new Intent(this, TutorialActivity.class);
+        startActivityForResult(tutorialIntent, ENTER_TUTORIAL);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

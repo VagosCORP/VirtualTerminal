@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="center"
+        android:background="?android:attr/selectableItemBackground"
         android:text="@string/typeString"/>
 
     <TextView
@@ -29,13 +30,14 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="center|end"
+        android:background="?android:attr/selectableItemBackground"
         android:hint="@string/commDVal"/>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ComXConstant"
-        android:id="@+id/checkBoxX"/>
+        android:id="@+id/checkBoxX" />
 
     <CheckBox
         android:layout_width="wrap_content"

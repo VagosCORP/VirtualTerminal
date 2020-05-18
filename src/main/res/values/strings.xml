@@ -4,12 +4,12 @@
     <string name="instructionsBasic">
         - Click on connection info button to change it.\n
         - Click on Connect button to start/stop communication.\n
-        - Use the TX Spinner to select what kind of data you want to send.\n
+        - Use the TX-Type Label to select what kind of data you want to send.\n
         - Write on the TX input the information you want to send.\n
         - On Text Mode, user can enable to append CR+LF during send operation.\n
-        - If enabled, \'append CR+LF\' bytes will be sent even if TX input is empty.\n
+        - If enabled, \'Append CR+LF\' bytes will be sent even if TX-Input is empty.\n
         - Use the app menu to access other options:\n
-        *   Select how to show and manage the incoming data \'RX\'.\n
+        *   Select how to show and manage the incoming data \'RX▼\'.\n
         *   Select advanced numeric reception options (int16, int32, float,..).\n
         *   Start/Stop FastSend Interface.\n
         *   Start Xtring Interface.\n
@@ -18,6 +18,7 @@
         *   Select appearance options: Light or Dark theme.\n
         *   Clear TX input after Send if needed.\n
         *   Change Number of Static and Scrollable FastSend Buttons.\n
+        *   Change byte order (endian) when sending multiByte numbers.\n
         - Tablet users can select the reception options without entering to menu.\n
         - In WiFi Server mode, net port should be greater or equal to 1100 to avoid ports used by the system.
     </string>
@@ -30,20 +31,23 @@
     </string>
     <string name="instructionsFastSend">
         Operating \'FastSend Interface\': Save data in to buttons to send it with a single click.\n
-        *   Select from TX Spinner the kind of data you want to save on a FastSend Button.\n
-        *   Write data on the TX input.\n
+        *   Select from TX-Type Label the kind of data you want to save on a FastSend Button.\n
+        *   Write data on the TX-Input.\n
         *   Start FastSend mode (if not running yet).\n
         *   LongClick on one FastSend Button to save the TX data on the button.\n
         *   Simple Click on FastSend Button to automatically send the saved data.\n
-        *   If TX input is empty, LongClick on a FastSend Button will erase saved data.\n
+        *   If TX-Input is empty, LongClick on a FastSend Button will erase saved data.\n
         *   FastSend Buttons will show type and data you just save.\n
         *   Pro users have Unlimited FastSend Buttons instead of 8. Change Quantities in Settings Screen.
     </string>
     <string name="instructionsXtring">
         Operating \'Xtring Interface\': Save an organized group of various types of data to send it as a package.\n
-        *   Press the data type button you want to add to the package.\n
-        *   Write data you want for that item into the just appeared TextInput.\n
-        *   If you want to change the data type, just Select from the item Spinner the kind of data you want to use.\n
+        *   By pressing the \'Add Item\' button you will be prompted to select a type of data.\n
+        *   The enabled Send-Types are the same as normal operation on the principal screen.\n
+        *   After selecting the type, a new screen will appear to write the desired Data.\n
+        *   Finishing this, your just created XtringItem will be shown in the list.\n
+        *   You can press the \'Type Label\' of any item to change it\'s type.\n
+        *   You can press the \'Data Label\' of any item to modify it\'s Data value.\n
         *   You can define constant items to avoid replacing precious information\n
         *   You can delete the last package item by pressing the \'Delete Item\' Button.\n
         *   If some item data is empty \'No_Dat\' the package will not be sent and you be prompted to write into the first empty item.\n
@@ -80,7 +84,7 @@
         *   Enhanced Xtring Interface with unlimited items and new options.\n
         *   Save the Xtring packages as FastSend Buttons to use from the principal Screen.
     </string>
-    <string-array name="sendtypes_array" translatable="false">
+    <!--<string-array name="sendtypes_array" translatable="false">
         <item>T</item>
         <item>#</item>
         <item>0b</item>
@@ -101,7 +105,7 @@
         <item>int 64-bits</item>
         <item>Float</item>
         <item>Double</item>
-    </string-array>
+    </string-array>-->
 
     <string name="app_name" translatable="false">Virtual Terminal</string>
     <string name="hello_world">Hello world!</string>
@@ -113,13 +117,14 @@
     <string name="updRate">#Upd</string>
     <string name="BRCV" translatable="false">Bytes</string>
     <string name="viewInstructions">View Instructions</string>
-    <string name="NSIAS">Never show again at startup</string>
+    <string name="NSIAS">Don\'t show at startup</string>
     <string name="Instructions_Basics">Basics</string>
     <string name="Instructions_Layout">Layout Gestures</string>
     <string name="Instructions_FastSend">FastSend Interface</string>
     <string name="Instructions_AdvRcv">Advanced Reception</string>
     <string name="Instructions_PackRcv">Package Reception</string>
     <string name="appendCRpLF">Append CR+LF</string>
+    <string name="appendCRpLFl" translatable="false">+ CR+LF</string>
     <string name="Appearance">Theme</string>
     <string name="normalTheme" translatable="false">Light</string>
     <string name="darkTheme" translatable="false">Dark</string>
@@ -164,31 +169,36 @@
     <string name="Cancel_Conn">Finish Connection</string>
     <string name="numFormExc">Numeric Format Exception</string>
     <string name="cThemeToast">Restart Activity to apply changes</string>
-    <string name="Text_RX" translatable="false">RX</string>
+    <string name="hintRX" translatable="false">RX</string>
+    <string name="menuRX" translatable="false">RX▼</string>
     <string name="byteRX" translatable="false">Byte RX</string>
     <string name="shortRX" translatable="false">Int16 RX</string>
     <string name="intRX" translatable="false">Int32 RX</string>
     <string name="longRX" translatable="false">Int64 RX</string>
     <string name="floatRX" translatable="false">Float RX</string>
     <string name="doubleRX" translatable="false">Double RX</string>
-    <string name="ComXByte" translatable="false">Byte</string>
-    <string name="ComXBinary" translatable="false">Bin</string>
-    <string name="ComXHexadecimal" translatable="false">Hex</string>
-    <string name="ComXInt16" translatable="false">Int16</string>
     <string name="ComXString" translatable="false">String</string>
+    <string name="ComXByte" translatable="false">Byte</string>
+    <string name="ComXInt16" translatable="false">Int16</string>
     <string name="ComXInt32" translatable="false">Int32</string>
     <string name="ComXInt64" translatable="false">Int64</string>
     <string name="ComXFloat" translatable="false">Float</string>
     <string name="ComXDouble" translatable="false">Double</string>
+    <string name="ioTypeDual" translatable="false">Dual RX</string>
+    <string name="ioTypePackage" translatable="false">Package RX</string>
+    <string name="ioFormDec" translatable="false">Dec</string>
+    <string name="ioFormHex" translatable="false">Hex</string>
+    <string name="ioFormBin" translatable="false">Bin</string>
+    <string name="ComXaddItem">Add Item</string>
     <string name="ComXdeleteItem">Delete Item</string>
     <string name="ComXSendX">Send</string>
     <string name="commDVal" translatable="false">NoDat</string>
     <string name="ComXConstant">Constant</string>
     <string name="ComXIgnore">Ignore</string>
-    <string name="Text_TXn" translatable="false">123456789</string>
+    <string name="Text_TXn" translatable="false">0123456789</string>
     <string name="Text_TXb" translatable="false">01</string>
     <string name="Text_TXh" translatable="false">0123456789ABCDEF</string>
-    <string name="Text_TXf" translatable="false">123456789.123456</string>
+    <string name="Text_TXf" translatable="false">0123456789.0123456</string>
     <string name="textRCV">Text Reception</string>
     <string name="numRCV">Bytes Reception</string>
     <string name="shortRCV">Int16 Reception</string>
@@ -228,14 +238,14 @@
     <string name="CLEAR_TX_AFTER_SEND" translatable="false">CLEAR_TX_AFTER_SEND</string>
     <string name="LITTLE_ENDIAN" translatable="false">LITTLE_ENDIAN</string>
 
-    <string name="EndianSelect">Endian Selection (In Development)</string>
+    <string name="EndianSelect">Endian Selection</string>
     <string name="GlobalEndian">Global Endian</string>
-    <!--<string name="ReceivingEndian">Receiving Endian</string>-->
+    <string name="NoXtring">No Items to Send</string>
     <string name="LittleEndian" translatable="false">LittleEndian</string>
     <string name="BigEndian" translatable="false">BigEndian</string>
 
     <string name="NEED_PRO">Pro Function</string>
-    <string name="ConfigNotSaved">Changes not applied</string>
+    <string name="ConfigNotSaved">No Changes Applied</string>
     <string name="LongClick2Save">LongClick to Save</string>
     <string name="FastSendButtName">FastSend Name</string>
     <string name="Item">Item</string>
@@ -245,5 +255,184 @@
     <string name="EmptyXtringItem">Empty Xtring Item</string>
     <string name="ComXConstantL" translatable="false">C</string>
     <string name="ComXIgnoreL" translatable="false">I</string>
+
+    <string name="IOConfigLabel">I/O Configuration</string>
+    <string name="IODataTypes">Data Type</string>
+
+    <string name="IOIntDataFormats">Integer Format</string>
+
+    <string name="TXConfig">TX Config</string>
+    <string name="RXConfig">RX Config</string>
+    <string name="XtringConfig">Item Type</string>
+    <string name="xItemNoEdited">Item value not edited</string>
+    <string name="showFastAdd">Fast Add Interface</string>
+    <string name="advType">Type</string>
+
+    <string name="typeString" translatable="false">Text</string>
+    <string name="size8" translatable="false">-8</string>
+    <string name="size16" translatable="false">-16</string>
+    <string name="size32" translatable="false">-32</string>
+    <string name="size64" translatable="false">-64</string>
+    <string name="typeFloat" translatable="false">Float</string>
+    <string name="typeDouble" translatable="false">Double</string>
+
+    <string name="formDecimal" translatable="false">Int</string>
+    <string name="formHexadecimal" translatable="false">Hex</string>
+    <string name="formBinary" translatable="false">Bin</string>
+
+    <string name="VT_Tutorial">Tutorial</string>
+    <string name="exitTutorial">Exit Tutorial</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
+    <string name="exitTutToast">Press Back to exit Tutorial or select the option from menu.</string>
+
+    <string name="tutPresentation">
+        - Here is the Principal Interface of Virtual Terminal.\n
+        - Take a moment to see it and play with the buttons if you want.\n
+        - Also you can enter to the menu, look out for the RX▼ Button.\n
+        - The I/O Configuration Screen should appear when RX▼ is pressed.\n
+        - Press the \'Next\' Button to start the guide.
+    </string>
+    <string name="tutChanSer">
+        - This button is used to configure where you will connect.\n
+        - In Bluetooth mode, it shows the list of paired devices to select one.\n
+        - In WiFi mode, it shows editable IP address and port, be sure to write the correct one.\n
+        - A LongClick should open the configuration screen.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutConnect">
+        - This button is used to start a connection to the specified Device/Address.\n
+        - The text on it will change based on the situation or connection state.\n
+        - If connection can\'t be done, the process will be canceled within 7 seconds.\n
+        - Pro users can use a LongClick to hide/show the ActionBar.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutSendType">
+        - This \"Send Type\" Label can be pressed to open the I/O configuration screen.\n
+        - It is possible to send text, bytes, bigger numbers with 2 or more bytes and floats.\n
+        - Also you will notice a format menu on the I/O screen, for writing in Binary or Hexadecimal.\n
+        - Give it a try and press!, it is at the left of the \"Vagos CORP\" TX-Input.\n
+        - This \"Send Type\" Label will change it\'s text based on your selection.\n
+        - IO Config Screen has a FastButton to configure the Reception type.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutACRpLF">
+        - This checkBox let you append the CR and LF characters to your message.\n
+        - It is enabled only when sending text, marking the end of line.\n
+        - When sending numeric data it gets disabled.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutEndianLab">
+        - This ⚠ label notifies about the sending order of the bytes when sending a number.\n
+        - More precisely a number formed for fore than 8 bits, like a short(16) or a float(32).\n
+        - Will be shown automatically based of the selected Send-Type.\n
+        - Big Endian means Most significant byte is sent first, Otherwise it is Little Endian.\n
+        - Big Endian is the default send order, Pro Users can change it from settings.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutTXinputText">
+        - This is the TX-Input for the data to send.\n
+        - The hint and characters allowed will change based on the Send-Type selection.\n
+        - By default the Send-Type is text, you can try to write on it now if desired.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutTXinputNum">
+        - Now the TX-Input behavior is set for numbers.\n
+        - The allowed characters are shown on the hint.\n
+        - Also the keyboard now should show only numbers, try it if desired.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutTXinputHex">
+        - Now the TX-Input behavior is set for numbers in hexadecimal.\n
+        - The allowed characters are shown on the hint.\n
+        - Also the keyboard now should show all characters but will filter the inputs.\n
+        - You can try to write on it, characters greater than F will be ignored.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutTXinputBin">
+        - Now the TX-Input behavior is set for numbers in binary.\n
+        - The allowed characters are shown on the hint.\n
+        - Also the keyboard now should show only numbers but will filter the inputs.\n
+        - You can try to write on it, numbers greater than 1 will be ignored.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutTXinputFloat">
+        - Now the TX-Input behavior is set for decimal numbers(float).\n
+        - The allowed characters are shown on the hint.\n
+        - Also the keyboard now should show only numbers, try to write on it if desired.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutSend">
+        - This button is used to send the actual content of the TX-Input.\n
+        - The send operation will respect the specified Send-Type and options applied.\n
+        - You can enable to erase automatically the TX-Input content after send on settings.\n
+        - A LongClick will open or close the FastSend Interface, try it!.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutFastSend">
+        - The FastSend interface is a group of configurable buttons for \'Fast Data send\'.\n
+        - Every button can hold a value with the selected Send-Type.\n
+        - A longClick on a button will save the actual content of TX-Input on it.\n
+        - After save, the button text will show the type and content stored on it.\n
+        - A button press will automatically send the stored data to the connected device.\n
+        - A longClick with an empty TX-Input will erase the stored value.\n
+        - An empty FastSend button has a \"NoDat\" text saved, it can be sent too.\n
+        - Pro users can configure the Button quantity from the settings Screen.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutDelTRX">
+        - This two buttons can erase the content of the TX-Input and RX-View respectively.\n
+        - For TX-Input, it is faster than erasing with the keyboard.\n
+        - For RX-View, it is the only way to clear the reception screen.\n
+        - Unless you are using an advanced reception type like \'Package RX\'.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutRXt">
+        - You are looking this text on the RX-View, all data received is shown here.\n
+        - Just like the Send-Type, you can use the menu button RX▼ to set the Reception-Type.\n
+        - You have the same options as the Send-Type plus two new ones meant for RX.\n
+        - \'Dual RX\' Mode let you see the received data as text and as bytes at the same time.\n
+        - \'Package RX\' Mode will wipe the RX-View once a defined package quantity is received.\n
+        - Data Packages are recognized by the last byte received, if EndByte = 10, that is a package.\n
+        - After the RX-View wipe, the count will restart, allowing to see only last data.\n
+        - \'Package RX\' can be mixed with all numeric Reception-Types to see realtime values.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutlayNAct">
+        - This text input and checkbox let you manage the \'Package RX\' Mode.\n
+        - The text input defines the max number of packages before RX Wipe(1 is default).\n
+        - The checkbox opens the numeric RX-View to see data just like \'Dual RX\' Mode.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutRXn">
+        - Down there, you can see the mentioned Numeric RX-View.\n
+        - It is enabled with all numeric Receive-Types, Dual and Package Modes.\n
+        - To Receive a multi-byte number, you need to add a start and end byte to your data.\n
+        - StartByte = 13 and EndByte = 10, the app will threat the in-between bytes as the selected type.\n
+        - Being the EndByte = 10 allows the mix between the package and the numeric modes.\n
+        - When using this advanced reception modes, the app will always wait for the EndByte.\n
+        - Or in numeric mode, for the maximum number of bytes of the selected receive-type.\n
+        - Press the \'Next\' Button to continue.
+    </string>
+    <string name="tutExit">
+        - Use the instructions for more information, can find them on the menu.\n
+        - In the menu you will notice the \'Xtring Interface\' option.\n
+        - The Xtring Interface let you create a list of data to be sent in sequence.\n
+        - Press Back to exit Tutorial or select the option from menu.
+    </string>
+    <string name="tutXtring">
+        - In the menu you will notice the Xtring Interface option.\n
+        - The Xtring Mode let you create a list of data to be sent in sequence.\n
+        - By pressing the \'Add Item\' button you will be prompted to select a type of data.\n
+        - The enabled Send-Types are the same as normal operation on the principal screen.\n
+        - After selecting the type, a new screen will appear to write the desired Data.\n
+        - Finishing this, your just created XtringItem will be shown in the list.\n
+        - You can press the \'Type Label\' at any moment to change the type of any item.\n
+        - You can press the \'Data Label\' at any moment to change the Data value of any item.\n
+        - You can delete the last item by pressing the \'Delete Item\' button.\n
+        - You can send the entire list/package of data by pressing the \'Send\' button.\n
+        - Pro Users can open the FastSend Interface by a LongClick on \'Send\' or Select it from the menu.\n
+        - Press Back to exit Tutorial or select the option from menu.
+    </string>
 
 </resources>
