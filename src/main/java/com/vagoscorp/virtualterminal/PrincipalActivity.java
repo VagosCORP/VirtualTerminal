@@ -409,6 +409,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                                 showKeyBoard = false;
                                 TXs[sendTX].dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
                                 TXs[sendTX].dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+                                TXs[sendTX].selectAll();
                                 //imm.showSoftInput(TXs[sendTX], InputMethodManager.SHOW_IMPLICIT);
                             }
                         }
@@ -741,7 +742,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             TXs[sendTX].clearFocus();
         }
         TXs[sendTX].setVisibility(View.VISIBLE);
-        TXs[sendTX].selectAll();
+        //TXs[sendTX].selectAll();
         TXs[sendTX].requestFocus();
         showKeyBoard = true;
         //imm.showSoftInput(TXs[sendTX], InputMethodManager.SHOW_IMPLICIT);
