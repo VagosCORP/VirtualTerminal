@@ -82,7 +82,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public int numCommScroll = 4;
     public int cantFastSendTot = 8;
 	public int SC;
-    public int txType = TX_FORM_TXT;
+    //public int txType = TX_FORM_TXT;
     int cantDataTyp = 5;
 
     public BluetoothAdapter BTAdapter;
@@ -1493,7 +1493,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void BTX(View view) { //Borrar TX
-        TXs[txType].setText("");
+        TXs[sendTX].setText("");
 	}
 
 	public void BRX(View view) { //Borrar RX
