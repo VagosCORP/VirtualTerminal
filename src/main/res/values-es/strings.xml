@@ -208,6 +208,8 @@
     <string name="NumCommScroll">Botones Desplazables</string>
     <string name="ApplyChanges">Aplicar Cambios</string>
     <string name="DiscardChanges">Descartar Cambios</string>
+    <string name="rcvInitByteLabel">Byte Inicio para RX Avanzado</string>
+    <string name="rcvEndByteLabel">Byte Final para RX Avanzado</string>
 
     <string name="EndianSelect">Selección de Endian</string>
     <string name="GlobalEndian">Endian para Global</string>

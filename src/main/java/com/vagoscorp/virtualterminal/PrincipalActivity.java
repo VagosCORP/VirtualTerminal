@@ -16,6 +16,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
@@ -61,6 +63,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     ScrollView scron;
     LinearLayout commBase;
     LinearLayout commStaticL;
+
     LinearLayout commScrollableL;
     LinearLayout byteRCV;
     LinearLayout layout_principal;
@@ -1245,8 +1248,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         try {
             for (NetworkInterface intf : Collections.list(NetworkInterface.getNetworkInterfaces())) {
                 for (InetAddress addr : Collections.list(intf.getInetAddresses())) {
-                    if (!addr.isLoopbackAddress()){
+                    if (!addr.isLoopbackAddress() && addr instanceof Inet4Address){
                         myIP = addr.getHostAddress();
+//                        String ip = Formatter.formatIpAddress(addr.hashCode());
 //                          textStatus.append("\n" + addr.getHostName() );
 //                          textStatus.append("\n" + addr.getCanonicalHostName() );
 //                          textStatus.append("\n\n" + intf.toString() );

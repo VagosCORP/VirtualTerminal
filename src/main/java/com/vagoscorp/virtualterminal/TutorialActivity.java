@@ -225,22 +225,22 @@ public class TutorialActivity extends Activity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.rcvTyp:
+            case R.id.rcvTypT:
                 enterIOConfig(IOc.RX_CONFIG);
                 return true;
-            case R.id.commMode:
+            case R.id.commModeT:
                 commanderMode();
                 return true;
-            case R.id.XtringMode:
+            case R.id.XtringModeT:
                 enterXtringMode();
                 return true;
-            case R.id.viewInstructions:
+            case R.id.viewInstructionsT:
                 enterInstructions();
                 return true;
-            case R.id.exitTutorial:
+            case R.id.exitTutorialT:
                 exitTutorial();
                 return true;
-            case R.id.action_settings:
+            case R.id.action_settingsT:
                 enterSettings();
                 return true;
         }

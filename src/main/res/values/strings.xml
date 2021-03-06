@@ -224,6 +224,10 @@
     <string name="NumCommScrollHint" translatable="false">4</string>
     <string name="ApplyChanges">Apply Changes</string>
     <string name="DiscardChanges">Discard Changes</string>
+    <string name="rcvInitByteLabel">Advanced RX Init Byte</string>
+    <string name="rcvEndByteLabel">Advanced RX End Byte</string>
+    <string name="rcvInitByteHint" translatable="false">13</string>
+    <string name="rcvEndByteHint" translatable="false">10</string>
 
     <string name="Extra_TCOM" translatable="false">TCOM</string>
     <string name="Extra_TYP" translatable="false">TYPE</string>
@@ -324,8 +328,8 @@
     </string>
     <string name="tutEndianLab">
         - This ⚠ label notifies about the sending order of the bytes when sending a number.\n
-        - More precisely a number formed for fore than 8 bits, like a short(16) or a float(32).\n
-        - Will be shown automatically based of the selected Send-Type.\n
+        - More precisely a number formed by more than 8 bits, like a short(16) or a float(32).\n
+        - This label Will be shown automatically based of the selected Send-Type.\n
         - Big Endian means Most significant byte is sent first, Otherwise it is Little Endian.\n
         - Big Endian is the default send order, Pro Users can change it from settings.\n
         - Press the \'Next\' Button to continue.
@@ -353,7 +357,7 @@
         - Now the TX-Input behavior is set for numbers in binary.\n
         - The allowed characters are shown on the hint.\n
         - Also the keyboard now should show only numbers but will filter the inputs.\n
-        - You can try to write on it, numbers greater than 1 will be ignored.\n
+        - You can try to write on it, characters greater than 1 will be ignored.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutTXinputFloat">
@@ -364,7 +368,7 @@
     </string>
     <string name="tutSend">
         - This button is used to send the actual content of the TX-Input.\n
-        - The send operation will respect the specified Send-Type and options applied.\n
+        - The send operation will use the specified Send-Type and options applied.\n
         - You can enable to erase automatically the TX-Input content after send on settings.\n
         - A LongClick will open or close the FastSend Interface, try it!.\n
         - Press the \'Next\' Button to continue.
