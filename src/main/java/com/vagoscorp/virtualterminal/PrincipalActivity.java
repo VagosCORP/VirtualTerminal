@@ -16,7 +16,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -45,8 +44,7 @@ import java.util.TimerTask;
 
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
-import vclibs.communication.android.Comunic;
-import vclibs.communication.android.ComunicBT;
+import vclibs.communication.android.Communic;
 
 public class PrincipalActivity extends Activity implements OnComunicationListener,OnConnectionListener,/*OnLongClickListener,*/GestureDetector.OnGestureListener {
 
@@ -81,9 +79,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public boolean CM = false;
     public boolean darkTheme = true;
     public boolean clearTXAS = false;
-    public int numCommStat = 4;
-    public int numCommScroll = 4;
-    public int cantFastSendTot = 8;
+    public int numCommStat = Configuration.defNumCommStat;
+    public int numCommScroll = Configuration.defNumCommScroll;
+    public int numFastSendTot = numCommStat + numCommScroll;
+    int charInit = Configuration.defInitByte;
+    int charEnd = Configuration.defEndByte;
+//    boolean sameEndByte = true;
+//    int charPkgEnd = Configuration.defEndByte;
+
 	public int SC;
     //public int txType = TX_FORM_TXT;
     int cantDataTyp = 5;
@@ -103,8 +106,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     ConnectivityManager CTM;
     String defMyIP = "No IP";
     String myIP = defMyIP;
-    Comunic comunic;
-	ComunicBT comunicBT;
+    Communic comunic;
+//	ComunicBT comunicBT;
 
     EditText[] TXs = new EditText[cantDataTyp];// Data to Send
     InputMethodManager imm;
@@ -189,10 +192,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     int dataCont = 0;
     int dataNBytes = 4;
 
-    int charInit = 13;
-    int charEnd = 10;
     boolean abHidden = false;
-    boolean checked = false;
+    boolean noShowInstruc = false;
     boolean isUpdateable = false;
 
 //    boolean NWiFi = false;
@@ -211,6 +212,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     int mCount = 0;
 
     boolean littleEndian = false;
+    boolean vtSendProtocol = false;
+    boolean packModEn = false;
 
     int actualTXtype = 0;
     int actualTXform = 0;
@@ -238,10 +241,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
-        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
-        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
-        checked = shapre.getBoolean(SIoS, false);
+        if(pro) {
+            littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+            vtSendProtocol = shapre.getBoolean(getString(R.string.SEND_VT_PROTOCOL), false);
+//            charInit = shapre.getInt(getString(R.string.START_BYTE), Configuration.defInitByte);
+//            charEnd = shapre.getInt(getString(R.string.END_BYTE), Configuration.defEndByte);
+//            sameEndByte = shapre.getBoolean(getString(R.string.SAME_END_BYTE), true);
+//            charPkgEnd = shapre.getInt(getString(R.string.PKG_END_BYTE), Configuration.defEndByte);
+        }
+        noShowInstruc = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
 		setContentView(R.layout.layout_activity_principal);
@@ -251,9 +259,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         Intent tip = getIntent();
         TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
         SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
-        comunic = new Comunic();
-        comunicBT = new ComunicBT();
-        comunicBT.littleEndian = littleEndian;
+        comunic = new Communic();
+//        comunicBT = new ComunicBT();
+//        comunicBT.littleEndian = littleEndian;
         comunic.littleEndian = littleEndian;
         if(TCOM) {
             BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -374,7 +382,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             editor.putInt(VER, versionCode);
             editor.commit();
             enterInstructions();
-        }else if(!checked)
+        }else if(!noShowInstruc)
             enterInstructions();
         UpdN.setChecked(false);
         updCommButtons();
@@ -422,8 +430,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
         },1,10);
         setupActionBar();
-        //registerForContextMenu(RX);
-        //registerForContextMenu(RXn);
+//        registerForContextMenu(RX);
+//        registerForContextMenu(RXn);
 	}
 
 	public int getTXval() {
@@ -455,13 +463,18 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     }
 
 	public void updCommButtons() {
-        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
-        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
-        cantFastSendTot = numCommStat + numCommScroll;
-        commX = new Button[cantFastSendTot];
+        if(!pro) {
+            numCommStat = Configuration.defNumCommStat;
+            numCommScroll = Configuration.defNumCommScroll;
+        }else {
+            numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
+            numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
+        }
+        numFastSendTot = numCommStat + numCommScroll;
+        commX = new Button[numFastSendTot];
         commStaticL.removeAllViewsInLayout();
         commScrollableL.removeAllViewsInLayout();
-        for(int i = 0; i < cantFastSendTot; i++) {
+        for(int i = 0; i < numFastSendTot; i++) {
             commX[i] = new Button(this);
             buttSetAllCaps(commX[i]);
             final int n = i + 1;
@@ -554,46 +567,46 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         boolean commN = shapre.getBoolean(commT + n, defBcomm);
                         switch(commType) {
                             case(COMMT_INT8):
-                                if(TCOM)
-                                    comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                                else
+//                                if(TCOM)
+//                                    comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+//                                else
                                     comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                                 break;
                             case(COMMT_INT16):
-                                if(TCOM)
-                                    comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
-                                else
+//                                if(TCOM)
+//                                    comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+//                                else
                                     comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
                                 break;
                             case(COMMT_INT32):
-                                if(TCOM)
-                                    comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
-                                else
+//                                if(TCOM)
+//                                    comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+//                                else
                                     comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
                                 break;
                             case(COMMT_INT64): // Fallthrough
                             case(COMMT_DOUBLE):
-                                if(TCOM)
-                                    comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                                else
+//                                if(TCOM)
+//                                    comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
+//                                else
                                     comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
                                 break;
                             case(COMMT_FLOAT):
-                                if(TCOM)
-                                    comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
-                                else
+//                                if(TCOM)
+//                                    comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
+//                                else
                                     comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
                                 break;
                             default:
                                 if (!commN){
-                                    if (TCOM)
-                                        comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
-                                    else
+//                                    if (TCOM)
+//                                        comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+//                                    else
                                         comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
                                 }else {
-                                    if (TCOM)
-                                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                                    else
+//                                    if (TCOM)
+//                                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+//                                    else
                                         comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
                                 }
                         }
@@ -609,23 +622,22 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     }
 
     public void enviar(View view) {
-        int sas = getTXval();
-        if (sas < 5) {
+        int txTypeSelected = getTXval();
+        if (txTypeSelected < 5) {
             switch (actualTXtype) {
                 case (IOc.TYPE_TEXT):
                     String eom = "\r\n";
                     if(!aCRpLF.isChecked())
                         eom = "";
-                    if(TCOM) {
-                        comunicBT.enviar(Message + eom);//???
-                    }else {
+//                    if(TCOM)
+//                        comunicBT.enviar(Message + eom);//???
+//                    else
                         comunic.enviar(Message + eom);//???
-                    }
                     break;
                 case (IOc.TYPE_BYTE):
-                    if(TCOM)
-                        comunicBT.enviar_Int8(Messagen);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Int8(Messagen);
+//                    else
                         comunic.enviar_Int8(Messagen);
                     break;
                 /*case (SEND_BIN):
@@ -643,44 +655,44 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                         comunic.enviar_Int8(Messagen);
                     break;*/
                 case (IOc.TYPE_SHORT):
-                    if(TCOM)
-                        comunicBT.enviar_Int16(Messagen);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Int16(Messagen);
+//                    else
                         comunic.enviar_Int16(Messagen);
                     break;
                 case (IOc.TYPE_INT):
-                    if(TCOM)
-                        comunicBT.enviar_Int32(Messagen);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Int32(Messagen);
+//                    else
                         comunic.enviar_Int32(Messagen);
                     break;
                 case (IOc.TYPE_LONG):
-                    if(TCOM)
-                        comunicBT.enviar_Int64(MessageL);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Int64(MessageL);
+//                    else
                         comunic.enviar_Int64(MessageL);
                     break;
                 case (IOc.TYPE_FLOAT):
-                    if(TCOM)
-                        comunicBT.enviar_Float(MessageF);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Float(MessageF);
+//                    else
                         comunic.enviar_Float(MessageF);
                     break;
                 case (IOc.TYPE_DOUBLE):
-                    if(TCOM)
-                        comunicBT.enviar_Double(MessageD);
-                    else
+//                    if(TCOM)
+//                        comunicBT.enviar_Double(MessageD);
+//                    else
                         comunic.enviar_Double(MessageD);
                     break;
             }
-        }else if(sas == 6 && actualTXtype == IOc.TYPE_TEXT && aCRpLF.isChecked()) {
-            if(TCOM) {
-                comunicBT.enviar_Int8(13);
-                comunicBT.enviar_Int8(10);
-            }else {
+        }else if(txTypeSelected == 6 && actualTXtype == IOc.TYPE_TEXT && aCRpLF.isChecked()) {
+//            if(TCOM) {
+//                comunicBT.enviar_Int8(13);
+//                comunicBT.enviar_Int8(10);
+//            }else {
                 comunic.enviar_Int8(13);
                 comunic.enviar_Int8(10);
-            }
+//            }
         }
         if(clearTXAS)
             BTX(null);
@@ -752,6 +764,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     }
 
     public void setRXType() {
+        setRcvTupd(packModEn);
         switch(actualRXtype) {
             case IOc.TYPE_TEXT:
                 setRcvTtxt(null);
@@ -889,9 +902,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public void setRcvTtxt(View view) {
         enNumericRcv = false;
         both = false;
-        upd = false;
+//        upd = false;
         advRcv = false;
-        layNAct.setVisibility(View.GONE);
+        UpdN.setEnabled(true);
+//        layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.GONE);
         scro.setVisibility(View.VISIBLE);
     }
@@ -914,10 +928,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         dataRcvtyp = COMMT_INT16;
         advRcv = true;
         both = false;
-        //upd = false;
+//        upd = false;
         //sepLab.setText(R.string.shortRX);
         UpdN.setEnabled(false);
-        //layNAct.setVisibility(View.GONE);
+//        layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -932,7 +946,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //        upd = false;
         //sepLab.setText(R.string.intRX);
         UpdN.setEnabled(false);
-//            layNAct.setVisibility(View.GONE);
+//        layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -945,10 +959,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             dataRcvtyp = COMMT_INT64;
             advRcv = true;
             both = false;
-            //upd = false;
+//            upd = false;
             //sepLab.setText(R.string.longRX);
             UpdN.setEnabled(false);
-            //layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
             byteRCV.setVisibility(View.VISIBLE);
             scro.setVisibility(View.GONE);
         }else
@@ -962,10 +976,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         dataRcvtyp = COMMT_FLOAT;
         advRcv = true;
         both = false;
-        //upd = false;
+//        upd = false;
         //sepLab.setText(R.string.floatRX);
         UpdN.setEnabled(false);
-        //layNAct.setVisibility(View.GONE);
+//        layNAct.setVisibility(View.GONE);
         byteRCV.setVisibility(View.VISIBLE);
         scro.setVisibility(View.GONE);
     }
@@ -978,10 +992,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             dataRcvtyp = COMMT_DOUBLE;
             advRcv = true;
             both = false;
-            //upd = false;
+//            upd = false;
             //sepLab.setText(R.string.doubleRX);
             UpdN.setEnabled(false);
-            //layNAct.setVisibility(View.GONE);
+//            layNAct.setVisibility(View.GONE);
             byteRCV.setVisibility(View.VISIBLE);
             scro.setVisibility(View.GONE);
         }else
@@ -1009,6 +1023,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         layNAct.setVisibility(View.VISIBLE);
         byteRCV.setVisibility(View.GONE);
         scro.setVisibility(View.VISIBLE);
+    }
+
+    public void setRcvTupd(boolean bool) {
+        upd = bool;
+        UpdN.setChecked(false);
+        if(bool)
+            layNAct.setVisibility(View.VISIBLE);
+        else
+            layNAct.setVisibility(View.GONE);
     }
 
     /*public void setSendType(int sendType) {
@@ -1070,7 +1093,6 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //            }
         }
     }*/
-
     public void commanderMode() {
         if(!CM) {
             CM = true;
@@ -1150,9 +1172,23 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         return super.onOptionsItemSelected(item);
     }
 
-    private void applyEndian() {
-        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
-        comunicBT.littleEndian = littleEndian;
+    private void applyProtocolConfig() {
+        if(!pro) {
+            littleEndian = false;
+            vtSendProtocol = false;
+//            charInit = Configuration.defInitByte;
+//            charEnd = Configuration.defEndByte;
+//            sameEndByte = true;
+//            charPkgEnd = Configuration.defEndByte;
+        }else {
+            littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+            vtSendProtocol = shapre.getBoolean(getString(R.string.SEND_VT_PROTOCOL), false);
+//            charInit = shapre.getInt(getString(R.string.START_BYTE), Configuration.defInitByte);
+//            charEnd = shapre.getInt(getString(R.string.END_BYTE), Configuration.defEndByte);
+//            sameEndByte = shapre.getBoolean(getString(R.string.SAME_END_BYTE), true);
+//            charPkgEnd = shapre.getInt(getString(R.string.PKG_END_BYTE), Configuration.defEndByte);
+        }
+//        comunicBT.littleEndian = littleEndian;
         comunic.littleEndian = littleEndian;
         String endian = "⚠ ";
         if(littleEndian)
@@ -1172,6 +1208,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         startIOConfig.putExtra(IOc.RX_TYPE, actualRXtype);
         startIOConfig.putExtra(IOc.RX_FORM, actualRXform);
         startIOConfig.putExtra(IOc.CONFIG_ACT, TX_RX);
+        startIOConfig.putExtra(IOc.PACKMOD_EN, packModEn);
         startActivityForResult(startIOConfig, ENTER_IO_CONFIG);
         overridePendingTransition(R.animator.slide_in_top,
                 R.animator.slide_out_bottom);
@@ -1230,7 +1267,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         else
             resumeW(shapre);
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-        applyEndian();
+        applyProtocolConfig();
         updCommButtons();
         UcommUI();
 		super.onResume();
@@ -1359,7 +1396,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 break;
             case SHOW_INSTRUCTIONS:
                 if(resultCode == Activity.RESULT_OK) {
-                    checked = data.getBooleanExtra(SIoS, false);
+                    noShowInstruc = data.getBooleanExtra(SIoS, false);
                     //editor.putBoolean(SIoS, checked);
                     //editor.commit();
                 }
@@ -1368,13 +1405,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 if(resultCode == Activity.RESULT_OK) {
                     byte[] newTX = data.getByteArrayExtra(XtringActivity.NEWTX);
                     String newTXs = data.getStringExtra(XtringActivity.NEWTXs);
-                    if(TCOM) {
-                        //comunicBT.enviar(newTXs);
-                        comunicBT.enviar_ByteArray(newTX);
-                    }else {
+//                    if(TCOM) {
+//                        //comunicBT.enviar(newTXs);
+//                        comunicBT.enviar_ByteArray(newTX);
+//                    }else {
                         //comunic.enviar(newTXs);
                         comunic.enviar_ByteArray(newTX);
-                    }
+//                    }
                     boolean XReturn = data.getBooleanExtra(XtringActivity.XRETURN,false);
                     if(XReturn)
                         enterXtringMode();
@@ -1384,7 +1421,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 if(resultCode == Activity.RESULT_OK) {
                     darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
                     clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-                    applyEndian();
+                    applyProtocolConfig();
                     updCommButtons();
                 }
                 break;
@@ -1394,6 +1431,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     actualTXform = data.getIntExtra(IOc.TX_FORM, IOc.INT_FORM_DEC);
                     actualRXtype = data.getIntExtra(IOc.RX_TYPE, IOc.TYPE_TEXT);
                     actualRXform = data.getIntExtra(IOc.RX_FORM, IOc.INT_FORM_DEC);
+                    packModEn = data.getBooleanExtra(IOc.PACKMOD_EN, false);
                     setRXType();
                     setTXType();
                 }else
@@ -1409,15 +1447,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
 	@Override
 	protected void onDestroy() {
-        if(TCOM)
-            comunicBT.Detener_Actividad();
-		else
+//        if(TCOM)
+//            comunicBT.Detener_Actividad();
+//		else
             comunic.Detener_Actividad();
 		super.onDestroy();
 	}
 	
 	public void UcommUI() {
-		for(int i = 0; i < cantFastSendTot; i++) {
+		for(int i = 0; i < numFastSendTot; i++) {
 		    int num = i + 1;
             commX[i].setText(shapre.getString(commN + num, getResources().getString(R.string.commDVal)));
         }
@@ -1456,44 +1494,50 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	}
 
 	public void conect(View view) {
-        if(TCOM) {
-//            mBluetoothGatt = mDevice.connectGatt(this, false, mGattCallback);
-//				mBluetoothGatt.disconnect();
-            if (comunicBT.estado == comunicBT.NULL) {
+//        if(TCOM) {
+////            mBluetoothGatt = mDevice.connectGatt(this, false, mGattCallback);
+////				mBluetoothGatt.disconnect();
+//            if (comunic.estado == comunic.NULL) {
+//                if (SC == MainActivity.CLIENT) {
+//                    comunic = new Communic(this, mDevice);
+//                } else if (SC == MainActivity.SERVER) {
+//                    comunic = new Communic(this, BTAdapter);
+//                }
+//                comunic.setComunicationListener(this);
+//                comunic.setConnectionListener(this);
+//                comunic.littleEndian = littleEndian;
+//                Chan_Ser.setEnabled(false);
+//                Conect.setText(getString(R.string.Button_Conecting));
+//                comunic.execute();
+//            } else
+//                comunic.Detener_Actividad();
+//        }else {
+        if(!TCOM && myIP.equals(defMyIP)) {
+            Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
+        }else {
+            if (comunic.estado == comunic.NULL) {
                 if (SC == MainActivity.CLIENT) {
-                    comunicBT = new ComunicBT(this, mDevice);
+                    if(TCOM)
+                        comunic = new Communic(this, mDevice);
+                    else
+                        comunic = new Communic(this, serverip, serverport);
                 } else if (SC == MainActivity.SERVER) {
-                    comunicBT = new ComunicBT(this, BTAdapter);
+                    if(TCOM)
+                        comunic = new Communic(this, BTAdapter);
+                    else
+                        comunic = new Communic(this, serverport);
                 }
-                comunicBT.setComunicationListener(this);
-                comunicBT.setConnectionListener(this);
-                comunicBT.littleEndian = littleEndian;
+                comunic.setComunicationListener(this);
+                comunic.setConnectionListener(this);
+                comunic.littleEndian = littleEndian;
                 Chan_Ser.setEnabled(false);
                 Conect.setText(getString(R.string.Button_Conecting));
-                comunicBT.execute();
-            } else
-                comunicBT.Detener_Actividad();
-        }else {
-            if(myIP.equals(defMyIP)) {
-                Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-                startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
-            }else {
-                if (comunic.estado == comunic.NULL) {
-                    if (SC == MainActivity.CLIENT) {
-                        comunic = new Comunic(this, serverip, serverport);
-                    } else if (SC == MainActivity.SERVER) {
-                        comunic = new Comunic(this, serverport);
-                    }
-                    comunic.setComunicationListener(this);
-                    comunic.setConnectionListener(this);
-                    comunic.littleEndian = littleEndian;
-                    Chan_Ser.setEnabled(false);
-                    Conect.setText(getString(R.string.Button_Conecting));
-                    comunic.execute();
-                }else
-                    comunic.Detener_Actividad();
-            }
+                comunic.execute();
+            }else
+                comunic.Detener_Actividad();
         }
+//        }
 	}
 
 	public void BTX(View view) { //Borrar TX
@@ -1666,7 +1710,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 scro.scrollTo(0, scro.getBottom() + scro.getScrollY());//*/fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
-        if (upd && dato.endsWith("\n")) {
+        if (upd && dato.endsWith(Character.toString((char)charEnd))) {
             contUpd++;
             String nup = editNAct.getText().toString();
             if (!nup.equals(""))

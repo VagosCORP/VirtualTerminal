@@ -224,10 +224,18 @@
     <string name="NumCommScrollHint" translatable="false">4</string>
     <string name="ApplyChanges">Apply Changes</string>
     <string name="DiscardChanges">Discard Changes</string>
-    <string name="rcvInitByteLabel">Advanced RX Init Byte</string>
-    <string name="rcvEndByteLabel">Advanced RX End Byte</string>
-    <string name="rcvInitByteHint" translatable="false">13</string>
+    <string name="StartEndByteLabel">Advanced RX Byte values</string>
+    <string name="rcvStartByte">Start Byte</string>
+    <string name="rcvStartByteHint" translatable="false">13</string>
+    <string name="rcvEndByte">End Byte</string>
     <string name="rcvEndByteHint" translatable="false">10</string>
+    <string name="pkgEndByte">Package End Byte</string>
+    <string name="pkgSameLabel">Same End Byte for Package Reception</string>
+    <string name="START_BYTE" translatable="false">START_BYTE</string>
+    <string name="END_BYTE" translatable="false">END_BYTE</string>
+    <string name="PKG_END_BYTE" translatable="false">PKG_END_BYTE</string>
+    <string name="SAME_END_BYTE" translatable="false">SAME_END_BYTE</string>
+    <string name="SEND_VT_PROTOCOL" translatable="false">SEND_VT_PROTOCOL</string>
 
     <string name="Extra_TCOM" translatable="false">TCOM</string>
     <string name="Extra_TYP" translatable="false">TYPE</string>

@@ -30,31 +30,38 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
 
     public static final int defNumCommStat = 4;
     public static final int defNumCommScroll = 4;
+    public static final int defInitByte = 13;
+    public static final int defEndByte = 10;
 
     private final int SHOW_INSTRUCTIONS = 16;
     public static final String SIoS = "SIoS";
 
     private boolean darkTheme = true;
-    private boolean pro = false;
     private boolean clearTXAS = false;
     private int numCommStat = defNumCommStat;
     private int numCommScroll = defNumCommScroll;
-    private boolean littleEndianGlobal = false;
-    //private boolean littleEndianForReceive = false;
+    private int charInit = defInitByte;
+    private int charEnd = defEndByte;
+    private int charPkgEnd = defEndByte;
+    private boolean sameEndByte = true;
+    private boolean littleEndian = false;
 
     CheckBox enDarkTheme;
     CheckBox enClearTX_AS;
-    LinearLayout cantCommStat_Layout;
-    EditText cantCommStat;
-    LinearLayout cantCommScroll_Layout;
-    EditText cantCommScroll;
-    RadioGroup endianGlobal;
-    RadioButton bigEndian;
-    RadioButton littleEndian;
-
-    //RadioGroup endian4Receive;
-    //RadioButton bigEndian4Receive;
-    //RadioButton littleEndian4Receive;
+    LinearLayout quantCommStat_Layout;
+    EditText quantCommStat;
+    LinearLayout quantCommScroll_Layout;
+    EditText quantCommScroll;
+    LinearLayout rcvStartByte_Layout;
+    EditText rcvStartByte;
+    LinearLayout rcvEndByte_Layout;
+    EditText rcvEndByte;
+    CheckBox sameAsEndByte;
+    LinearLayout pkgEndByte_Layout;
+    EditText pkgEndByte;
+    RadioGroup endianRBGroup;
+    RadioButton bigEndianRB;
+    RadioButton littleEndianRB;
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
@@ -62,16 +69,21 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //shapre = getPreferences(MODE_PRIVATE);
+//        shapre = getPreferences(MODE_PRIVATE);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
         darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
-        pro = shapre.getBoolean(getString(R.string.isPRO), false);
+        boolean pro = shapre.getBoolean(getString(R.string.isPRO), false);
         clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), defNumCommStat);
-        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), defNumCommScroll);
-        littleEndianGlobal = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
-        //littleEndianForReceive = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), false);
+        if(pro) {
+            numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), defNumCommStat);
+            numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), defNumCommScroll);
+//            charInit = shapre.getInt(getString(R.string.START_BYTE), defInitByte);
+//            charEnd = shapre.getInt(getString(R.string.END_BYTE), defEndByte);
+//            sameEndByte = shapre.getBoolean(getString(R.string.SAME_END_BYTE), true);
+//            charPkgEnd = shapre.getInt(getString(R.string.PKG_END_BYTE), defEndByte);
+            littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+        }
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_configuration);
@@ -84,58 +96,87 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
         enDarkTheme.setOnCheckedChangeListener(this);
         enClearTX_AS = findViewById(R.id.enClearTX_AS);
         enClearTX_AS.setChecked(clearTXAS);
-        cantCommStat_Layout = findViewById(R.id.cantCommStat_Layout);
-        cantCommStat = findViewById(R.id.cantCommStat);
+        quantCommStat_Layout = findViewById(R.id.quantCommStat_Layout);
+        quantCommStat = findViewById(R.id.quantCommStat);
         String temp = "" + numCommStat;
-        cantCommStat.setText(temp);
-        cantCommScroll_Layout = findViewById(R.id.cantCommScroll_Layout);
-        cantCommScroll = findViewById(R.id.cantCommScroll);
+        quantCommStat.setText(temp);
+        quantCommScroll_Layout = findViewById(R.id.quantCommScroll_Layout);
+        quantCommScroll = findViewById(R.id.quantCommScroll);
         temp = "" + numCommScroll;
-        cantCommScroll.setText(temp);
-        endianGlobal = findViewById(R.id.endianGlobal);
-        bigEndian = findViewById(R.id.bigEndian);
-        bigEndian.setChecked(!littleEndianGlobal);
-        littleEndian = findViewById(R.id.littleEndian);
-        littleEndian.setChecked(littleEndianGlobal);
-        //endian4Receive = findViewById(R.id.endian4Receive);
-        //bigEndian4Receive = findViewById(R.id.bigEndian4Receive);
-        //bigEndian4Receive.setChecked(!littleEndianForReceive);
-        //littleEndian4Receive = findViewById(R.id.littleEndian4Receive);
-        //littleEndian4Receive.setChecked(littleEndianForReceive);
+        quantCommScroll.setText(temp);
+        rcvStartByte_Layout = findViewById(R.id.rcvInitByte_Layout);
+        rcvStartByte = findViewById(R.id.rcvInitByte);
+        temp = "" + charInit;
+        rcvStartByte.setText(temp);
+        rcvEndByte_Layout = findViewById(R.id.rcvEndByte_Layout);
+        rcvEndByte = findViewById(R.id.rcvEndByte);
+        temp = "" + charEnd;
+        rcvEndByte.setText(temp);
+        sameAsEndByte = findViewById(R.id.sameAsEndByte);
+        sameAsEndByte.setChecked(sameEndByte);
+        sameAsEndByte.setOnCheckedChangeListener(this);
+        pkgEndByte_Layout = findViewById(R.id.pkgEndByte_Layout);
+        pkgEndByte = findViewById(R.id.pkgEndByte);
+        temp = "" + charPkgEnd;
+        pkgEndByte.setText(temp);
+        endianRBGroup = findViewById(R.id.endianGlobal);
+        bigEndianRB = findViewById(R.id.bigEndian);
+        bigEndianRB.setChecked(!littleEndian);
+        littleEndianRB = findViewById(R.id.littleEndian);
+        littleEndianRB.setChecked(littleEndian);
+        quantCommStat.setEnabled(pro);
+        quantCommScroll.setEnabled(pro);
+//        rcvStartByte.setEnabled(pro);
+//        rcvEndByte.setEnabled(pro);
+//        sameAsEndByte.setEnabled(pro);
+//        if(pro && !sameEndByte)
+//            pkgEndByte_Layout.setVisibility(View.VISIBLE);
+        bigEndianRB.setEnabled(pro);
+        littleEndianRB.setEnabled(pro);
         if(!pro) {
-            cantCommStat.setEnabled(pro);
-            cantCommScroll.setEnabled(pro);
-            cantCommStat.setText("");
-            cantCommScroll.setText("");
-            cantCommStat.setHint(R.string.NEED_PRO);
-            cantCommScroll.setHint(R.string.NEED_PRO);
-            bigEndian.setEnabled(pro);
-            littleEndian.setEnabled(pro);
-            //bigEndian4Receive.setEnabled(pro);
-            numCommStat = defNumCommStat;
-            numCommScroll = defNumCommScroll;
+//            cantCommStat.setText("");
+//            cantCommScroll.setText("");
+//            cantCommStat.setHint("" + defNumCommStat);
+//            cantCommScroll.setHint("" + defNumCommScroll);
+//            rcvInitByte.setText("");
+//            rcvEndByte.setText("");
+//            rcvInitByte.setHint("" + defInitByte);
+//            rcvEndByte.setHint("" + defEndByte);
             editor.putInt(getString(R.string.NUM_COMM_STAT), numCommStat);
             editor.putInt(getString(R.string.NUM_COMM_SCROLL), numCommScroll);
+//            editor.putInt(getString(R.string.START_BYTE), charInit);
+//            editor.putInt(getString(R.string.END_BYTE), charEnd);
+//            editor.putBoolean(getString(R.string.SAME_END_BYTE), sameEndByte);
+//            editor.putInt(getString(R.string.PKG_END_BYTE), charPkgEnd);
             editor.commit();
         }
-        //littleEndian4Receive.setEnabled(false);
     }
 
     public void applyConfig(View view) {
         darkTheme = enDarkTheme.isChecked();
         clearTXAS = enClearTX_AS.isChecked();
-        if(!cantCommStat.getText().toString().equals(""))
-            numCommStat = Integer.parseInt(cantCommStat.getText().toString());
-        if(!cantCommScroll.getText().toString().equals(""))
-            numCommScroll = Integer.parseInt(cantCommScroll.getText().toString());
-        littleEndianGlobal = littleEndian.isChecked();
-        //littleEndianForReceive = littleEndian4Receive.isChecked();
+        if(!quantCommStat.getText().toString().equals(""))
+            numCommStat = Integer.parseInt(quantCommStat.getText().toString());
+        if(!quantCommScroll.getText().toString().equals(""))
+            numCommScroll = Integer.parseInt(quantCommScroll.getText().toString());
+//        if(!rcvStartByte.getText().toString().equals(""))
+//            charInit = Integer.parseInt(rcvStartByte.getText().toString());
+//        if(!rcvEndByte.getText().toString().equals(""))
+//            charEnd = Integer.parseInt(rcvEndByte.getText().toString());
+//        if(!pkgEndByte.getText().toString().equals(""))
+//            charPkgEnd = Integer.parseInt(pkgEndByte.getText().toString());
+        littleEndian = littleEndianRB.isChecked();
         editor.putBoolean(getString(R.string.DARK_THEME), darkTheme);
         editor.putBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), clearTXAS);
         editor.putInt(getString(R.string.NUM_COMM_STAT), numCommStat);
         editor.putInt(getString(R.string.NUM_COMM_SCROLL), numCommScroll);
-        editor.putBoolean(getString(R.string.LITTLE_ENDIAN), littleEndianGlobal);
-        //editor.putBoolean(getString(R.string.LITTLE_ENDIAN4RECEIVE), littleEndianForReceive);
+//        editor.putInt(getString(R.string.START_BYTE), charInit);
+//        editor.putInt(getString(R.string.END_BYTE), charEnd);
+//        editor.putBoolean(getString(R.string.SAME_END_BYTE), sameEndByte);
+//        if(sameEndByte)
+//            charPkgEnd = charEnd;
+//        editor.putInt(getString(R.string.PKG_END_BYTE), charPkgEnd);
+        editor.putBoolean(getString(R.string.LITTLE_ENDIAN), littleEndian);
         editor.commit();
         Intent resIntent = new Intent(PrincipalActivity.RESULT_ACTION);
         setResult(Activity.RESULT_OK, resIntent);
@@ -150,7 +191,15 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+        if(buttonView == enDarkTheme)
+            Toast.makeText(this, R.string.cThemeToast, Toast.LENGTH_SHORT).show();
+        else if(buttonView == sameAsEndByte) {
+            sameEndByte = isChecked;
+            if(isChecked)
+                pkgEndByte_Layout.setVisibility(View.GONE);
+            else
+                pkgEndByte_Layout.setVisibility(View.VISIBLE);
+        }
     }
 
     public void showInstructions(View view) {
@@ -161,14 +210,15 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case SHOW_INSTRUCTIONS:
+//        switch (requestCode) {
+//            case SHOW_INSTRUCTIONS:
+            if(requestCode == SHOW_INSTRUCTIONS) {
                 if (resultCode == Activity.RESULT_OK) {
                     boolean checked = data.getBooleanExtra(SIoS, false);
                     editor.putBoolean(PrincipalActivity.SIoS, checked);
                     editor.commit();
                 }
-                break;
+//                break;
         }
     }
 

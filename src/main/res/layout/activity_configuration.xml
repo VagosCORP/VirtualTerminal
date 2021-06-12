@@ -41,7 +41,7 @@
         android:text="@string/NumCommLabel" />
 
     <LinearLayout
-        android:id="@+id/cantCommStat_Layout"
+        android:id="@+id/quantCommStat_Layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -53,18 +53,19 @@
             android:text="@string/NumCommStat" />
 
         <EditText
-            android:id="@+id/cantCommStat"
+            android:id="@+id/quantCommStat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="6"
             android:hint="@string/NumCommStatHint"
+            android:enabled="false"
             android:importantForAutofill="no"
             android:inputType="number" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/cantCommScroll_Layout"
+        android:id="@+id/quantCommScroll_Layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -76,21 +77,107 @@
             android:text="@string/NumCommScroll" />
 
         <EditText
-            android:id="@+id/cantCommScroll"
+            android:id="@+id/quantCommScroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="6"
             android:hint="@string/NumCommScrollHint"
+            android:enabled="false"
             android:importantForAutofill="no"
             android:inputType="number" />
 
     </LinearLayout>
 
-    <!--<TextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/EndianSelect" />-->
+        android:visibility="gone"
+        android:text="@string/StartEndByteLabel" />
+
+    <LinearLayout
+        android:id="@+id/rcvInitByte_Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rcvStartByte" />
+
+        <EditText
+            android:id="@+id/rcvInitByte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="@string/rcvStartByteHint"
+            android:enabled="false"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rcvEndByte_Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rcvEndByte" />
+
+        <EditText
+            android:id="@+id/rcvEndByte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="@string/rcvEndByteHint"
+            android:enabled="false"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/sameAsEndByte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/pkgSameLabel"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:enabled="false" />
+
+    <LinearLayout
+        android:id="@+id/pkgEndByte_Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pkgEndByte" />
+
+        <EditText
+            android:id="@+id/pkgEndByte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="@string/rcvEndByteHint"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+    </LinearLayout>
 
     <RadioGroup
         android:id="@+id/endianGlobal"
@@ -108,12 +195,14 @@
             android:id="@+id/bigEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="@string/BigEndian" />
 
         <RadioButton
             android:id="@+id/littleEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="@string/LittleEndian" />
     </RadioGroup>
 

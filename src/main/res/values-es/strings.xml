@@ -208,9 +208,11 @@
     <string name="NumCommScroll">Botones Desplazables</string>
     <string name="ApplyChanges">Aplicar Cambios</string>
     <string name="DiscardChanges">Descartar Cambios</string>
-    <string name="rcvInitByteLabel">Byte Inicio para RX Avanzado</string>
-    <string name="rcvEndByteLabel">Byte Final para RX Avanzado</string>
-
+    <string name="StartEndByteLabel">Valor de bytes para RX Avanzado</string>
+    <string name="rcvStartByte">Byte de Inicio</string>
+    <string name="rcvEndByte">Byte Final</string>
+    <string name="pkgEndByte">Byte Fin de Paquete</string>
+    <string name="pkgSameLabel">Mismo Byte Final para Recepción de Paquetes</string>
     <string name="EndianSelect">Selección de Endian</string>
     <string name="GlobalEndian">Endian para Global</string>
     <string name="NoXtring">Sin Items para Enviar</string>

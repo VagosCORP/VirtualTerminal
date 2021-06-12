@@ -13,7 +13,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <RadioGroup
@@ -51,6 +51,7 @@
                 android:id="@+id/SelPackage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/ioTypePackage"/>
 
             <RadioButton
@@ -116,6 +117,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ioFormBin"/>
 
+            <CheckBox
+                android:id="@+id/packageMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ioTypePackage" />
+
             <TextView
                 android:id="@+id/endianMode"
                 android:layout_width="wrap_content"
@@ -124,7 +131,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="end|bottom"
                 android:orientation="vertical">
 

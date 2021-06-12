@@ -116,4 +116,9 @@
         </activity>
     </application>
 
+    <queries>
+        <package android:name="com.vagoscorp.virtualterminal.prokey" />
+        <package android:name="com.vagoscorp.virtualterminalprokey" />
+    </queries>
+
 </manifest>

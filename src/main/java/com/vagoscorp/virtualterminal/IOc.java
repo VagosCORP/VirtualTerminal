@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ public class IOc extends Activity {
 
     RadioGroup typesRG;
     RadioGroup intFormRG;
+
+    CheckBox packageMode;
 
     int actualTXtype = 0;
     int actualTXform = 0;
@@ -56,9 +60,12 @@ public class IOc extends Activity {
     public static final String RX_TYPE = "RX_TYPE";
     public static final String RX_FORM = "RX_FORM";
     public static final String CONFIG_ACT = "CONFIG_ACT";
+    public static final String PACKMOD_EN = "PACKMOD_EN";
 
     boolean pro = false;
     boolean littleEndian = false;
+    boolean vtSendProtocol = false;
+    boolean packModeEn = false;
 
     int[] types = {R.id.SelText, R.id.SelByte, R.id.SelShort, R.id.SelInt, R.id.SelLong,
             R.id.SelFloat, R.id.SelDouble, R.id.SelDual, R.id.SelPackage};
@@ -80,12 +87,16 @@ public class IOc extends Activity {
         actualRXtype = data.getIntExtra(RX_TYPE, TYPE_TEXT);
         actualRXform = data.getIntExtra(RX_FORM, INT_FORM_DEC);
         actualConfig = data.getIntExtra(CONFIG_ACT, TX_CONFIG);
+        packModeEn = data.getBooleanExtra(PACKMOD_EN, false);
         itemPos = data.getIntExtra(XtringActivity.POS, 1);
         external = data.getBooleanExtra(XtringActivity.EXTERNAL, true);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
-        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+        if(pro) {
+            littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+            vtSendProtocol = shapre.getBoolean(getString(R.string.SEND_VT_PROTOCOL), false);
+        }
         setContentView(R.layout.activity_ioconfig);
         TX_Menu = findViewById(R.id.TX_Menu);
         RX_Menu = findViewById(R.id.RX_Menu);
@@ -93,10 +104,18 @@ public class IOc extends Activity {
         typesRG = findViewById(R.id.typesRG);
         intFormRG = findViewById(R.id.intFormRG);
         endianMode = findViewById(R.id.endianMode);
+        packageMode = findViewById(R.id.packageMode);
         for(int i = 0; i < 9; i++)
             typeRadB[i] = findViewById(types[i]);
         for(int i = 0; i < 3; i++)
             intFormRadB[i] = findViewById(intForms[i]);
+        packageMode.setChecked(packModeEn);
+        packageMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                packModeEn = isChecked;
+            }
+        });
         TX_Menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,7 +197,8 @@ public class IOc extends Activity {
             RX_Menu.setVisibility(View.VISIBLE);//RX_Menu.setEnabled(true);
             setTitle(R.string.TXConfig);
             typeRadB[TYPE_DUAL].setVisibility(View.GONE);
-            typeRadB[TYPE_PACKAGE].setVisibility(View.GONE);
+            //typeRadB[TYPE_PACKAGE].setVisibility(View.GONE);
+            packageMode.setVisibility(View.GONE);
         }else if(actualConfig == XTRING_CONFIG) {
             typeRadB[actualTXtype].setChecked(true);
             intFormRadB[actualTXform].setChecked(true);
@@ -187,7 +207,8 @@ public class IOc extends Activity {
             String temp = getString(R.string.XtringConfig) + " ( " + itemPos + " )";
             setTitle(temp);
             typeRadB[TYPE_DUAL].setVisibility(View.GONE);
-            typeRadB[TYPE_PACKAGE].setVisibility(View.GONE);
+            //typeRadB[TYPE_PACKAGE].setVisibility(View.GONE);
+            packageMode.setVisibility(View.GONE);
         }else if(actualConfig == RX_CONFIG) {
             typeRadB[actualRXtype].setChecked(true);
             intFormRadB[actualRXform].setChecked(true);
@@ -195,7 +216,8 @@ public class IOc extends Activity {
             RX_Menu.setVisibility(View.GONE);//RX_Menu.setEnabled(false);
             setTitle(R.string.RXConfig);
             typeRadB[TYPE_DUAL].setVisibility(View.VISIBLE);
-            typeRadB[TYPE_PACKAGE].setVisibility(View.VISIBLE);
+            //typeRadB[TYPE_PACKAGE].setVisibility(View.VISIBLE);
+            packageMode.setVisibility(View.VISIBLE);
         }
     }
 
@@ -213,10 +235,13 @@ public class IOc extends Activity {
         }
         for(int i = 0; i < 3; i++)
             intFormRadB[i].setEnabled(isInt);
-        if(aType > 1 && aType < 7)
+        if(aType > 1 && aType < 7) {
             endianMode.setVisibility(View.VISIBLE);
-        else
+            packageMode.setEnabled(true);
+        }else {
             endianMode.setVisibility(View.INVISIBLE);
+            packageMode.setEnabled(aType == 0);
+        }
     }
 
     public void updateResult() {
@@ -225,6 +250,7 @@ public class IOc extends Activity {
         result.putExtra(TX_FORM, actualTXform);
         result.putExtra(RX_TYPE, actualRXtype);
         result.putExtra(RX_FORM, actualRXform);
+        result.putExtra(PACKMOD_EN, packModeEn);
         result.putExtra(XtringActivity.POS, itemPos);
         result.putExtra(XtringActivity.EXTERNAL, external);
         setResult(Activity.RESULT_OK, result);

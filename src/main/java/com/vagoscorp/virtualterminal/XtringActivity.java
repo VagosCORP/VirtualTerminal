@@ -44,9 +44,9 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     public static final int XTRING_EDITOR = 199;
     public static final int valXReturn = 0;
-    public int numCommStat = 4;
-    public int numCommScroll = 4;
-    public int cantFastSendTot = 8;
+    public int numCommStat = Configuration.defNumCommStat;
+    public int numCommScroll = Configuration.defNumCommScroll;
+    public int numFastSendTot = numCommStat + numCommScroll;
 
     private final int SHOW_INSTRUCTIONS = 16;
     private final int ENTER_CONFIG = 18;
@@ -107,10 +107,11 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
         numItems = shapre.getInt(cantXItems, 0);
-        numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
-        numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
-        littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
-        if(!pro && numItems > 10)
+        if(pro) {
+            numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
+            numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
+            littleEndian = shapre.getBoolean(getString(R.string.LITTLE_ENDIAN), false);
+        }else if(numItems > 10)
             numItems = 10;
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
@@ -298,11 +299,11 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public void updCommButtons() {
         numCommStat = shapre.getInt(getString(R.string.NUM_COMM_STAT), Configuration.defNumCommStat);
         numCommScroll = shapre.getInt(getString(R.string.NUM_COMM_SCROLL), Configuration.defNumCommScroll);
-        cantFastSendTot = numCommStat + numCommScroll;
-        commX = new Button[cantFastSendTot];
+        numFastSendTot = numCommStat + numCommScroll;
+        commX = new Button[numFastSendTot];
         commStaticL.removeAllViewsInLayout();
         commScrollableL.removeAllViewsInLayout();
-        for(int i = 0; i < cantFastSendTot; i++) {
+        for(int i = 0; i < numFastSendTot; i++) {
             commX[i] = new Button(this);
             buttSetAllCaps(commX[i]);
             final int n = i + 1;
@@ -423,7 +424,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     public void UcommUI() {
-        for(int i = 0; i < cantFastSendTot; i++) {
+        for(int i = 0; i < numFastSendTot; i++) {
             int num = i + 1;
             commX[i].setText(shapre.getString(PrincipalActivity.commN + num, getResources().getString(R.string.commDVal)));
         }

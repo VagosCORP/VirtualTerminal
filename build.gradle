@@ -13,9 +13,9 @@ android {
         applicationId "com.vagoscorp.virtualterminal"
         minSdkVersion 7
         targetSdkVersion 30
-        versionName '1.4.1'
+        versionName '1.4.2'
         signingConfig signingConfigs.Sebasu
-        versionCode 20210306
+        versionCode 20210612
     }
     buildTypes {
         release {
