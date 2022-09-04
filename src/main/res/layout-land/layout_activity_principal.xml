@@ -17,14 +17,14 @@
         <Button
             android:id="@+id/Conect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:onClick="conect"
             android:text="@string/Button_Conect" />
 
         <Button
             android:id="@+id/chan_ser"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:onClick="Chan_Ser"
             android:text="@string/Ser_Dat" />
 

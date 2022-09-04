@@ -142,11 +142,17 @@
     <string name="Server_IP" translatable="false">10.0.0.6</string>
     <string name="Server_Port" translatable="false">2000</string>
     <string name="OK">Accept</string>
+    <string name="Cancel">Cancel</string>
     <string name="Button_Conect">Connect</string>
     <string name="Button_Conecting">Connecting…</string>
     <string name="Button_DisConect">Disconnect</string>
     <string name="BSend">Send</string>
     <string name="NB">Your Device do not have Bluetooth</string>
+    <string name="NBC">Bluetooth connection permission was not Granted by the user</string>
+    <string name="NBCG">Bluetooth connection permission was Granted!</string>
+    <string name="PGP">Please grant the Bluetooth connection permission to use this Mode</string>
+    <string name="PGPS">Please grant the Bluetooth connection permission on App Settings</string>
+    <string name="GrantBT_P">Enable</string>
     <string name="SincDev">Paired Devices</string>
     <string name="EncDev">Found Devices</string>
     <string name="device_list">Select a Device</string>
@@ -297,6 +303,8 @@
     <string name="prev">Prev</string>
     <string name="next">Next</string>
     <string name="exitTutToast">Press Back to exit Tutorial or select the option from menu.</string>
+    <string name="BT_PP_Title">Bluetooth Permition</string>
+    <string name="BT_P_Prompt">Bluetooth needs additional permitions to be used, please grant them in the next prompt.</string>
 
     <string name="tutPresentation">
         - Here is the Principal Interface of Virtual Terminal.\n

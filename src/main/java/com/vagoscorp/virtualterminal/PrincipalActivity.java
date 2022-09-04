@@ -1,5 +1,6 @@
 package com.vagoscorp.virtualterminal;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -12,11 +13,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +30,6 @@ import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -84,8 +87,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public int numFastSendTot = numCommStat + numCommScroll;
     int charInit = Configuration.defInitByte;
     int charEnd = Configuration.defEndByte;
-//    boolean sameEndByte = true;
-//    int charPkgEnd = Configuration.defEndByte;
+    // boolean sameEndByte = true;
+    // int charPkgEnd = Configuration.defEndByte;
 
 	public int SC;
     //public int txType = TX_FORM_TXT;
@@ -111,7 +114,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     EditText[] TXs = new EditText[cantDataTyp];// Data to Send
     InputMethodManager imm;
-//    EditText TX;// Data to Send
+    // EditText TX;// Data to Send
 
 	public int index;
 	public String[] DdeviceNames;
@@ -231,6 +234,10 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     SharedPreferences.Editor editor;
 
     boolean showKeyBoard = false;
+    boolean askingForBT_PE = false;
+
+    Toast permitBT;
+    Toast permitBTx;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -272,6 +279,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 finish();
                 return;
             }
+            checkBTcomPermit();
         }else {
             WFM = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
             CTM = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
@@ -311,38 +319,19 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         commBase = findViewById(R.id.commBase);
         commStaticL = findViewById(R.id.commStaticL);
         commScrollableL = findViewById(R.id.commScrollableL);
-        aCRpLF.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(getApplicationContext(), R.string.appendCRpLF, Toast.LENGTH_SHORT).show();
-            }
+        aCRpLF.setOnCheckedChangeListener((buttonView, isChecked) -> Toast.makeText(getApplicationContext(), R.string.appendCRpLF, Toast.LENGTH_SHORT).show());
+        UpdN.setOnCheckedChangeListener((buttonView, isChecked) -> updPNum(isChecked));
+        Conect.setOnLongClickListener(v -> {
+            hideActionBar();
+            return true;
         });
-        UpdN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                updPNum(isChecked);
-            }
+        Send.setOnLongClickListener(v -> {
+            commanderMode();
+            return true;
         });
-        Conect.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                hideActionBar();
-                return true;
-            }
-        });
-        Send.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                commanderMode();
-                return true;
-            }
-        });
-        Chan_Ser.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                enterSettings();
-                return true;
-            }
+        Chan_Ser.setOnLongClickListener(v -> {
+            enterSettings();
+            return true;
         });
         /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sendtypes_array, android.R.layout.simple_spinner_item); // Specify the layout to use when the list of choices appears
@@ -359,12 +348,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
             }
         });*/
-        typeTXB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterIOConfig(IOc.TX_CONFIG);
-            }
-        });
+        typeTXB.setOnClickListener(v -> enterIOConfig(IOc.TX_CONFIG));
         //typeTXB.setBackgroundColor(Color.DKGRAY);
         setTXType();
         setRXType();
@@ -1238,40 +1222,95 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         startActivityForResult(tutorialIntent, ENTER_TUTORIAL);
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.TIRAMISU)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_ENABLE_BT: {
+                // If request is cancelled, the result arrays are empty.
+                permitBT.cancel();
+                permitBTx.cancel();
+                askingForBT_PE = false;
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the contacts-related task you need to do.
+                    Toast.makeText(PrincipalActivity.this, R.string.NBCG, Toast.LENGTH_SHORT).show();
+                    checkBTcomPermit();
+                } else {
+                    // permission denied, boo! Disable the functionality that depends on this permission.
+                    Toast.makeText(PrincipalActivity.this, R.string.NBC, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.TIRAMISU)
+    private boolean checkBTcomPermit() {
+        if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if(!askingForBT_PE) {
+                askingForBT_PE = true;
+                permitBT = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+                permitBTx = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+                permitBT.show();
+                permitBTx.show();
+                requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
+            }
+            return false;
+        } else return true;
+    }
+
+    /* @TargetApi(Build.VERSION_CODES.TIRAMISU)
+    private void askBTcomPermit() {
+        if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT},REQUEST_ENABLE_BT);
+    } */
+
     private void initBTD(BluetoothDevice[] BonDev) {
-		myName = BTAdapter.getName();
-		myAddress = BTAdapter.getAddress();
-		if(BonDev.length > 0) {
-			if(BonDev.length <= index)
-				index = 0;
-			mDevice = BonDev[index];
+        if(!checkBTcomPermit())
+            return;
+        myName = BTAdapter.getName();
+        myAddress = BTAdapter.getAddress();
+        if (BonDev.length > 0) {
+            if (BonDev.length <= index)
+                index = 0;
+            mDevice = BonDev[index];
             Conect.setEnabled(true);
             Chan_Ser.setEnabled(true);
             String tempString = mDevice.getName() + "\n" + mDevice.getAddress();
-			if(SC == MainActivity.SERVER) {
+            if (SC == MainActivity.SERVER) {
                 tempString = myName + "\n" + myAddress;
                 Chan_Ser.setEnabled(false);
             }
             Chan_Ser.setText(tempString);
-		}else {
+        } else {
             Chan_Ser.setText(R.string.NoPD);
             Chan_Ser.setEnabled(false);
             Conect.setEnabled(false);
-		}
+        }
 	}
-	
-	@Override
-	protected void onResume() {
-        if(TCOM)
-            resumeBT(shapre);
-        else
-            resumeW(shapre);
-        clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
-        applyProtocolConfig();
-        updCommButtons();
-        UcommUI();
-		super.onResume();
-	}
+
+    private void resumeBT(SharedPreferences shapre) {
+        if(!checkBTcomPermit())
+            return;
+        index = shapre.getInt(indev, defIndex);
+        if (BTAdapter.isEnabled()) {
+            BondedDevices = BTAdapter.getBondedDevices().toArray(
+                    new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
+            initBTD(BondedDevices);
+        } else {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+    }
 
     private void resumeW(SharedPreferences shapre) {
 //    NetworkInfo nWI = CTM.getActiveNetworkInfo();
@@ -1324,18 +1363,18 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         Chan_Ser.setText(tempString);
     }
 
-    private void resumeBT(SharedPreferences shapre) {
-        index = shapre.getInt(indev, defIndex);
-        if (BTAdapter.isEnabled()) {
-            BondedDevices = BTAdapter.getBondedDevices().toArray(
-                    new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
-            initBTD(BondedDevices);
-        } else {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }
-    }
+	@Override
+	protected void onResume() {
+        if(TCOM)
+            resumeBT(shapre);
+        else
+            resumeW(shapre);
+        clearTXAS = shapre.getBoolean(getString(R.string.CLEAR_TX_AFTER_SEND), false);
+        applyProtocolConfig();
+        updCommButtons();
+        UcommUI();
+		super.onResume();
+	}
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1348,6 +1387,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 } else {
                     BondedDevices = BTAdapter.getBondedDevices().toArray(
                             new BluetoothDevice[BTAdapter.getBondedDevices().size()]);
+                    Log.d("BT Perm","Bluetooth enabled!");
                     initBTD(BondedDevices);
                 }
                 break;
@@ -1450,7 +1490,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //        if(TCOM)
 //            comunicBT.Detener_Actividad();
 //		else
-            comunic.Detener_Actividad();
+        comunic.Detener_Actividad();
 		super.onDestroy();
 	}
 	

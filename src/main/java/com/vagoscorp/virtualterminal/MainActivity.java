@@ -1,19 +1,27 @@
 package com.vagoscorp.virtualterminal;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import java.util.Arrays;
+
+public class MainActivity extends Activity implements View.OnLongClickListener {
 
 	Button CB;
 	Button CW;
@@ -42,7 +50,13 @@ public class MainActivity extends Activity {
 
 	SharedPreferences shapre;
 	SharedPreferences.Editor editor;
-	
+
+	int BT_Permit_Try_Cont = 0;
+	boolean askingForBT_PE = false;
+	Toast permitBT;
+	Toast permitBTx;
+	Toast permitBT_NG;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +103,82 @@ public class MainActivity extends Activity {
 			serverBT.setVisibility(View.VISIBLE);
 			serverW.setVisibility(View.VISIBLE);
 		}
+		permitBT_NG = Toast.makeText(MainActivity.this, R.string.NBC, Toast.LENGTH_SHORT);
+		CB.setOnLongClickListener(this);
+		SB.setOnLongClickListener(this);
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		if(!checkBTcomPermit(false))
+			openSettings();
+		return true;
+	}
+
+	private void openSettings() {
+		permitBT = Toast.makeText(MainActivity.this, R.string.PGPS, Toast.LENGTH_LONG);
+		permitBT.show();
+		Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Uri uri = Uri.fromParts("package", getPackageName(), null);
+		intent.setData(uri);
+		startActivity(intent);
+	}
+
+	@TargetApi(Build.VERSION_CODES.TIRAMISU)
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case 1: {
+				// If request is cancelled, the result arrays are empty.
+				permitBT.cancel();
+				permitBTx.cancel();
+				permitBT_NG.cancel();
+				askingForBT_PE = false;
+				if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// permission was granted, yay! Do the contacts-related task you need to do.
+					Toast.makeText(MainActivity.this, R.string.NBCG, Toast.LENGTH_SHORT).show();
+					checkBTcomPermit(true);
+				} else {
+					// permission denied, boo! Disable the functionality that depends on this permission.
+					BT_Permit_Try_Cont++;
+					if(BT_Permit_Try_Cont > 4)
+						openSettings();
+					else {
+						permitBT_NG = Toast.makeText(MainActivity.this, R.string.NBC, Toast.LENGTH_SHORT);
+						permitBT_NG.show();
+					}
+//					finish();
+				}
+			}
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.TIRAMISU)
+	private boolean checkBTcomPermit(boolean alsoAsk) {
+		if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED){
+			CB.setText(R.string.GrantBT_P);
+			SB.setText(R.string.GrantBT_P);
+			if(alsoAsk && !askingForBT_PE) {
+				askingForBT_PE = true;
+				permitBT = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+				permitBTx = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+				permitBT.show();
+				permitBTx.show();
+				requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+			}
+			return false;
+		}else {
+			CB.setText(R.string.Button_Sel);
+			SB.setText(R.string.Button_Sel);
+			return true;
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		checkBTcomPermit(false);
+		super.onResume();
 	}
 
 	boolean checkPro() {
@@ -106,6 +196,18 @@ public class MainActivity extends Activity {
 		return itsPro;
 	}
 
+	/*@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	private void openAppSysSettings() {
+		BT_Permit_Try_Cont++;
+		if(BT_Permit_Try_Cont > 5) {
+			Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+			Uri uri = Uri.fromParts("package", getPackageName(), null);
+			intent.setData(uri);
+			startActivity(intent);
+		}
+	}*/
+
 	public void viewBuild(View view) {
 		String versioning = "v" + versionName + " b" + versionCode;
 		verLab.setText(versioning);
@@ -115,8 +217,10 @@ public class MainActivity extends Activity {
 		Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), CLIENT);
+		if(checkBTcomPermit(true))
+			startActivity(Init);
+//			openAppSysSettings();
         //Init.putExtra(getString(R.string.Extra_LVL), pro);
-		startActivity(Init);
 	}
 
 	public void InitW(View view) {
@@ -131,8 +235,10 @@ public class MainActivity extends Activity {
         Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), SERVER);
+		if(!checkBTcomPermit(true))
+			startActivity(Init);
+//			openAppSysSettings();
         //Init.putExtra(getString(R.string.Extra_LVL), pro);
-		startActivity(Init);
 	}
 
 	public void InitWs(View view) {

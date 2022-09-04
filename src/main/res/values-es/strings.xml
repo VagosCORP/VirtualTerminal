@@ -130,11 +130,17 @@
 
 
     <string name="OK">Aceptar</string>
+    <string name="Cancel">Cancelar</string>
     <string name="Button_Conect">Conectar</string>
     <string name="Button_Conecting">Conectando…</string>
     <string name="Button_DisConect">Desconectar</string>
     <string name="BSend">Enviar</string>
     <string name="NB">Su Dispositivo no cuenta con Bluetooth</string>
+    <string name="NBC">El permiso de Conexión Bluetooth ha sido rechazado por el usuario</string>
+    <string name="NBCG">Permiso de Conexión Bluetooth Aceptado!</string>
+    <string name="PGP">Por favor acepte el permiso de Conexión Bluetooth para usar este Modo</string>
+    <string name="PGPS">Por favor acepte el permiso de Conexión Bluetooth en Configuracion de App</string>
+    <string name="GrantBT_P">Habilitar</string>
     <string name="SincDev">Dispositivos Sincronizados</string>
     <string name="EncDev">Dispositivos Encontrados</string>
     <string name="device_list">Seleccione un Dispositivo</string>
@@ -247,6 +253,8 @@
     <string name="prev">Anterior</string>
     <string name="next">Siguiente</string>
     <string name="exitTutToast">Presione Volver para salir del Tutorial o seleccione la opción del menú.</string>
+    <string name="BT_PP_Title">Permiso Bluetooth</string>
+    <string name="BT_P_Prompt">Se requieren permisos adicionales para usar Bluetooth, por favor acepte la solicitud siguiente.</string>
 
     <string name="tutPresentation">
         - Esta es la Interfaz Principal de Virtual Terminal.\n

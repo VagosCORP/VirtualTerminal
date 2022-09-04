@@ -19,7 +19,7 @@
         <Button
             android:id="@+id/Conect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:onClick="conect"
             android:text="@string/Button_Conect"/>
 
