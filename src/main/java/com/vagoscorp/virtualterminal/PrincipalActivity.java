@@ -1252,18 +1252,20 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.TIRAMISU)
+    @TargetApi(Build.VERSION_CODES.S)
     private boolean checkBTcomPermit() {
-        if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            if(!askingForBT_PE) {
-                askingForBT_PE = true;
-                permitBT = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
-                permitBTx = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
-                permitBT.show();
-                permitBTx.show();
-                requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
-            }
-            return false;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if(!askingForBT_PE) {
+                    askingForBT_PE = true;
+                    permitBT = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+                    permitBTx = Toast.makeText(PrincipalActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+                    permitBT.show();
+                    permitBTx.show();
+                    requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
+                }
+                return false;
+            } else return true;
         } else return true;
     }
 

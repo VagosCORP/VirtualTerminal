@@ -154,25 +154,27 @@ public class MainActivity extends Activity implements View.OnLongClickListener {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.TIRAMISU)
+	@TargetApi(Build.VERSION_CODES.S)
 	private boolean checkBTcomPermit(boolean alsoAsk) {
-		if(checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED){
-			CB.setText(R.string.GrantBT_P);
-			SB.setText(R.string.GrantBT_P);
-			if(alsoAsk && !askingForBT_PE) {
-				askingForBT_PE = true;
-				permitBT = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
-				permitBTx = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
-				permitBT.show();
-				permitBTx.show();
-				requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+				CB.setText(R.string.GrantBT_P);
+				SB.setText(R.string.GrantBT_P);
+				if (alsoAsk && !askingForBT_PE) {
+					askingForBT_PE = true;
+					permitBT = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+					permitBTx = Toast.makeText(MainActivity.this, R.string.PGP, Toast.LENGTH_LONG);
+					permitBT.show();
+					permitBTx.show();
+					requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+				}
+				return false;
+			} else {
+				CB.setText(R.string.Button_Sel);
+				SB.setText(R.string.Button_Sel);
+				return true;
 			}
-			return false;
-		}else {
-			CB.setText(R.string.Button_Sel);
-			SB.setText(R.string.Button_Sel);
-			return true;
-		}
+		}else return true;
 	}
 
 	@Override
@@ -235,7 +237,7 @@ public class MainActivity extends Activity implements View.OnLongClickListener {
         Init = new Intent(this, PrincipalActivity.class);
         Init.putExtra(getString(R.string.Extra_TCOM), true);
         Init.putExtra(getString(R.string.Extra_TYP), SERVER);
-		if(!checkBTcomPermit(true))
+		if(checkBTcomPermit(true))
 			startActivity(Init);
 //			openAppSysSettings();
         //Init.putExtra(getString(R.string.Extra_LVL), pro);

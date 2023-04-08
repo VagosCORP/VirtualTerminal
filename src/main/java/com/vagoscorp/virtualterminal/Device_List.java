@@ -26,7 +26,6 @@ public class Device_List extends Activity {
 		Adapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, LDev);
 		IS = new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -35,7 +34,6 @@ public class Device_List extends Activity {
 				setResult(Activity.RESULT_OK, SelDev);
 				finish();
 			}
-
 		};
 		LD.setAdapter(Adapter);
 		LD.setOnItemClickListener(IS);
