@@ -305,6 +305,7 @@
     <string name="exitTutToast">Press Back to exit Tutorial or select the option from menu.</string>
     <string name="BT_PP_Title">Bluetooth Permition</string>
     <string name="BT_P_Prompt">Bluetooth needs additional permitions to be used, please grant them in the next prompt.</string>
+    <string name="your_ips">Your IPs</string>
 
     <string name="tutPresentation">
         - Here is the Principal Interface of Virtual Terminal.\n

@@ -41,6 +41,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -76,6 +77,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     Button[] commX;
     ActionBar actionBar;
 
+    public String MyNIF;// NetInterface
     public String serverip;// IP to Connect
     public int serverport;// Port to Connect
     public boolean enNumericRcv = false;
@@ -107,8 +109,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public int mDeviceIndex;
     WifiManager WFM;
     ConnectivityManager CTM;
-    String defMyIP = "No IP";
-    String myIP = defMyIP;
+
     Communic comunic;
 //	ComunicBT comunicBT;
 
@@ -134,8 +135,14 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     public static final String IS_PRO = "IS_PRO";
     public static final String SIoS = "SIoS";
+    public static final String SIF = "SIF";
+    public static final String MIP = "MIP";
     public static final String SI = "SIP";
+    public static final String SIF_L = "SIF_L";
+    public static final String SIP_L = "SIP_L";
     public static final String SP = "SPort";
+    public static final String NSIF = "NSIF";
+    public static final String NMIP = "NMIP";
     public static final String NSI = "NSIP";
     public static final String NSP = "NSPort";
     public static final String RESULT_ACTION = "RESULT_ACTION";
@@ -149,6 +156,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	public static final String commT = "commT";
     public static final String commET = "commET";
     public static final String defIP = "10.0.0.6";
+    public static final String defMyIP = "No IP";
+    public static final String defIF = "wlan0";
     public static final String VER = "VER";
     public static final int defPort = 2000;
 	public static final int defNcomm = 0;
@@ -178,6 +187,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
     public static final int TX_FORM_HEX = 2;
     public static final int TX_FORM_BIN = 3;
     public static final int TX_FORM_FLOAT = 4;
+
+    String myIP = defMyIP;
+    String[] ServerIPs;
+    String[] ServerIntfs;
+    int numIPs = 0;
 
     boolean both = false;
     boolean upd = false;
@@ -467,78 +481,78 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 public boolean onLongClick(View v) {
                     int commType = COMMT_STRING;
                     boolean N = true;
-                    if(n != 0) {
-                        int sas = getTXval();
-                        if(sas < 5) {
-                            switch (actualTXtype) {
-                                case (IOc.TYPE_TEXT):
-                                    String eom = "\r\n";
-                                    if(!aCRpLF.isChecked())
-                                        eom = "";
-                                    editor.putString(comm + n, Message + eom);
-                                    editor.putString(commN + n, Message + eom);
-                                    commType = COMMT_STRING;
-                                    N = false;
-                                    break;
-                                case (IOc.TYPE_BYTE):
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                /*case (SEND_BIN): {
-                                    int Messagen = Integer.parseInt(message, 2);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                }
-                                case (SEND_HEX): {
-                                    int Messagen = Integer.parseInt(message, 16);
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
-                                    commType = COMMT_INT8;
-                                    break;
-                                }*/
-                                case (IOc.TYPE_SHORT):
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_INT16;
-                                    break;
-                                case (IOc.TYPE_INT):
-                                    editor.putInt(comm + n, Messagen);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_INT32;
-                                    break;
-                                case (IOc.TYPE_LONG):
-                                    editor.putLong(comm + n, MessageL);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_INT64;
-                                    break;
-                                case (IOc.TYPE_FLOAT):
-                                    editor.putFloat(comm + n, MessageF);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_FLOAT;
-                                    break;
-                                case (IOc.TYPE_DOUBLE):
-                                    ByteBuffer buffer = ByteBuffer.allocate(8);
-                                    buffer.putDouble(MessageD);
-                                    buffer.flip();
-                                    long MessageDL = buffer.getLong();
-                                    editor.putLong(comm + n, MessageDL);
-                                    editor.putString(commN + n, genTXtypeLbl(true) + Message);
-                                    commType = COMMT_DOUBLE;
-                                    break;
+                    //if(n != 0) {
+                    int sas = getTXval();
+                    if(sas < 5) {
+                        switch (actualTXtype) {
+                            case (IOc.TYPE_TEXT):
+                                String eom = "\r\n";
+                                if(!aCRpLF.isChecked())
+                                    eom = "";
+                                editor.putString(comm + n, Message + eom);
+                                editor.putString(commN + n, Message + eom);
+                                commType = COMMT_STRING;
+                                N = false;
+                                break;
+                            case (IOc.TYPE_BYTE):
+                                editor.putInt(comm + n, Messagen);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_INT8;
+                                break;
+                            /*case (SEND_BIN): {
+                                int Messagen = Integer.parseInt(message, 2);
+                                editor.putInt(comm + n, Messagen);
+                                editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_BIN] + message);
+                                commType = COMMT_INT8;
+                                break;
                             }
-                        }else if(sas == 6){
-                            N = false;
-                            editor.putString(comm + n, getResources().getString(R.string.commDVal));
-                            editor.putString(commN + n, getResources().getString(R.string.commDVal));
+                            case (SEND_HEX): {
+                                int Messagen = Integer.parseInt(message, 16);
+                                editor.putInt(comm + n, Messagen);
+                                editor.putString(commN + n, getResources().getStringArray(R.array.sendtypes_array)[SEND_HEX] + message);
+                                commType = COMMT_INT8;
+                                break;
+                            }*/
+                            case (IOc.TYPE_SHORT):
+                                editor.putInt(comm + n, Messagen);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_INT16;
+                                break;
+                            case (IOc.TYPE_INT):
+                                editor.putInt(comm + n, Messagen);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_INT32;
+                                break;
+                            case (IOc.TYPE_LONG):
+                                editor.putLong(comm + n, MessageL);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_INT64;
+                                break;
+                            case (IOc.TYPE_FLOAT):
+                                editor.putFloat(comm + n, MessageF);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_FLOAT;
+                                break;
+                            case (IOc.TYPE_DOUBLE):
+                                ByteBuffer buffer = ByteBuffer.allocate(8);
+                                buffer.putDouble(MessageD);
+                                buffer.flip();
+                                long MessageDL = buffer.getLong();
+                                editor.putLong(comm + n, MessageDL);
+                                editor.putString(commN + n, genTXtypeLbl(true) + Message);
+                                commType = COMMT_DOUBLE;
+                                break;
                         }
-                        editor.putBoolean(commT + n, N);
-                        editor.putInt(commET + n, commType);
-                        editor.commit();
-                        UcommUI();
+                    }else if(sas == 6){
+                        N = false;
+                        editor.putString(comm + n, getResources().getString(R.string.commDVal));
+                        editor.putString(commN + n, getResources().getString(R.string.commDVal));
                     }
+                    editor.putBoolean(commT + n, N);
+                    editor.putInt(commET + n, commType);
+                    editor.commit();
+                    UcommUI();
+                    //}
                     return true;
                 }
             });
@@ -546,55 +560,55 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 @Override
                 public void onClick(View v) {
                     //int n = nComm(view);
-                    if(n != 0) {
-                        int commType = shapre.getInt(commET + n, COMMT_STRING);
-                        boolean commN = shapre.getBoolean(commT + n, defBcomm);
-                        switch(commType) {
-                            case(COMMT_INT8):
+                    //if(n != 0) {
+                    int commType = shapre.getInt(commET + n, COMMT_STRING);
+                    boolean commN = shapre.getBoolean(commT + n, defBcomm);
+                    switch(commType) {
+                        case(COMMT_INT8):
 //                                if(TCOM)
 //                                    comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
 //                                else
-                                    comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                                break;
-                            case(COMMT_INT16):
+                                comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                            break;
+                        case(COMMT_INT16):
 //                                if(TCOM)
 //                                    comunicBT.enviar_Int16(shapre.getInt(comm + n, defNcomm));
 //                                else
-                                    comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
-                                break;
-                            case(COMMT_INT32):
+                                comunic.enviar_Int16(shapre.getInt(comm + n, defNcomm));
+                            break;
+                        case(COMMT_INT32):
 //                                if(TCOM)
 //                                    comunicBT.enviar_Int32(shapre.getInt(comm + n, defNcomm));
 //                                else
-                                    comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
-                                break;
-                            case(COMMT_INT64): // Fallthrough
-                            case(COMMT_DOUBLE):
+                                comunic.enviar_Int32(shapre.getInt(comm + n, defNcomm));
+                            break;
+                        case(COMMT_INT64): // Fallthrough
+                        case(COMMT_DOUBLE):
 //                                if(TCOM)
 //                                    comunicBT.enviar_Int64(shapre.getLong(comm + n, defNcomm));
 //                                else
-                                    comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
-                                break;
-                            case(COMMT_FLOAT):
+                                comunic.enviar_Int64(shapre.getLong(comm + n, defNcomm));
+                            break;
+                        case(COMMT_FLOAT):
 //                                if(TCOM)
 //                                    comunicBT.enviar_Float(shapre.getFloat(comm + n, defNcomm));
 //                                else
-                                    comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
-                                break;
-                            default:
-                                if (!commN){
+                                comunic.enviar_Float(shapre.getFloat(comm + n, defNcomm));
+                            break;
+                        default:
+                            if (!commN){
 //                                    if (TCOM)
 //                                        comunicBT.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
 //                                    else
-                                        comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
-                                }else {
+                                    comunic.enviar(shapre.getString(comm + n, getString(R.string.commDVal)));
+                            }else {
 //                                    if (TCOM)
 //                                        comunicBT.enviar_Int8(shapre.getInt(comm + n, defNcomm));
 //                                    else
-                                        comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
-                                }
-                        }
+                                    comunic.enviar_Int8(shapre.getInt(comm + n, defNcomm));
+                            }
                     }
+                    //}
                 }
             });
             if(i < numCommStat) {
@@ -616,7 +630,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //                    if(TCOM)
 //                        comunicBT.enviar(Message + eom);//???
 //                    else
-                        comunic.enviar(Message + eom);//???
+                    comunic.enviar(Message + eom);//???
                     break;
                 case (IOc.TYPE_BYTE):
 //                    if(TCOM)
@@ -1091,68 +1105,84 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.rcvTyp:
-                enterIOConfig(IOc.RX_CONFIG);
-                return true;
-            /*case R.id.rcvText:
-                setRcvTtxt(null);
-                return true;
-            case R.id.rcvNum:
-                setRcvTint8(null);
-                return true;
-            case R.id.rcvBoth:
-                setRcvTboth(null);
-                return true;
-            case R.id.rcvUpd:
-                setRcvTupd(null);
-                return true;
-            case R.id.shortRcv:
-                setRcvTint16(null);
-                return true;
-            case R.id.intRcv:
-                setRcvTint32(null);
-                return true;
-            case R.id.longRcv:
-                setRcvTint64(null);
-                return true;
-            case R.id.floatRcv:
-                setRcvTfloat(null);
-                return true;
-            case R.id.doubleRcv:
-                setRcvTdouble(null);
-                return true;*/
-            case R.id.commMode:
-                commanderMode();
-                return true;
-            case R.id.XtringMode:
-                enterXtringMode();
-                return true;
-            /*case R.id.themeDark:
-                //themeSavePref(true);
-                return true;
-            case R.id.themeNormal:
-                //themeSavePref(false);
-                return true;
-            case R.id.bigEndian:
-                changeEndian(true);
-                return true;
-            case R.id.littleEndian:
-                changeEndian(false);
-                return true;*/
-            case R.id.viewInstructions:
-                enterInstructions();
-                return true;
-            case R.id.enterTutorial:
-                enterTutorial();
-                return true;
-            case R.id.action_settings:
-                enterSettings();
-                return true;
-        }
+        int selID = item.getItemId();
+        if(selID == android.R.id.home)
+            finish();
+        else if(selID == R.id.rcvTyp)
+            enterIOConfig(IOc.RX_CONFIG);
+        else if(selID == R.id.commMode)
+            commanderMode();
+        else if(selID == R.id.XtringMode)
+            enterXtringMode();
+        else if(selID == R.id.viewInstructions)
+            enterInstructions();
+        else if(selID == R.id.enterTutorial)
+            enterTutorial();
+        else if(selID == R.id.action_settings)
+            enterSettings();
+//        return true;
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                finish();
+//                return true;
+//            case R.id.rcvTyp:
+//                enterIOConfig(IOc.RX_CONFIG);
+//                return true;
+//            /*case R.id.rcvText:
+//                setRcvTtxt(null);
+//                return true;
+//            case R.id.rcvNum:
+//                setRcvTint8(null);
+//                return true;
+//            case R.id.rcvBoth:
+//                setRcvTboth(null);
+//                return true;
+//            case R.id.rcvUpd:
+//                setRcvTupd(null);
+//                return true;
+//            case R.id.shortRcv:
+//                setRcvTint16(null);
+//                return true;
+//            case R.id.intRcv:
+//                setRcvTint32(null);
+//                return true;
+//            case R.id.longRcv:
+//                setRcvTint64(null);
+//                return true;
+//            case R.id.floatRcv:
+//                setRcvTfloat(null);
+//                return true;
+//            case R.id.doubleRcv:
+//                setRcvTdouble(null);
+//                return true;*/
+//            case R.id.commMode:
+//                commanderMode();
+//                return true;
+//            case R.id.XtringMode:
+//                enterXtringMode();
+//                return true;
+//            /*case R.id.themeDark:
+//                //themeSavePref(true);
+//                return true;
+//            case R.id.themeNormal:
+//                //themeSavePref(false);
+//                return true;
+//            case R.id.bigEndian:
+//                changeEndian(true);
+//                return true;
+//            case R.id.littleEndian:
+//                changeEndian(false);
+//                return true;*/
+//            case R.id.viewInstructions:
+//                enterInstructions();
+//                return true;
+//            case R.id.enterTutorial:
+//                enterTutorial();
+//                return true;
+//            case R.id.action_settings:
+//                enterSettings();
+//                return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -1322,12 +1352,20 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //        Intent enableIntent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
 //        startActivityForResult(enableIntent, REQUEST_ENABLE_WIFI);
 //    }else {
-        myIP = defMyIP;
+//        myIP = defMyIP; // Maybe not to use to prevent reset of Server IP
+        MyNIF = shapre.getString(SIF, defIF);
+        myIP = shapre.getString(MIP, defMyIP);
         try {
+            ArrayList<String> addr_list = new ArrayList<>(0);
+            ArrayList<String> intf_list = new ArrayList<>(0);
             for (NetworkInterface intf : Collections.list(NetworkInterface.getNetworkInterfaces())) {
                 for (InetAddress addr : Collections.list(intf.getInetAddresses())) {
-                    if (!addr.isLoopbackAddress() && addr instanceof Inet4Address){
-                        myIP = addr.getHostAddress();
+                    if (addr instanceof Inet4Address){ //  && !addr.isLoopbackAddress() // Dar la opción de loopback para probar suena interesante
+                        String intfAdd = intf.getName()+": "+addr.getHostAddress();
+                        Log.d("ListHostAddress",intfAdd);
+                        intf_list.add(intf.getName());
+                        addr_list.add(addr.getHostAddress());
+//                        newNumIPs++;
 //                        String ip = Formatter.formatIpAddress(addr.hashCode());
 //                          textStatus.append("\n" + addr.getHostName() );
 //                          textStatus.append("\n" + addr.getCanonicalHostName() );
@@ -1337,6 +1375,50 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                     }
                 }
             }
+            int newNumIPs = addr_list.size();
+            Log.d("resumeW","newNumIPs = "+newNumIPs);
+            if(newNumIPs < 2) {
+                newNumIPs = 2;
+                intf_list.add(defIF);
+                addr_list.add(defMyIP);
+            }
+            ServerIPs = new String[newNumIPs];
+            ServerIntfs = new String[newNumIPs];
+            boolean IP_Changed = true;
+            boolean IF_Changed = true;
+            int defIndex = -1;
+            for(int i=0;i<newNumIPs;i++) {
+                ServerIPs[i] = addr_list.get(i);
+                ServerIntfs[i] = intf_list.get(i);
+                if(myIP.equals(defMyIP) && ServerIntfs[i].equals(defIF)) { //
+                    MyNIF = ServerIntfs[i];
+                    myIP = ServerIPs[i];
+                    defIndex = i;
+                }else if(ServerIntfs[i].equals(MyNIF)) {
+                    IF_Changed = false;
+                    defIndex = i;
+                    if(ServerIPs[i].equals(myIP))
+                        IP_Changed = false;
+                }else if(ServerIntfs[i].equals(defIF))
+                    defIndex = i;
+            }
+            Log.d("resumeW","defIndex = "+defIndex);
+            if(defIndex == -1) {
+                MyNIF = defIF;
+                myIP = defMyIP;
+            }else if(IP_Changed)
+                myIP = ServerIPs[defIndex];
+            else if(IF_Changed) {
+                MyNIF = ServerIntfs[defIndex];
+                myIP = ServerIPs[defIndex];
+            }
+
+//            if(newNumIPs > numIPs) {
+//                Log.d("ListHostAddress","New IP options detected!");
+//            }else if(newNumIPs < numIPs) {
+//                Log.d("ListHostAddress","IP options are less now!");
+//            }
+            numIPs = newNumIPs;
 //            if(myIP.equals(defMyIP)) {
 ////                Toast.makeText(this, R.string.EnWF, Toast.LENGTH_SHORT).show();
 ////                    finish();
@@ -1357,11 +1439,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //            myIP = "0.0.0.0";
 //        }
 //    }
+//        serverintf = shapre.getString(SIF, defIF);
         serverip = shapre.getString(SI, defIP);
         serverport = shapre.getInt(SP, defPort);
         String tempString = serverip + ":" + serverport;
         if(SC == MainActivity.SERVER)
-            tempString = myIP + ":" + serverport;
+            tempString = myIP + ":" + serverport; // myIPintf...
         Chan_Ser.setText(tempString);
     }
 
@@ -1419,8 +1502,12 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 break;
             case REQUEST_CHANGE_SERVER:
                 if (resultCode == Activity.RESULT_OK) {
+                    MyNIF = data.getStringExtra(NSIF);
+                    myIP = data.getStringExtra(NMIP);
                     serverip = data.getStringExtra(NSI);
                     serverport = data.getIntExtra(NSP, defPort);
+                    editor.putString(SIF, MyNIF);
+                    editor.putString(MIP, myIP);
                     editor.putString(SI, serverip);
                     editor.putInt(SP, serverport);
                     editor.commit();
@@ -1505,6 +1592,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
 	public void Chan_Ser(View view) {
         if(TCOM) {
+            resumeBT(shapre);
             if (BondedDevices.length > 0) {
                 int deviceCount = BondedDevices.length;
 
@@ -1526,8 +1614,13 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             } else
                 Toast.makeText(this, R.string.NoPD, Toast.LENGTH_SHORT).show();
         }else {
+            resumeW(shapre);
             Intent CS = new Intent(this, Set_Server.class);
+            CS.putExtra(SIF, MyNIF);
+            CS.putExtra(MIP, myIP);
             CS.putExtra(SI, serverip);
+            CS.putExtra(SIF_L,ServerIntfs);
+            CS.putExtra(SIP_L,ServerIPs);
             if(SC == MainActivity.SERVER)
                 CS.putExtra(SnIP, true);
             CS.putExtra(SP, serverport);

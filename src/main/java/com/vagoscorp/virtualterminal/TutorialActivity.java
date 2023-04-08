@@ -221,7 +221,22 @@ public class TutorialActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int selID = item.getItemId();
+        if(selID == android.R.id.home)
+            finish();
+        else if(selID == R.id.rcvTypT)
+            enterIOConfig(IOc.RX_CONFIG);
+        else if(selID == R.id.commModeT)
+            commanderMode();
+        else if(selID == R.id.XtringModeT)
+            enterXtringMode();
+        else if(selID == R.id.viewInstructionsT)
+            enterInstructions();
+        else if(selID == R.id.exitTutorialT)
+            exitTutorial();
+        else if(selID == R.id.action_settingsT)
+            enterSettings();
+        /*switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
@@ -243,7 +258,7 @@ public class TutorialActivity extends Activity {
             case R.id.action_settingsT:
                 enterSettings();
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

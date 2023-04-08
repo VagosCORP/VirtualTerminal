@@ -454,7 +454,18 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int selID = item.getItemId();
+        if(selID == android.R.id.home)
+            exitXtring();
+        else if(selID == R.id.saveComm)
+            commanderMode(false);
+        else if(selID == R.id.showAddItemLays)
+            showAddItemLays();
+        else if(selID == R.id.viewInstructions)
+            enterInstructions();
+        else if(selID == R.id.action_settings)
+            enterSettings();
+        /*switch (item.getItemId()) {
             case android.R.id.home:
                 exitXtring();
                 return true;
@@ -470,7 +481,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             case R.id.action_settings:
                 enterSettings();
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

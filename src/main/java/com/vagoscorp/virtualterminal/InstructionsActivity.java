@@ -179,16 +179,22 @@ public class InstructionsActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                finish();
-                return true;
-            }
-            case R.id.action_settings: {
+        int selID = item.getItemId();
+        if(selID == android.R.id.home)
+            finish();
+//        else if(selID == R.id.action_settings) // ???
+//            enterIOConfig(IOc.RX_CONFIG);
 
-                return true;
-            }
-        }
+//        switch (item.getItemId()) {
+//            case android.R.id.home: {
+//                finish();
+//                return true;
+//            }
+//            case R.id.action_settings: {
+//
+//                return true;
+//            }
+//        }
         return super.onOptionsItemSelected(item);
     }
 }
