@@ -15,7 +15,7 @@ android {
         targetSdk 33
         versionName '1.4.5'
         signingConfig signingConfigs.Sebasu
-        versionCode 20230408
+        versionCode 20230414
     }
     buildTypes {
         release {
