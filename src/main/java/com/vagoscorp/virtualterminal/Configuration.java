@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -16,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import android.graphics.Insets;
+import android.view.WindowInsets;
 
 public class Configuration extends Activity implements OnCheckedChangeListener{
 
@@ -62,6 +66,9 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
     RadioGroup endianRBGroup;
     RadioButton bigEndianRB;
     RadioButton littleEndianRB;
+    Button bViewInstruct;
+    Button bDiscChan;
+    Button bApplyChan;
 
     SharedPreferences shapre;
     SharedPreferences.Editor editor;
@@ -87,9 +94,29 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_configuration);
-        LinearLayout layoutSettings = findViewById(R.id.layout_settings);;
+        LinearLayout layoutSettings = findViewById(R.id.layout_settings);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            layoutSettings.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    int hMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+                    int vMargin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBars.left + hMargin, systemBars.top + vMargin,
+                                systemBars.right + hMargin, systemBars.bottom + vMargin);
+                    } else {
+                        v.setPadding(insets.getSystemWindowInsetLeft() + hMargin,
+                                insets.getSystemWindowInsetTop() + vMargin,
+                                insets.getSystemWindowInsetRight() + hMargin,
+                                insets.getSystemWindowInsetBottom() + vMargin);
+                    }
+                    return insets;
+                }
+            });
+        }
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            layoutSettings.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+            layoutSettings.setBackgroundColor(getResources().getColor(R.color.DT));
         //layoutSettings.setBackgroundColor(Color.parseColor("#ff303030"));
         enDarkTheme = findViewById(R.id.enDarkTheme);
         enDarkTheme.setChecked(darkTheme);
@@ -126,6 +153,14 @@ public class Configuration extends Activity implements OnCheckedChangeListener{
         littleEndianRB.setChecked(littleEndian);
         quantCommStat.setEnabled(pro);
         quantCommScroll.setEnabled(pro);
+        bViewInstruct = findViewById(R.id.bViewInstruct);
+        bDiscChan = findViewById(R.id.bDiscChan);
+        bApplyChan = findViewById(R.id.bApplyChan);
+        if(darkTheme) {
+            IOc.formatDT_Button(bViewInstruct);
+            IOc.formatDT_Button(bDiscChan);
+            IOc.formatDT_Button(bApplyChan);
+        }
 //        rcvStartByte.setEnabled(pro);
 //        rcvEndByte.setEnabled(pro);
 //        sameAsEndByte.setEnabled(pro);

@@ -134,8 +134,8 @@
     <string name="getPRO">Get PRO features</string>
     <string name="UNProPack">ProKey BetaTest finished, thank you for participating</string>
     <string name="commMode">FastSend Interface</string>
-    <string name="typSend">Send Type</string>
-    <string name="RCVtype">Reception Type</string>
+    <string name="typSend">Send Type▼</string>
+    <string name="RCVtype">Reception Type▼</string>
     <string name="DS" translatable="false">\n</string>
     <string name="defvalup" translatable="false">255</string>
     <string name="defvaldwn" translatable="false">0</string>
@@ -163,9 +163,9 @@
     <string name="set_server">Connection Data</string>
     <string name="Button_Sel">Start</string>
     <string name="Sel_W">WiFi Client</string>
-    <string name="Sel_BT">Bluetooth Client</string>
+    <string name="Sel_BT">Bluetooth(Classic) Client</string>
     <string name="Sel_Ws">WiFi Server</string>
-    <string name="Sel_BTs">Bluetooth Server</string>
+    <string name="Sel_BTs">Bluetooth(Classic) Server</string>
     <string name="Clients">Wireless Clients</string>
     <string name="Servers">Wireless Servers</string>
     <string name="EnBT">Bluetooth Activation Denied by User</string>
@@ -247,7 +247,6 @@
     <string name="Extra_TYP" translatable="false">TYPE</string>
     <string name="Extra_LVL" translatable="false">LEVEL</string>
 
-    <string name="DT_Color" translatable="false">#ff303030</string>
     <string name="SHARPREF" translatable="false">SHARPREF</string>
     <string name="isPRO" translatable="false">isPRO</string>
     <string name="DARK_THEME" translatable="false">DARK_THEME</string>
@@ -354,33 +353,33 @@
     <string name="tutTXinputText">
         - This is the TX-Input for the data to send.\n
         - The hint and characters allowed will change based on the Send-Type selection.\n
-        - By default the Send-Type is text, you can try to write on it now if desired.\n
+        - By default the Send-Type is text, you can try writting.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutTXinputNum">
         - Now the TX-Input behavior is set for numbers.\n
         - The allowed characters are shown on the hint.\n
-        - Also the keyboard now should show only numbers, try it if desired.\n
+        - Also the keyboard now should show only numbers, try it!.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutTXinputHex">
         - Now the TX-Input behavior is set for numbers in hexadecimal.\n
         - The allowed characters are shown on the hint.\n
         - Also the keyboard now should show all characters but will filter the inputs.\n
-        - You can try to write on it, characters greater than F will be ignored.\n
+        - Characters greater than F will be ignored, you can try writting.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutTXinputBin">
         - Now the TX-Input behavior is set for numbers in binary.\n
         - The allowed characters are shown on the hint.\n
         - Also the keyboard now should show only numbers but will filter the inputs.\n
-        - You can try to write on it, characters greater than 1 will be ignored.\n
+        - Characters greater than 1 will be ignored, you can try writting.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutTXinputFloat">
         - Now the TX-Input behavior is set for decimal numbers(float).\n
         - The allowed characters are shown on the hint.\n
-        - Also the keyboard now should show only numbers, try to write on it if desired.\n
+        - Also the keyboard now should show only numbers, you can try writting.\n
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutSend">
@@ -402,7 +401,7 @@
         - Press the \'Next\' Button to continue.
     </string>
     <string name="tutDelTRX">
-        - This two buttons can erase the content of the TX-Input and RX-View respectively.\n
+        - These two buttons can erase the content of the TX-Input and RX-View respectively.\n
         - For TX-Input, it is faster than erasing with the keyboard.\n
         - For RX-View, it is the only way to clear the reception screen.\n
         - Unless you are using an advanced reception type like \'Package RX\'.\n

@@ -19,6 +19,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.graphics.Insets;
+import android.view.WindowInsets;
 
 public class InstructionsActivity extends Activity {
 
@@ -60,8 +62,28 @@ public class InstructionsActivity extends Activity {
         setContentView(R.layout.activity_instructions);
         checked = shapre.getBoolean(PrincipalActivity.SIoS, false);
         slayout = findViewById(R.id.slayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            slayout.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    int hMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+                    int vMargin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBars.left + hMargin, systemBars.top + vMargin,
+                                systemBars.right + hMargin, systemBars.bottom + vMargin);
+                    } else {
+                        v.setPadding(insets.getSystemWindowInsetLeft() + hMargin,
+                                insets.getSystemWindowInsetTop() + vMargin,
+                                insets.getSystemWindowInsetRight() + hMargin,
+                                insets.getSystemWindowInsetBottom() + vMargin);
+                    }
+                    return insets;
+                }
+            });
+        }
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            slayout.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+            slayout.setBackgroundColor(getResources().getColor(R.color.DT));
             //slayout.setBackgroundColor(Color.parseColor("#ff303030"));
         getPRO = findViewById(R.id.getPRO);
         insGP = findViewById(R.id.insGP);
@@ -98,6 +120,7 @@ public class InstructionsActivity extends Activity {
             }
         });
         checkBox.setChecked(checked);
+        // if(darkTheme) formatDT_Button(getPRO);
         setupActionBar();
     }
 

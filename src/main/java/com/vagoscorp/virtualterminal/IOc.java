@@ -67,9 +67,9 @@ public class IOc extends Activity {
     boolean vtSendProtocol = false;
     boolean packModeEn = false;
 
-    int[] types = {R.id.SelText, R.id.SelByte, R.id.SelShort, R.id.SelInt, R.id.SelLong,
+    public static int[] types = {R.id.SelText, R.id.SelByte, R.id.SelShort, R.id.SelInt, R.id.SelLong,
             R.id.SelFloat, R.id.SelDouble, R.id.SelDual, R.id.SelPackage};
-    int[] intForms = {R.id.SelDec, R.id.SelHex, R.id.SelBin};
+    public static int[] intForms = {R.id.SelDec, R.id.SelHex, R.id.SelBin};
     RadioButton[] typeRadB = new RadioButton[9];
     RadioButton[] intFormRadB = new RadioButton[3];
 
@@ -109,6 +109,9 @@ public class IOc extends Activity {
             typeRadB[i] = findViewById(types[i]);
         for(int i = 0; i < 3; i++)
             intFormRadB[i] = findViewById(intForms[i]);
+        formatDT_Button(TX_Menu);
+        formatDT_Button(RX_Menu);
+        formatDT_Button(AcceptIO);
         packageMode.setChecked(packModeEn);
         packageMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -180,6 +183,15 @@ public class IOc extends Activity {
         endianMode.setText(endian);
         isAnInt();
         //touchOut(false);
+    }
+
+    public static void formatDT_Button(Button b) {
+        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            b.setBackgroundTintList(getColorStateList(R.color.DT_B));
+        } else {
+            b.setBackgroundColor(getResources().getColor(R.color.DT_B));
+            // b.setTextColor(getResources().getColor(R.color.white));
+        } // */
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

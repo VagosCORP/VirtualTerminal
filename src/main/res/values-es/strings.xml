@@ -122,8 +122,8 @@
     <string name="getPRO">Obtener funciones PRO</string>
     <string name="UNProPack">ProKey BetaTest terminado, gracias por participar</string>
     <string name="commMode">Interfaz de EnvíoRápido</string>
-    <string name="typSend">Tipo de envío</string>
-    <string name="RCVtype">Tipo de Reception</string>
+    <string name="typSend">Tipo de envío▼</string>
+    <string name="RCVtype">Tipo de Reception▼</string>
 
 
 
@@ -151,9 +151,9 @@
     <string name="set_server">Datos de Conexión</string>
     <string name="Button_Sel">Iniciar</string>
     <string name="Sel_W">Cliente WiFi</string>
-    <string name="Sel_BT">Cliente Bluetooth</string>
+    <string name="Sel_BT">Cliente Bluetooth(Clásico)</string>
     <string name="Sel_Ws">Servidor WiFi</string>
-    <string name="Sel_BTs">Servidor Bluetooth</string>
+    <string name="Sel_BTs">Servidor Bluetooth(Clásico)</string>
     <string name="Clients">Clientes Inalámbricos</string>
     <string name="Servers">Servidores Inalámbricos</string>
     <string name="EnBT">Activación de Bluetooth Denegada por el Usuario</string>
@@ -352,7 +352,7 @@
         - Presione el botón \'Siguiente\' para continuar.
     </string>
     <string name="tutDelTRX">
-        - estos dos botones pueden borrar el contenido de la entrada TX ó la vista RX respectivamente.\n
+        - Estos dos botones pueden borrar el contenido de la entrada TX ó la vista RX respectivamente.\n
         - Para la entrada TX, resulta más rápido que realizar el borrado con el teclado.\n
         - Para la vista RX, esta es la única manera de limpiar la pantalla de recepción.\n
         - A menos que se esté usando un tipo de recepción avanzada como \'Package RX\'.\n

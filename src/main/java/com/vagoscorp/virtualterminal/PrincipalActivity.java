@@ -46,6 +46,9 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.graphics.Insets;
+import android.view.WindowInsets;
+
 import vclibs.communication.Eventos.OnComunicationListener;
 import vclibs.communication.Eventos.OnConnectionListener;
 import vclibs.communication.android.Communic;
@@ -54,11 +57,11 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     //Spinner spinner;
     TextView endianMode;
-    TextView typeTXB;
+    Button typeTXB; // TextView typeTXB;
     TextView RX;// Received Data
     TextView RXn;// Received Data
     TextView sepLab;// Received Data
-	Button Conect;
+	Button Connect;
 	Button Chan_Ser;
 	Button Send;
     ScrollView scro;
@@ -76,6 +79,9 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 
     Button[] commX;
     ActionBar actionBar;
+
+    Button DelTX;
+    Button DelRX;
 
     public String MyNIF;// NetInterface
     public String serverip;// IP to Connect
@@ -273,10 +279,30 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         noShowInstruc = shapre.getBoolean(SIoS, false);
         if(darkTheme)
             this.setTheme(R.style.DarkTheme);
-		setContentView(R.layout.layout_activity_principal);
+        setContentView(R.layout.layout_activity_principal);
         layout_principal = findViewById(R.id.layout_principal);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            layout_principal.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    int hMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+                    int vMargin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBars.left + hMargin, systemBars.top + vMargin,
+                                systemBars.right + hMargin, systemBars.bottom + vMargin);
+                    } else {
+                        v.setPadding(insets.getSystemWindowInsetLeft() + hMargin,
+                                insets.getSystemWindowInsetTop() + vMargin,
+                                insets.getSystemWindowInsetRight() + hMargin,
+                                insets.getSystemWindowInsetBottom() + vMargin);
+                    }
+                    return insets;
+                }
+            });
+        }
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            layout_principal.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+            layout_principal.setBackgroundColor(getResources().getColor(R.color.DT));
         Intent tip = getIntent();
         TCOM = tip.getBooleanExtra(getString(R.string.Extra_TCOM), false);
         SC = tip.getIntExtra(getString(R.string.Extra_TYP), MainActivity.CLIENT);
@@ -324,7 +350,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             }
         });*/
         byteRCV = findViewById(R.id.byteRCV);
-		Conect =  findViewById(R.id.Conect);
+        Connect =  findViewById(R.id.Connect);
 		Chan_Ser = findViewById(R.id.chan_ser);
         buttSetAllCaps(Chan_Ser);
 		Send = findViewById(R.id.Send);
@@ -333,9 +359,19 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         commBase = findViewById(R.id.commBase);
         commStaticL = findViewById(R.id.commStaticL);
         commScrollableL = findViewById(R.id.commScrollableL);
+        DelTX = findViewById(R.id.DelTX);
+        DelRX = findViewById(R.id.DelRX);
+        if(darkTheme) {
+            IOc.formatDT_Button(Connect);
+            IOc.formatDT_Button(Chan_Ser);
+            IOc.formatDT_Button(typeTXB);
+            IOc.formatDT_Button(Send);
+            IOc.formatDT_Button(DelTX);
+            IOc.formatDT_Button(DelRX);
+        }
         aCRpLF.setOnCheckedChangeListener((buttonView, isChecked) -> Toast.makeText(getApplicationContext(), R.string.appendCRpLF, Toast.LENGTH_SHORT).show());
         UpdN.setOnCheckedChangeListener((buttonView, isChecked) -> updPNum(isChecked));
-        Conect.setOnLongClickListener(v -> {
+        Connect.setOnLongClickListener(v -> {
             hideActionBar();
             return true;
         });
@@ -475,6 +511,8 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         for(int i = 0; i < numFastSendTot; i++) {
             commX[i] = new Button(this);
             buttSetAllCaps(commX[i]);
+            if(darkTheme)
+                IOc.formatDT_Button(commX[i]);
             final int n = i + 1;
             commX[i].setOnLongClickListener(new OnLongClickListener() {
                 @Override
@@ -1314,7 +1352,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
             if (BonDev.length <= index)
                 index = 0;
             mDevice = BonDev[index];
-            Conect.setEnabled(true);
+            Connect.setEnabled(true);
             Chan_Ser.setEnabled(true);
             String tempString = mDevice.getName() + "\n" + mDevice.getAddress();
             if (SC == MainActivity.SERVER) {
@@ -1325,7 +1363,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
         } else {
             Chan_Ser.setText(R.string.NoPD);
             Chan_Ser.setEnabled(false);
-            Conect.setEnabled(false);
+            Connect.setEnabled(false);
         }
 	}
 
@@ -1642,7 +1680,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 //                comunic.setConnectionListener(this);
 //                comunic.littleEndian = littleEndian;
 //                Chan_Ser.setEnabled(false);
-//                Conect.setText(getString(R.string.Button_Conecting));
+//                Connect.setText(getString(R.string.Button_Conecting));
 //                comunic.execute();
 //            } else
 //                comunic.Detener_Actividad();
@@ -1667,7 +1705,7 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
                 comunic.setConnectionListener(this);
                 comunic.littleEndian = littleEndian;
                 Chan_Ser.setEnabled(false);
-                Conect.setText(getString(R.string.Button_Conecting));
+                Connect.setText(getString(R.string.Button_Conecting));
                 comunic.execute();
             }else
                 comunic.Detener_Actividad();
@@ -1863,15 +1901,15 @@ public class PrincipalActivity extends Activity implements OnComunicationListene
 	@Override
 	public void onConnectionstablished() {
 		Chan_Ser.setEnabled(false);
-		Conect.setText(getResources().getString(R.string.Button_DisConect));
-		Conect.setEnabled(true);
+		Connect.setText(getResources().getString(R.string.Button_DisConect));
+		Connect.setEnabled(true);
 		Send.setEnabled(true);
 	}
 
 	@Override
 	public void onConnectionfinished() {
-		Conect.setText(getResources().getString(R.string.Button_Conect));
-		Conect.setEnabled(true);
+		Connect.setText(getResources().getString(R.string.Button_Conect));
+		Connect.setEnabled(true);
         if(!(TCOM && SC == MainActivity.SERVER))
 		    Chan_Ser.setEnabled(true);
 		Send.setEnabled(false);

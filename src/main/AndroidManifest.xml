@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <uses-permission android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <uses-permission
@@ -33,6 +31,7 @@
             android:name=".Configuration"
             android:label="@string/action_settings"
             android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme"
             android:exported="true">
             <meta-data
@@ -72,6 +71,7 @@
             android:name=".PrincipalActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme"
             android:exported="true">
             <meta-data
@@ -82,7 +82,8 @@
             android:name=".TutorialActivity"
             android:label="@string/VT_Tutorial"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/DarkTheme"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme"
             android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,6 +102,7 @@
             android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme"
             android:exported="true">
             <meta-data
@@ -111,6 +113,7 @@
             android:name=".XtringActivity"
             android:label="@string/title_activity_xtring"
             android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme"
             android:exported="true">
             <meta-data

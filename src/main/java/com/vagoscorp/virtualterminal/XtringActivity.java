@@ -25,6 +25,9 @@ import android.widget.Toast;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
+import android.graphics.Insets;
+import android.view.WindowInsets;
+
 public class XtringActivity extends Activity implements GestureDetector.OnGestureListener {
 
     LinearLayout layout_xtring;
@@ -37,6 +40,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     LinearLayout typesLay2;
     EditText commX_Name;
     Button newXtringItem;
+    Button[] commX;
     InputMethodManager imm;
     ActionBar actionBar;
     public int numItems = 0;
@@ -66,8 +70,6 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     public static final String disabledX = "disabledX";
     public static final String cantXItems = "cantXItems";
 
-    Button[] commX;
-
     XtringItem[] listItems;
     XtringItem[] tempListItems;
     GestureDetector gesDetector;
@@ -79,6 +81,7 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             R.id.intButton,R.id.longButton,R.id.floatButton,R.id.doubleButton, R.id.advButton, R.id.newXtringItem};
     Button[] Buttons = new Button[9];
     CheckBox XReturn;
+    Button delItem;
     Button sendX;
     //ArrayAdapter<CharSequence> adapter;
     boolean xReturn = false;
@@ -98,13 +101,14 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
     }
 
     boolean addItemsByType = false;
+    boolean darkTheme = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         editor = shapre.edit();editor.commit();
-        boolean darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
+        darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
         numItems = shapre.getInt(cantXItems, 0);
         if(pro) {
@@ -117,8 +121,28 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
             this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_xtring);
         layout_xtring = findViewById(R.id.layout_xtring);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            layout_xtring.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    int hMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+                    int vMargin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBars.left + hMargin, systemBars.top + vMargin,
+                                systemBars.right + hMargin, systemBars.bottom + vMargin);
+                    } else {
+                        v.setPadding(insets.getSystemWindowInsetLeft() + hMargin,
+                                insets.getSystemWindowInsetTop() + vMargin,
+                                insets.getSystemWindowInsetRight() + hMargin,
+                                insets.getSystemWindowInsetBottom() + vMargin);
+                    }
+                    return insets;
+                }
+            });
+        }
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
-            layout_xtring.setBackgroundColor(Color.parseColor(getString(R.string.DT_Color)));
+            layout_xtring.setBackgroundColor(getResources().getColor(R.color.DT));
         commX_Lay = findViewById(R.id.CommX_Lay);
         typesLay1 = findViewById(R.id.TypesLay1);
         typesLay2 = findViewById(R.id.TypesLay2);
@@ -129,7 +153,13 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         commStaticL = findViewById(R.id.commStaticL);
         commScrollableL = findViewById(R.id.commScrollableL);
         XReturn = findViewById(R.id.xReturn);
+        delItem = findViewById(R.id.delItem);
         sendX = findViewById(R.id.SendX);
+        if(darkTheme) {
+            IOc.formatDT_Button(delItem);
+            IOc.formatDT_Button(sendX);
+            IOc.formatDT_Button(newXtringItem);
+        }
         imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         View.OnLongClickListener disLay = new View.OnLongClickListener() {
             @Override
@@ -141,6 +171,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         for(int i = 0; i < 9; i++) {
             Buttons[i] = findViewById(ButtIDs[i]);
             Buttons[i].setOnLongClickListener(disLay);
+            if(darkTheme)
+                IOc.formatDT_Button(Buttons[i]);
         }
         Buttons[IOc.TYPE_LONG].setEnabled(pro);
         Buttons[IOc.TYPE_DOUBLE].setEnabled(pro);
@@ -306,6 +338,8 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
         for(int i = 0; i < numFastSendTot; i++) {
             commX[i] = new Button(this);
             buttSetAllCaps(commX[i]);
+            if(darkTheme)
+                IOc.formatDT_Button(commX[i]);
             final int n = i + 1;
             commX[i].setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -314,44 +348,42 @@ public class XtringActivity extends Activity implements GestureDetector.OnGestur
                     boolean N = false;
                     String name = getResources().getString(R.string.commDVal);
                     String message = getResources().getString(R.string.commDVal);
-                    if(n != 0) {
-                        CanSendPlusData tempData = genBuff();
-                        if(tempData.can) {
-                            saveAll();
-                            boolean mutable = false;
-                            try {
-                                message = new String(tempData.data, "ISO-8859-1");
-                                commType = PrincipalActivity.COMMT_XTRING;
-                                mutable = true;
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                            String theName = "Pack" + n;
-                            if(mutable){
-                                if(commX_Name.length() > 0) {
-                                    name = "Xtr:" + commX_Name.getText().toString();
-                                }else {
-                                    name = "Xtr:" + theName;
-                                    //String tempX = getString(R.string.FastSendButtName) + " " + getString(R.string.Empty);
-                                    //commX_Name.requestFocus();
-                                    //commX_Name.setText(theName);
-                                    commX_Name.setHint(theName);
-                                    //commX_Name.clearFocus();
-                                    //imm.showSoftInput(commX_Name, InputMethodManager.SHOW_IMPLICIT);
-
-                                }
-                                imm.hideSoftInputFromWindow(commX_Name.getWindowToken(), 0);
-                                String tempX = getString(R.string.SavedAsFS) + " " + name;
-                                Toast.makeText(XtringActivity.this, tempX, Toast.LENGTH_SHORT).show();
-                            }
+                    CanSendPlusData tempData = genBuff();
+                    if(tempData.can) {
+                        saveAll();
+                        boolean mutable = false;
+                        try {
+                            message = new String(tempData.data, "ISO-8859-1");
+                            commType = PrincipalActivity.COMMT_XTRING;
+                            mutable = true;
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
-                        editor.putString(PrincipalActivity.comm + n, message);
-                        editor.putString(PrincipalActivity.commN + n, name);
-                        editor.putBoolean(PrincipalActivity.commT + n, N);
-                        editor.putInt(PrincipalActivity.commET + n, commType);
-                        editor.commit();
-                        UcommUI();
+                        String theName = "Pack" + n;
+                        if(mutable){
+                            if(commX_Name.length() > 0) {
+                                name = "Xtr:" + commX_Name.getText().toString();
+                            }else {
+                                name = "Xtr:" + theName;
+                                //String tempX = getString(R.string.FastSendButtName) + " " + getString(R.string.Empty);
+                                //commX_Name.requestFocus();
+                                //commX_Name.setText(theName);
+                                commX_Name.setHint(theName);
+                                //commX_Name.clearFocus();
+                                //imm.showSoftInput(commX_Name, InputMethodManager.SHOW_IMPLICIT);
+
+                            }
+                            imm.hideSoftInputFromWindow(commX_Name.getWindowToken(), 0);
+                            String tempX = getString(R.string.SavedAsFS) + " " + name;
+                            Toast.makeText(XtringActivity.this, tempX, Toast.LENGTH_SHORT).show();
+                        }
                     }
+                    editor.putString(PrincipalActivity.comm + n, message);
+                    editor.putString(PrincipalActivity.commN + n, name);
+                    editor.putBoolean(PrincipalActivity.commT + n, N);
+                    editor.putInt(PrincipalActivity.commET + n, commType);
+                    editor.commit();
+                    UcommUI();
                     return true;
                 }
             });

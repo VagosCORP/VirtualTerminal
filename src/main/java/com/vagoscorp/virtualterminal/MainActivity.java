@@ -65,15 +65,19 @@ public class MainActivity extends Activity implements View.OnLongClickListener {
 		shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
 		editor = shapre.edit();editor.commit();
 		setContentView(R.layout.layout_activity_main);
-        BTAdapter = BluetoothAdapter.getDefaultAdapter();
+		BTAdapter = BluetoothAdapter.getDefaultAdapter();
 		verLab = findViewById(R.id.verLab);
 		proLabel = findViewById(R.id.proLabel);
-        serverBT = findViewById(R.id.serverBT);
-        serverW = findViewById(R.id.serverW);
+		serverBT = findViewById(R.id.serverBT);
+		serverW = findViewById(R.id.serverW);
 		CB = findViewById(R.id.Sel_BT);
 		CW = findViewById(R.id.Sel_W);
 		SB = findViewById(R.id.Sel_SBT);
 		SW = findViewById(R.id.Sel_SW);
+		IOc.formatDT_Button(CB);
+		IOc.formatDT_Button(CW);
+		IOc.formatDT_Button(SB);
+		IOc.formatDT_Button(SW);
         Init = new Intent(this, PrincipalActivity.class);
         if(BTAdapter == null) {
             CB.setEnabled(false);

@@ -19,6 +19,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.graphics.Insets;
+import android.view.WindowInsets;
+
 public class TutorialActivity extends Activity {
 
     ActionBar actionBar;
@@ -26,7 +29,7 @@ public class TutorialActivity extends Activity {
     TextView RX;// Received Data
     TextView RXn;// Received Data
     TextView sepLab;// Received Data
-    Button Conect;
+    Button Connect;
     Button Chan_Ser;
     Button Send;
     ScrollView scro;
@@ -39,11 +42,12 @@ public class TutorialActivity extends Activity {
     EditText editNAct;
     CheckBox UpdN;
     CheckBox aCRpLF;
-    TextView typeTXB;
+    Button typeTXB; // TextView typeTXB;
     Button DelTX;
     Button DelRX;
     Button nextTut;
     Button prevTut;
+    LinearLayout layout_principal;
 
     Button[] commX = new Button[8];
     EditText[] TXs = new EditText[5];
@@ -63,6 +67,7 @@ public class TutorialActivity extends Activity {
     int maxTut = 0;
     boolean abHidden = false;
     boolean pro = false;
+    boolean darkTheme = true;
 
     SharedPreferences shapre;
 
@@ -82,7 +87,33 @@ public class TutorialActivity extends Activity {
         super.onCreate(savedInstanceState);
         shapre = getSharedPreferences(getString(R.string.SHARPREF),MODE_PRIVATE);
         pro = shapre.getBoolean(getString(R.string.isPRO), false);
+        darkTheme = shapre.getBoolean(getString(R.string.DARK_THEME), true);
+        if(darkTheme)
+            this.setTheme(R.style.DarkTheme);
         setContentView(R.layout.activity_tutorial);
+        layout_principal = findViewById(R.id.layout_principal);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            layout_principal.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    int hMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+                    int vMargin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Insets systemBars = insets.getInsets(WindowInsets.Type.systemBars());
+                        v.setPadding(systemBars.left + hMargin, systemBars.top + vMargin,
+                                systemBars.right + hMargin, systemBars.bottom + vMargin);
+                    } else {
+                        v.setPadding(insets.getSystemWindowInsetLeft() + hMargin,
+                                insets.getSystemWindowInsetTop() + vMargin,
+                                insets.getSystemWindowInsetRight() + hMargin,
+                                insets.getSystemWindowInsetBottom() + vMargin);
+                    }
+                    return insets;
+                }
+            });
+        }
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && darkTheme)
+            layout_principal.setBackgroundColor(getResources().getColor(R.color.DT));
         RX = findViewById(R.id.RX);
         sepLab = findViewById(R.id.sepLab);
         RXn = findViewById(R.id.RXn);
@@ -92,7 +123,7 @@ public class TutorialActivity extends Activity {
         aCRpLF = findViewById(R.id.aCRpLF);
         endianMode = findViewById(R.id.endianMode);
         byteRCV = findViewById(R.id.byteRCV);
-        Conect =  findViewById(R.id.Conect);
+        Connect =  findViewById(R.id.Connect);
         Chan_Ser = findViewById(R.id.chan_ser);
         Send = findViewById(R.id.Send);
         TXs[TX_FORM_TXT] = findViewById(R.id.TXtext);
@@ -110,6 +141,14 @@ public class TutorialActivity extends Activity {
         nextTut = findViewById(R.id.nextTut);
         prevTut = findViewById(R.id.prevTut);
         typeTXB = findViewById(R.id.typeTXB);
+        if(darkTheme) {
+            IOc.formatDT_Button(Connect);
+            IOc.formatDT_Button(Chan_Ser);
+            IOc.formatDT_Button(typeTXB);
+            IOc.formatDT_Button(Send);
+            IOc.formatDT_Button(DelTX);
+            IOc.formatDT_Button(DelRX);
+        }
         typeTXB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +168,7 @@ public class TutorialActivity extends Activity {
                 updPNum(isChecked);
             }
         });
-        Conect.setOnLongClickListener(new View.OnLongClickListener() {
+        Connect.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 hideActionBar();
@@ -148,7 +187,7 @@ public class TutorialActivity extends Activity {
         String endian = "⚠ " + getString(R.string.BigEndian);
         endianMode.setText(endian);
         updCommButtons();
-        View[] tutOrderTemp = {Chan_Ser, Conect, typeTXB, aCRpLF, endianMode, TXs[0], TXs[1],
+        View[] tutOrderTemp = {Chan_Ser, Connect, typeTXB, aCRpLF, endianMode, TXs[0], TXs[1],
                 TXs[2], TXs[3], TXs[4], Send, commX[0], DelTX, scro, layNAct, byteRCV/*, typeTXB*/};
         maxTut = tutOrderTemp.length;
         tutOrder = tutOrderTemp;
@@ -334,6 +373,21 @@ public class TutorialActivity extends Activity {
         }
     }
 
+    public void updateTXtype(int indexTut) {
+        for(int i = 0; i < 5; i++)
+            TXs[i].setVisibility(View.GONE);
+        tutOrder[indexTut].setVisibility(View.VISIBLE);
+        String txText = "TX ";
+        if(indexTut > 5 && indexTut < 9)
+            txText += getString(IOc.formStrings[indexTut-6]);
+        else if(indexTut == 5)
+            txText += getString(IOc.typeStrings[0]);
+        else if(indexTut == 9)
+            txText += getString(IOc.typeStrings[5]);
+        txText += "▼";
+        typeTXB.setText(txText);
+    }
+
     public void applyTutScreen() {
         if(abHidden)
             hideActionBar();
@@ -347,9 +401,7 @@ public class TutorialActivity extends Activity {
         for(int i = 0; i < 8; i++)
             commX[i].setEnabled(false);
         if(indexTut > 4 && indexTut < 10) {
-            for(int i = 0; i < 5; i++)
-                TXs[i].setVisibility(View.GONE);
-            tutOrder[indexTut].setVisibility(View.VISIBLE);
+            updateTXtype(indexTut);
         }
         if(indexTut == 4) {
             aCRpLF.setVisibility(View.GONE);
@@ -367,7 +419,7 @@ public class TutorialActivity extends Activity {
             UpdN.setChecked(true);
             byteRCV.setVisibility(View.VISIBLE);
         /*}else if(indexTut == 16) {
-            Conect.setVisibility(View.GONE);
+            Connect.setVisibility(View.GONE);
             Chan_Ser.setText(R.string.ComXaddItem);
             aCRpLF.setVisibility(View.GONE);
             typeTXB.setVisibility(View.GONE);
